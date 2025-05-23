@@ -1,0 +1,18 @@
+@import url("../../styles/default.module.css");
+
+.menu{
+    display: flex;
+    flex-direction: column;
+    padding: 0px 0px 0px 20px;
+    background-color: var(--color-smoke-white);
+    width: 100%;
+    height: 100%;
+    
+}
+
+.menu__title{
+    font-size: 36px;
+    font-weight: 500;
+    padding: 20px 0px 0px 0px;
+    margin: 0;
+}

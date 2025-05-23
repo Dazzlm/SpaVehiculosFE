@@ -1,0 +1,24 @@
+@import url("../../styles/default.module.css");
+.main__layout {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 98vw ;
+}
+
+.main__layout--content {
+  display: flex;
+  flex-direction: column;
+  height: 100%; 
+  width: 85%;
+}
+
+.main__layout--sidebar {
+  display: flex;
+  flex-direction: column;
+  padding: 0px 0px 0px 20px;
+  height: 100%;
+  width: 15%;
+  background-color: var(--color-dark-blue);
+  color: white ;
+}

@@ -1,0 +1,39 @@
+@import url("../../styles/default.module.css");
+
+.sidebar__title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 8px 20px;
+}
+
+.sidebar__container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    
+}
+
+.sidebar__link {
+  text-decoration: none;
+  color: rgb(207, 214, 255);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 20px 30px;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.sidebar__link:hover {
+  background-color: #151d2e;
+  transition: background-color 0.2s ease-in-out;
+  color : #fff;
+  
+}
+
+.sidebar__link--active {
+  background-color: #151d2e;
+  transition: background-color 0.2s ease-in-out;
+  color: #fff;
+}
+

@@ -1,0 +1,20 @@
+:root {
+  --color-dark-blue: #1F2A44;      /* Azul oscuro profesional */
+  --color-red-oxide: #B02E0C;      /* Rojo óxido tipo auto */
+  --color-metal-gray: #D9D9D9;     /* Gris metálico claro */
+  --color-smoke-white: #F4F4F4;    /* Blanco humo */
+  --color-carbon-black: #222222;   /* Negro carbón */
+
+  --font-light: 300;
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-extrabold: 800;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--color-smoke-white);
+  color: var(--color-carbon-black);
+}

@@ -13,6 +13,11 @@ import SedeForm from './componentes/sedes/SedeForm';
 import SedeEditar from './componentes/sedes/SedeEditar';
 import SedeDetalle from './componentes/sedes/SedeDetalle';
 import SedeEliminar from './componentes/sedes/SedeEliminar';
+import ListaCiudades from './componentes/ciudad/CiudadLista';
+import CiudadForm from './componentes/ciudad/CiudadForm';
+import CiudadDetalle from './componentes/ciudad/CiudadDetalle';
+import CiudadEditar from './componentes/ciudad/CiudadEditar';
+import CiudadEliminar from './componentes/ciudad/CiudadEliminar';
 //<Route index element={<CardGroupButton />} />
 function App() {
 
@@ -32,6 +37,11 @@ function App() {
           <Route path="/sedes/editar/:id" element={<SedeEditar />} />
           <Route path="/sedes/ver/:id" element={<SedeDetalle />} />
           <Route path="/sedes/eliminar/:id" element={<SedeEliminar />} />
+          <Route path="/ciudades" element={<ListaCiudades />} />
+          <Route path="/ciudades/crear" element={<CiudadForm />} />
+          <Route path="/ciudades/ver/:id" element={<CiudadDetalle />} />
+          <Route path="/ciudades/editar/:id" element={<CiudadEditar />} />
+          <Route path="/ciudades/eliminar/:id" element={<CiudadEliminar />} />
         </Route>
         
       </Routes>

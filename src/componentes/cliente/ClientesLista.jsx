@@ -34,8 +34,15 @@ const ListaClientes = () => {
   }, []);
 
   return (
-    <Box sx={{ width: "100%", maxWidth: "1200px", mx: "auto", py: 3, px: { xs: 1, sm: 2, md: 3 } }}>
-      {/* HEADER */}
+    <Box
+      sx={{
+        width: "100%",
+        maxWidth: "1200px",
+        mx: "auto",
+        py: 3,
+        px: { xs: 1, sm: 2, md: 3 },
+      }}
+    >
       <Stack
         direction="row"
         alignItems="center"
@@ -67,18 +74,37 @@ const ListaClientes = () => {
         </Button>
       </Stack>
 
-      {/* TABLA CON SCROLL HORIZONTAL SOLO EN LA TABLA */}
       <Box sx={{ overflowX: "auto" }}>
-        <TableContainer component={Paper} sx={{ borderRadius: 2, minWidth: 800 }}>
+        <TableContainer
+          component={Paper}
+          sx={{
+            borderRadius: 2,
+            minWidth: 800,
+            maxHeight: 700,    
+            overflowY: "auto", 
+          }}
+        >
           <Table stickyHeader>
             <TableHead>
               <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-                <TableCell><b>ID</b></TableCell>
-                <TableCell><b>Nombre</b></TableCell>
-                <TableCell><b>Email</b></TableCell>
-                <TableCell><b>Teléfono</b></TableCell>
-                <TableCell><b>Dirección</b></TableCell>
-                <TableCell align="center"><b>Acciones</b></TableCell>
+                <TableCell>
+                  <b>ID</b>
+                </TableCell>
+                <TableCell>
+                  <b>Nombre</b>
+                </TableCell>
+                <TableCell>
+                  <b>Email</b>
+                </TableCell>
+                <TableCell>
+                  <b>Teléfono</b>
+                </TableCell>
+                <TableCell>
+                  <b>Dirección</b>
+                </TableCell>
+                <TableCell align="center">
+                  <b>Acciones</b>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -110,19 +136,25 @@ const ListaClientes = () => {
                       <Stack direction="row" spacing={1} justifyContent="center">
                         <IconButton
                           color="primary"
-                          onClick={() => navigate(`/usuarios/cliente/ver/${cliente.IdCliente}`)}
+                          onClick={() =>
+                            navigate(`/usuarios/cliente/ver/${cliente.IdCliente}`)
+                          }
                         >
                           <VisibilityIcon />
                         </IconButton>
                         <IconButton
                           color="success"
-                          onClick={() => navigate(`/usuarios/cliente/editar/${cliente.IdCliente}`)}
+                          onClick={() =>
+                            navigate(`/usuarios/cliente/editar/${cliente.IdCliente}`)
+                          }
                         >
                           <EditIcon />
                         </IconButton>
                         <IconButton
                           color="error"
-                          onClick={() => navigate(`/usuarios/cliente/eliminar/${cliente.IdCliente}`)}
+                          onClick={() =>
+                            navigate(`/usuarios/cliente/eliminar/${cliente.IdCliente}`)
+                          }
                         >
                           <DeleteIcon />
                         </IconButton>
@@ -132,7 +164,11 @@ const ListaClientes = () => {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={6} align="center" sx={{ py: 4, color: "gray" }}>
+                  <TableCell
+                    colSpan={6}
+                    align="center"
+                    sx={{ py: 4, color: "gray" }}
+                  >
                     No hay clientes registrados.
                   </TableCell>
                 </TableRow>

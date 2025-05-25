@@ -7,7 +7,12 @@ import ClientesLista from './componentes/cliente/ClientesLista';
 import ClienteDetalle from './componentes/cliente/ClienteDetalle';
 import ClienteEditar from './componentes/cliente/ClienteEditar';
 import Usuarios from './componentes/usuarios/Usuarios';
+import SedesLista from './componentes/sedes/SedeLista';
 import ClienteEliminar from './componentes/cliente/ClienteEliminar';
+import SedeForm from './componentes/sedes/SedeForm';
+import SedeEditar from './componentes/sedes/SedeEditar';
+import SedeDetalle from './componentes/sedes/SedeDetalle';
+import SedeEliminar from './componentes/sedes/SedeEliminar';
 //<Route index element={<CardGroupButton />} />
 function App() {
 
@@ -22,6 +27,11 @@ function App() {
           <Route path="/usuarios/cliente/ver/:id" element={<ClienteDetalle />} />
           <Route path="/usuarios/cliente/editar/:id" element={<ClienteEditar />} />
           <Route path="/usuarios/cliente/eliminar/:id" element={<ClienteEliminar />} />
+          <Route path="/sedes" element={<SedesLista />} />
+          <Route path="/sedes/crear" element={<SedeForm />} />
+          <Route path="/sedes/editar/:id" element={<SedeEditar />} />
+          <Route path="/sedes/ver/:id" element={<SedeDetalle />} />
+          <Route path="/sedes/eliminar/:id" element={<SedeEliminar />} />
         </Route>
         
       </Routes>

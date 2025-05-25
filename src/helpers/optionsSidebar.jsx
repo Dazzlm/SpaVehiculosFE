@@ -5,6 +5,7 @@ import LocalCarWashIcon from '@mui/icons-material/LocalCarWash';
 import PlaceIcon from '@mui/icons-material/Place';
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import HomeIcon from '@mui/icons-material/Home';
+import LocationCityIcon from '@mui/icons-material/LocationCity';
 
 
 const optionsSidebar = [
@@ -42,7 +43,7 @@ const optionsSidebar = [
   {
     id: 5,
     title: "Sedes",
-    icon: <PlaceIcon />,
+    icon: <LocationCityIcon />,
     Path: "/sedes",
   },
   {
@@ -50,6 +51,12 @@ const optionsSidebar = [
     title: "Reservar",
     icon: <EventAvailableIcon />,
     Path: "/reservar",
+  },
+    {
+    id: 7,
+    title: "Ciudades",
+    icon: <PlaceIcon />,
+    Path: "/ciudades",
   },
 ];
 

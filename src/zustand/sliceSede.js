@@ -1,8 +1,5 @@
 export const sliceSede = (set) => ({
-    currentSede: "",
-    setCurrentSede: (sede) => {
-        set(() => ({
-            currentSede: sede
-        }));
-    },
+  currentSede: null,
+  isSedeLoaded: false,
+  setCurrentSede: (sede) => set({ currentSede: sede, isSedeLoaded: true }), // Cambiado
 });

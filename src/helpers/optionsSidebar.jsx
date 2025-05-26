@@ -27,7 +27,7 @@ const optionsSidebar = [
     id: 2,
     title: "Facturacion",
     icon: <ReceiptLongIcon />,
-    Path: "/facturas",
+    Path: "/facturacion",
   },
   {
     id: 3,

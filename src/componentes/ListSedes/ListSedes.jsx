@@ -1,35 +1,36 @@
-
-import {getSedes} from "../../helpers/getSedes";
+import { getSedes } from "../../helpers/getSedes";
 import { useEffect, useState } from "react";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { useSpaVehiculosStore } from "../../zustand/SpaVehiculosStore.js";
-import styles from "./ListSedes.module.css";
+
 export default function ListSedes() {
     const [sedes, setSedes] = useState([]);
-    const [selectedSede, setSelectedSede] = useState("");
-    const setSede = useSpaVehiculosStore((state) => state.currentSede);
+
+    const currentSede = useSpaVehiculosStore((state) => state.currentSede);
     const setCurrentSede = useSpaVehiculosStore((state) => state.setCurrentSede);
+
     const handleChange = (event) => {
-        setSelectedSede(event.target.value);
         setCurrentSede(event.target.value);
-        console.log(event.target.value);
+        
     };
 
     useEffect(() => {
-        const fetchData = async () => { 
+        const fetchData = async () => {
             const result = await getSedes();
 
-            if (result === undefined || result === null) {
-                setSedes([]);
-                console.error("Error fetching data");
-                return;
+            if (!result || result.length === 0) {
+            console.error("Error fetching sedes");
+            return;
             }
-            console.log(result);
-            
+
             setSedes(result);
+            if (!currentSede) {
+            setCurrentSede(result[0].IdSede);
+            }
         };
         fetchData();
     }, []);
+
 
     return (
        <FormControl fullWidth>
@@ -37,14 +38,12 @@ export default function ListSedes() {
         <Select
             labelId="Sede-label"
             id="Sede-select"
-            value={selectedSede?? ""}
+            value={currentSede || ""}
             label="Sede"
             onChange={handleChange}
         >
-
-            {sedes && sedes.map((sede) => (
-                <MenuItem key={sede.IdSede} 
-                        value={sede.IdSede}>
+            {sedes.map((sede) => (
+                <MenuItem key={sede.IdSede} value={sede.IdSede}>
                     {sede.Nombre}
                 </MenuItem>
             ))}

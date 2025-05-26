@@ -1,7 +1,6 @@
 
 import Mainlayout from './views/mainlayout/Mainlayout';
 import { BrowserRouter,Routes,Route } from "react-router";
-import './App.css';
 import ClienteForm from './componentes/cliente/ClienteForm';
 import ClientesLista from './componentes/cliente/ClientesLista';
 import ClienteDetalle from './componentes/cliente/ClienteDetalle';
@@ -23,7 +22,9 @@ import CrudImagen from './componentes/cliente/CrudImagen';
 import EliminarImagen from './componentes/cliente/EliminarImagen';
 import ActualizarImagen from './componentes/cliente/ActualizarImagen';
 import DescargarImagen from './componentes/cliente/DescargarImagen';
-//<Route index element={<CardGroupButton />} />
+import Facturacion from './views/Facturacion/Facturacion';
+import './App.css';
+
 function App() {
 
   return (
@@ -31,6 +32,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Mainlayout />}>
           <Route path="*" element={<h1>No encontrado</h1>} />
+          <Route path="/facturacion" element={<Facturacion />} />
           <Route path="/usuarios" element={<Usuarios />} />
           <Route path="usuarios/cliente/crear" element={<ClienteForm />} />
           <Route path="usuarios/cliente" element={<ClientesLista />} />

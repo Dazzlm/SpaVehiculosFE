@@ -41,7 +41,7 @@ const ListaCiudades = () => {
         spacing={2}
         mb={3}
       >
-        <Stack paddingLeft={4} direction="row" alignItems="center" spacing={1}>
+        <Stack paddingLeft={35} direction="row" alignItems="center" spacing={1}>
           <PlaceIcon sx={{ fontSize: 36, color: "#444" }} />
           <Typography variant="h5" fontWeight="bold">
             Lista de Ciudades

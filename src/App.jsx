@@ -18,6 +18,11 @@ import CiudadForm from './componentes/ciudad/CiudadForm';
 import CiudadDetalle from './componentes/ciudad/CiudadDetalle';
 import CiudadEditar from './componentes/ciudad/CiudadEditar';
 import CiudadEliminar from './componentes/ciudad/CiudadEliminar';
+import UploadImage from './componentes/cliente/CargarImagen';
+import CrudImagen from './componentes/cliente/CrudImagen';
+import EliminarImagen from './componentes/cliente/EliminarImagen';
+import ActualizarImagen from './componentes/cliente/ActualizarImagen';
+import DescargarImagen from './componentes/cliente/DescargarImagen';
 //<Route index element={<CardGroupButton />} />
 function App() {
 
@@ -42,6 +47,14 @@ function App() {
           <Route path="/ciudades/ver/:id" element={<CiudadDetalle />} />
           <Route path="/ciudades/editar/:id" element={<CiudadEditar />} />
           <Route path="/ciudades/eliminar/:id" element={<CiudadEliminar />} />
+
+          <Route path="/imagen" element={<CrudImagen />} />
+          <Route path="/imagen/asignar" element={<UploadImage />} />
+          <Route path="/imagen/actualizar" element={<ActualizarImagen />} />
+          <Route path="/imagen/eliminar" element={<EliminarImagen />} />
+          <Route path="/imagen/descargar" element={<DescargarImagen />} />
+
+
         </Route>
         
       </Routes>

@@ -8,6 +8,7 @@ import {
   Stack,
   Divider,
   CircularProgress,
+  Avatar,
 } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import BadgeIcon from '@mui/icons-material/Badge';
@@ -20,13 +21,32 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 function ClienteDetalle() {
   const { id } = useParams();
   const [cliente, setCliente] = useState(null);
+  const [imagenUrl, setImagenUrl] = useState(null);
   const navigate = useNavigate();
+
+  const imagenPorDefecto = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
   useEffect(() => {
     const baseUrl = 'https://localhost:44376/api/Clientes';
     fetch(`${baseUrl}/ConsultarXId?idCliente=${id}`)
       .then(res => res.json())
-      .then(data => setCliente(data))
+      .then(data => {
+        setCliente(data);
+
+        // Intenta cargar la imagen del cliente
+        const imagenClienteUrl = `https://localhost:44376/api/UploadCliente/ImagenCliente?idCliente=${id}`;
+        fetch(imagenClienteUrl)
+          .then(response => {
+            if (response.ok) {
+              setImagenUrl(imagenClienteUrl);
+            } else {
+              setImagenUrl(imagenPorDefecto);
+            }
+          })
+          .catch(() => {
+            setImagenUrl(imagenPorDefecto);
+          });
+      })
       .catch(err => console.error("Error al cargar cliente", err));
   }, [id]);
 
@@ -40,7 +60,6 @@ function ClienteDetalle() {
       </Box>
     );
 
-  // Datos para mapear en UI
   const detalles = [
     { icon: <BadgeIcon color="primary" sx={{ fontSize: 28 }} />, label: "ID Cliente:", value: cliente.IdCliente },
     { icon: <PersonIcon color="primary" sx={{ fontSize: 28 }} />, label: "Nombre:", value: cliente.Nombre },
@@ -62,28 +81,41 @@ function ClienteDetalle() {
       borderRadius={4}
       boxShadow="0 4px 20px rgba(0,0,0,0.12)"
     >
-      <Button
-        variant="outlined"
-        startIcon={<ArrowBackIcon />}
-        onClick={() => navigate("/usuarios/cliente")}
-        sx={{
-          mb: 4,
-          color: "primary.main",
-          borderColor: "primary.main",
-          fontWeight: "bold",
-          textTransform: "none",
-          transition: "all 0.3s ease",
-          "&:hover": {
-            bgcolor: "primary.main",
-            color: "white",
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
+        <Button
+          variant="outlined"
+          startIcon={<ArrowBackIcon />}
+          onClick={() => navigate("/usuarios/cliente")}
+          sx={{
+            color: "primary.main",
             borderColor: "primary.main",
-          },
-        }}
-      >
-        Regresar
-      </Button>
+            fontWeight: "bold",
+            textTransform: "none",
+            "&:hover": {
+              bgcolor: "primary.main",
+              color: "white",
+              borderColor: "primary.main",
+            },
+          }}
+        >
+          Regresar
+        </Button>
 
-      <Typography variant="h4" component="h2" gutterBottom textAlign="center" fontWeight="700" color="primary.main">
+        <Avatar
+          src={imagenUrl || imagenPorDefecto}
+          alt="Imagen del cliente"
+          sx={{ width: 60, height: 60 }}
+        />
+      </Box>
+
+      <Typography
+        variant="h4"
+        component="h2"
+        gutterBottom
+        textAlign="center"
+        fontWeight="700"
+        color="primary.main"
+      >
         Detalle del Cliente
       </Typography>
 
@@ -93,10 +125,7 @@ function ClienteDetalle() {
             <Box key={i}>
               <Stack direction="row" alignItems="center" spacing={2}>
                 {icon}
-                <Typography
-                  fontWeight={700}
-                  sx={{ minWidth: 130, color: "text.secondary" }}
-                >
+                <Typography fontWeight={700} sx={{ minWidth: 130, color: "text.secondary" }}>
                   {label}
                 </Typography>
                 <Typography fontWeight={500} color="text.primary" sx={{ wordBreak: "break-word" }}>

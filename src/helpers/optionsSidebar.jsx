@@ -6,6 +6,7 @@ import PlaceIcon from '@mui/icons-material/Place';
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import HomeIcon from '@mui/icons-material/Home';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
+import PhotoIcon from '@mui/icons-material/Photo';
 
 
 const optionsSidebar = [
@@ -57,6 +58,12 @@ const optionsSidebar = [
     title: "Ciudades",
     icon: <PlaceIcon />,
     Path: "/ciudades",
+  },
+     {
+    id: 8,
+    title: "Imagen Cliente",
+    icon: <PhotoIcon />,
+    Path: "/imagen",
   },
 ];
 

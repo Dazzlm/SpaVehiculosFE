@@ -16,7 +16,7 @@ export const getCliente = async () => {
 
   try {
     
-    const response = await fetch(`https://localhost:44376/api/Clientes/ConsultarXCC?CC=${cc}`);
+    const response = await fetch(`http://spavehiculos.runasp.net/api/Clientes/ConsultarXCC?CC=${cc}`);
 
     const cliente = await response.json();
     if (!cliente || !cliente.IdCliente) {

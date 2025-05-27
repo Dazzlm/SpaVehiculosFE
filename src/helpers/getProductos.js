@@ -1,6 +1,6 @@
 export async function getProductos(idSede) {
     try {
-        const response = await fetch(`https://localhost:44376/api/Productos/ObtenerConStockPorSede?idSede=${idSede}`);
+        const response = await fetch(`http://spavehiculos.runasp.net/api/Productos/ObtenerConStockPorSede?idSede=${idSede}`);
         const result = await response.json();
 
         if (!response.ok) {

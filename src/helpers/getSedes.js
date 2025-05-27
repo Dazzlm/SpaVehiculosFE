@@ -2,7 +2,7 @@
 export async function getSedes() {
 
     try {
-        const response = await fetch('https://localhost:44376/api/Sedes/ConsultarTodos');
+        const response = await fetch('http://spavehiculos.runasp.net/api/Sedes/ConsultarTodos');
         const result = await response.json();
 
         if (!response.ok) {

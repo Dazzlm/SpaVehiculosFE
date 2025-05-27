@@ -1,6 +1,6 @@
 export async function getServicios() {
     try {
-        const response = await fetch(`https://localhost:44376/api/Servicios/ConsultarTodos`);
+        const response = await fetch(`http://spavehiculos.runasp.net/api/Servicios/ConsultarTodos`);
         const result = await response.json();
 
         if (!response.ok) {

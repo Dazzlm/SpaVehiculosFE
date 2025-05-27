@@ -19,36 +19,30 @@ import ReceiptIcon from "@mui/icons-material/Receipt";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import DownloadIcon from "@mui/icons-material/Download";
+import { getFacturas } from "../../helpers/getFacturas"; // Asegúrate de tener esta función para obtener las facturas
+import { getFacturaPDF } from "../../helpers/getFacturaPDF";
 
 const ListaFacturas = () => {
   const [facturas, setFacturas] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("https://localhost:44376/api/Facturas/ConsultarTodas")
-      .then((response) => response.json())
-      .then((data) => setFacturas(data))
-      .catch((error) => console.error("Error al obtener facturas:", error));
+    const fetchData = async () => {
+      const result = await getFacturas();
+
+      if (result === undefined || result === null) {
+        setFacturas([]);
+        console.error("Error fetching data");
+        return;
+      }
+      setFacturas(result);
+    };
+    fetchData();
   }, []);
 
   const verPDF = async (idFactura) => {
     try {
-      const response = await fetch(
-        `https://localhost:44376/api/Facturas/VerPDF/${idFactura}`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/pdf",
-          },
-        }
-      );
-
-      if (!response.ok) throw new Error("No se pudo obtener el PDF");
-
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-
-      // Abrir en una nueva pestaña
+      const url = await getFacturaPDF(idFactura);
       window.open(url, "_blank");
     } catch (error) {
       console.error("Error al mostrar el PDF:", error);
@@ -58,20 +52,7 @@ const ListaFacturas = () => {
 
   const descargarPDF = async (idFactura) => {
     try {
-      const response = await fetch(
-        `https://localhost:44376/api/Facturas/VerPDF/${idFactura}`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/pdf",
-          },
-        }
-      );
-
-      if (!response.ok) throw new Error("No se pudo descargar el PDF");
-
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
+      const url = await getFacturaPDF(idFactura);
 
       const link = document.createElement("a");
       link.href = url;

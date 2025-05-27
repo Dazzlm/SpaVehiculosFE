@@ -1,0 +1,43 @@
+import ItemCard from "../item-card/ItemCard";
+import styles from "./ListProductos.module.css";
+import { getProductos } from "../../helpers/getProductos";
+import { useState, useEffect } from "react";
+import {useSpaVehiculosStore} from "../../zustand/SpaVehiculosStore.js";
+export default function ListProductos() {
+    const [productos, setProductos] = useState([]);
+    const currentSede = useSpaVehiculosStore((state) => state.currentSede);
+    const isSedeLoaded = useSpaVehiculosStore((state) => state.isSedeLoaded);
+
+  useEffect(() => {
+    if (isSedeLoaded) {
+          const fetchData = async () => { 
+              const result = await getProductos(currentSede);
+
+              if (result === undefined || result === null) {
+                  setProductos([]);
+                  console.error("Error fetching data");
+                  return;
+              }
+              console.log(result);
+
+              setProductos(result);
+          };
+          fetchData();
+        }
+}, [currentSede, isSedeLoaded]);
+    
+  return (
+    <div className={styles["container"]}>
+      {productos.length == 0 ? "No hay productos disponibles" :
+      <>
+      <h2 className={styles["titulo"]}>Elige los Productos a facturar</h2>
+      <div className={styles["list-productos"]}>
+      {productos.map((item, index) => (
+        <ItemCard key={index} item={item} type={"Producto"} />
+      ))}
+      </div>
+      </>
+    }
+    </div>
+  );
+}

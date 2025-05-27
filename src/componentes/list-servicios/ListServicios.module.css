@@ -1,0 +1,10 @@
+.list-servicios {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.titulo {
+    padding: 5px;
+    margin: 0;
+}

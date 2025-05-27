@@ -11,7 +11,7 @@ export default function Sidebar({ className }) {
       <h1 className={styles["sidebar__title"]}>SPA Vehículos</h1>
       <div className={styles["sidebar__container"]}>
         {optionsSidebar.map((option) => {
-          const isActive = location.pathname === option.Path;
+          const isActive = location.pathname.includes(option.Path) && option.Path !== "/";
 
           return (
             <Link

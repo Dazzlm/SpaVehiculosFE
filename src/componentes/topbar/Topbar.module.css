@@ -22,7 +22,6 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-width: 400px;
     margin-left: 20px;
     gap : 10px;
     
@@ -50,4 +49,13 @@
 .topbar__search-button:hover {
   color: #007bff;
     transition: color 0.3s ease;
+}
+
+.topbar__container--sedes {
+  height: 20px;
+  width: 15%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }

@@ -1,43 +1,45 @@
 import ItemCard from "../item-card/ItemCard";
 import styles from "./ListProductos.module.css";
-import { getProductos } from "../../helpers/getProductos";
+import { getProductosSede } from "../../helpers/getProductosSede.js";
 import { useState, useEffect } from "react";
-import {useSpaVehiculosStore} from "../../zustand/SpaVehiculosStore.js";
+import { useSpaVehiculosStore } from "../../zustand/SpaVehiculosStore.js";
 export default function ListProductos() {
-    const [productos, setProductos] = useState([]);
-    const currentSede = useSpaVehiculosStore((state) => state.currentSede);
-    const isSedeLoaded = useSpaVehiculosStore((state) => state.isSedeLoaded);
+  const [productos, setProductos] = useState([]);
+  const currentSede = useSpaVehiculosStore((state) => state.currentSede);
+  const isSedeLoaded = useSpaVehiculosStore((state) => state.isSedeLoaded);
 
   useEffect(() => {
     if (isSedeLoaded) {
-          const fetchData = async () => { 
-              const result = await getProductos(currentSede);
+      const fetchData = async () => {
+        const result = await getProductosSede(currentSede);
 
-              if (result === undefined || result === null) {
-                  setProductos([]);
-                  console.error("Error fetching data");
-                  return;
-              }
-              console.log(result);
-
-              setProductos(result);
-          };
-          fetchData();
+        if (result === undefined || result === null) {
+          setProductos([]);
+          console.error("Error fetching data");
+          return;
         }
-}, [currentSede, isSedeLoaded]);
-    
+        console.log(result);
+
+        setProductos(result);
+      };
+      fetchData();
+    }
+  }, [currentSede, isSedeLoaded]);
+
   return (
     <div className={styles["container"]}>
-      {productos.length == 0 ? "No hay productos disponibles" :
-      <>
-      <h2 className={styles["titulo"]}>Elige los Productos a facturar</h2>
-      <div className={styles["list-productos"]}>
-      {productos.map((item, index) => (
-        <ItemCard key={index} item={item} type={"Producto"} />
-      ))}
-      </div>
-      </>
-    }
+      {productos.length == 0 ? (
+        "No hay productos disponibles"
+      ) : (
+        <>
+          <h2 className={styles["titulo"]}>Elige los Productos a facturar</h2>
+          <div className={styles["list-productos"]}>
+            {productos.map((item, index) => (
+              <ItemCard key={index} item={item} type={"Producto"} />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }

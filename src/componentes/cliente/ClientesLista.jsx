@@ -13,27 +13,36 @@ import {
   Paper,
   Stack,
   IconButton,
+  Avatar,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import PlaceIcon from '@mui/icons-material/Place';
+import PeopleIcon from "@mui/icons-material/People";
 
-const ListaCiudades = () => {
-  const [ciudades, setCiudades] = useState([]);
+const ListaClientes = () => {
+  const [clientes, setClientes] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("https://localhost:44376/api/Ciudades/ConsultarTodos")
+    fetch("https://localhost:44376/api/Clientes/ConsultarTodos")
       .then((response) => response.json())
-      .then((data) => setCiudades(data))
-      .catch((error) => console.error("Error al obtener ciudades:", error));
+      .then((data) => setClientes(data))
+      .catch((error) => console.error("Error al obtener clientes:", error));
   }, []);
 
   return (
-    <Box sx={{ width: "100%", maxWidth: "800px", mx: "auto", py: 3, px: { xs: 1, sm: 2, md: 3 } }}>
+    <Box
+      sx={{
+        width: "100%",
+        maxWidth: "1200px",
+        mx: "auto",
+        py: 3,
+        px: { xs: 1, sm: 2, md: 3 },
+      }}
+    >
       <Stack
         direction="row"
         alignItems="center"
@@ -41,19 +50,27 @@ const ListaCiudades = () => {
         spacing={2}
         mb={3}
       >
-        <Stack paddingLeft={35} direction="row" alignItems="center" spacing={1}>
-          <PlaceIcon sx={{ fontSize: 36, color: "#444" }} />
+        <Button
+          variant="outlined"
+          startIcon={<ArrowBackIcon />}
+          onClick={() => navigate("/usuarios")}
+        >
+          Regresar
+        </Button>
+
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <PeopleIcon sx={{ fontSize: 36, color: "#444" }} />
           <Typography variant="h5" fontWeight="bold">
-            Lista de Ciudades
+            Lista de Clientes
           </Typography>
         </Stack>
 
         <Button
           variant="contained"
           startIcon={<AddIcon />}
-          onClick={() => navigate("/ciudades/crear")}
+          onClick={() => navigate("/usuarios/cliente/crear")}
         >
-          Crear Ciudad
+          Crear Cliente
         </Button>
       </Stack>
 
@@ -62,51 +79,82 @@ const ListaCiudades = () => {
           component={Paper}
           sx={{
             borderRadius: 2,
-            minWidth: 400,
-            maxHeight: 600,
-            overflowY: "auto",
+            minWidth: 800,
+            maxHeight: 700,    
+            overflowY: "auto", 
           }}
         >
           <Table stickyHeader>
             <TableHead>
               <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-                <TableCell><b>ID</b></TableCell>
-                <TableCell><b>Nombre</b></TableCell>
-                <TableCell align="center"><b>Acciones</b></TableCell>
+                <TableCell>
+                  <b>ID</b>
+                </TableCell>
+                <TableCell>
+                  <b>Nombre</b>
+                </TableCell>
+                <TableCell>
+                  <b>Email</b>
+                </TableCell>
+                <TableCell>
+                  <b>Teléfono</b>
+                </TableCell>
+                <TableCell>
+                  <b>Dirección</b>
+                </TableCell>
+                <TableCell align="center">
+                  <b>Acciones</b>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {ciudades.length > 0 ? (
-                ciudades.map((ciudad) => (
+              {clientes.length > 0 ? (
+                clientes.map((cliente) => (
                   <TableRow
-                    key={ciudad.IdCiudad}
+                    key={cliente.IdCliente}
                     hover
                     sx={{
                       transition: "0.2s",
                       "&:hover": { backgroundColor: "#f0f0f0" },
                     }}
                   >
-                    <TableCell>{ciudad.IdCiudad}</TableCell>
+                    <TableCell>{cliente.IdCliente}</TableCell>
                     <TableCell>
-                      <Typography>{ciudad.Nombre}</Typography>
+                      <Stack direction="row" spacing={1} alignItems="center">
+                        <Avatar sx={{ width: 36, height: 36 }}>
+                          {cliente.Nombre?.[0]}
+                        </Avatar>
+                        <Typography>
+                          {cliente.Nombre} {cliente.Apellidos}
+                        </Typography>
+                      </Stack>
                     </TableCell>
+                    <TableCell>{cliente.Email}</TableCell>
+                    <TableCell>{cliente.Teléfono}</TableCell>
+                    <TableCell>{cliente.Dirección}</TableCell>
                     <TableCell align="center">
                       <Stack direction="row" spacing={1} justifyContent="center">
                         <IconButton
                           color="primary"
-                          onClick={() => navigate(`/ciudades/ver/${ciudad.IdCiudad}`)}
+                          onClick={() =>
+                            navigate(`/usuarios/cliente/ver/${cliente.IdCliente}`)
+                          }
                         >
                           <VisibilityIcon />
                         </IconButton>
                         <IconButton
                           color="success"
-                          onClick={() => navigate(`/ciudades/editar/${ciudad.IdCiudad}`)}
+                          onClick={() =>
+                            navigate(`/usuarios/cliente/editar/${cliente.IdCliente}`)
+                          }
                         >
                           <EditIcon />
                         </IconButton>
                         <IconButton
                           color="error"
-                          onClick={() => navigate(`/ciudades/eliminar/${ciudad.IdCiudad}`)}
+                          onClick={() =>
+                            navigate(`/usuarios/cliente/eliminar/${cliente.IdCliente}`)
+                          }
                         >
                           <DeleteIcon />
                         </IconButton>
@@ -116,8 +164,12 @@ const ListaCiudades = () => {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={3} align="center" sx={{ py: 4, color: "gray" }}>
-                    No hay ciudades registradas.
+                  <TableCell
+                    colSpan={6}
+                    align="center"
+                    sx={{ py: 4, color: "gray" }}
+                  >
+                    No hay clientes registrados.
                   </TableCell>
                 </TableRow>
               )}
@@ -129,4 +181,4 @@ const ListaCiudades = () => {
   );
 };
 
-export default ListaCiudades;
+export default ListaClientes;

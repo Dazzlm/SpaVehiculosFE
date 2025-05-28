@@ -10,6 +10,8 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
+const MAX_FILE_SIZE_MB = 2;
+
 const ActualizarImagenCliente = () => {
   const [idCliente, setIdCliente] = useState('');
   const [archivo, setArchivo] = useState(null);
@@ -21,11 +23,43 @@ const ActualizarImagenCliente = () => {
     setArchivo(e.target.files[0]);
   };
 
+  const validarFormulario = () => {
+    if (!idCliente) {
+      setError('El ID del cliente es obligatorio.');
+      return false;
+    }
+
+    const idNum = Number(idCliente);
+    if (!Number.isInteger(idNum) || idNum <= 0) {
+      setError('El ID del cliente debe ser un número entero positivo.');
+      return false;
+    }
+
+    if (!archivo) {
+      setError('Debes seleccionar una imagen.');
+      return false;
+    }
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!allowedTypes.includes(archivo.type)) {
+      setError('El archivo debe ser una imagen JPG o PNG');
+      return false;
+    }
+
+    const maxSizeBytes = MAX_FILE_SIZE_MB * 1024 * 1024;
+    if (archivo.size > maxSizeBytes) {
+      setError(`La imagen no puede superar los ${MAX_FILE_SIZE_MB} MB.`);
+      return false;
+    }
+
+    setError('');
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!idCliente || !archivo) {
-      setError('Por favor, ingresa un ID y selecciona una imagen.');
+    if (!validarFormulario()) {
       setMensaje('');
       return;
     }
@@ -35,9 +69,9 @@ const ActualizarImagenCliente = () => {
     formData.append('archivo', archivo);
 
     try {
-      const response = await fetch('https://localhost:44376/api/UploadCliente/Actualizar', {
+      const response = await fetch('http://spavehiculos.runasp.net/api/UploadCliente/Actualizar', {
         method: 'PUT',
-        body: formData
+        body: formData,
       });
 
       if (!response.ok) {
@@ -73,6 +107,7 @@ const ActualizarImagenCliente = () => {
           type="number"
           value={idCliente}
           onChange={(e) => setIdCliente(e.target.value)}
+          inputProps={{ min: 1, step: 1 }}
           required
         />
 
@@ -95,11 +130,7 @@ const ActualizarImagenCliente = () => {
         {mensaje && <Alert severity="success">{mensaje}</Alert>}
         {error && <Alert severity="error">{error}</Alert>}
 
-        <Button
-          variant="text"
-          color="secondary"
-          onClick={() => navigate('/imagen')}
-        >
+        <Button variant="text" color="secondary" onClick={() => navigate('/imagen')}>
           Regresar
         </Button>
       </Box>

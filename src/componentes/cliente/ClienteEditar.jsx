@@ -36,7 +36,7 @@ export default function ClienteEditar() {
   });
 
   useEffect(() => {
-    fetch(`https://localhost:44376/api/Clientes/ConsultarXId?idCliente=${id}`)
+    fetch(`http://spavehiculos.runasp.net/api/Clientes/ConsultarXId?idCliente=${id}`)
       .then(async (res) => {
         if (res.status === 204) throw new Error("Cliente no encontrado");
         if (!res.ok) throw new Error("Error al obtener cliente");
@@ -52,7 +52,7 @@ export default function ClienteEditar() {
 
   const onSubmit = async (data) => {
     try {
-      const res = await fetch("https://localhost:44376/api/Clientes/Actualizar", {
+      const res = await fetch("http://spavehiculos.runasp.net/api/Clientes/Actualizar", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

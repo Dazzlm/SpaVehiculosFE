@@ -27,7 +27,7 @@ const ListaClientes = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("https://localhost:44376/api/Clientes/ConsultarTodos")
+    fetch("http://spavehiculos.runasp.net/api/Clientes/ConsultarTodos")
       .then((response) => response.json())
       .then((data) => setClientes(data))
       .catch((error) => console.error("Error al obtener clientes:", error));

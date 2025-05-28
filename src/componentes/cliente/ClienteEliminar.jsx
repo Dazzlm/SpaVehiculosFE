@@ -19,14 +19,14 @@ function ClienteEliminar() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`https://localhost:44376/api/Clientes/ConsultarXId?idCliente=${id}`)
+    fetch(`http://spavehiculos.runasp.net/api/Clientes/ConsultarXId?idCliente=${id}`)
       .then((res) => res.json())
       .then((data) => setCliente(data))
       .catch((err) => setError("Error al obtener cliente"));
   }, [id]);
 
   const handleEliminar = () => {
-    fetch(`https://localhost:44376/api/Clientes/EliminarXId?IdCliente=${id}`, {
+    fetch(`http://spavehiculos.runasp.net/api/Clientes/EliminarXId?IdCliente=${id}`, {
       method: "DELETE",
     })
       .then((res) => res.text())

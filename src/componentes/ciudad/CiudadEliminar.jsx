@@ -19,7 +19,7 @@ function CiudadEliminar() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`https://localhost:44376/api/Ciudades/ConsultarXId?idCiudad=${id}`)
+    fetch(`http://spavehiculos.runasp.net44376/api/Ciudades/ConsultarXId?idCiudad=${id}`)
       .then((res) => {
         if (res.status === 204) throw new Error("Ciudad no encontrada");
         if (!res.ok) throw new Error("Error al obtener la ciudad");
@@ -30,7 +30,7 @@ function CiudadEliminar() {
   }, [id]);
 
   const handleEliminar = () => {
-    fetch(`https://localhost:44376/api/Ciudades/EliminarXId?idCiudad=${id}`, {
+    fetch(`http://spavehiculos.runasp.net/api/Ciudades/EliminarXId?idCiudad=${id}`, {
       method: "DELETE",
     })
       .then((res) => {

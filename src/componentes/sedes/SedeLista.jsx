@@ -26,7 +26,7 @@ const ListaSedes = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("https://localhost:44376/api/Sedes/ConsultarTodos")
+    fetch("http://spavehiculos.runasp.net/api/Sedes/ConsultarTodos")
       .then((response) => response.json())
       .then((data) => setSedes(data))
       .catch((error) => console.error("Error al obtener sedes:", error));

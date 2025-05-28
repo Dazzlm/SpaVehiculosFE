@@ -19,14 +19,14 @@ function SedeEliminar() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`https://localhost:44376/api/Sedes/ConsultarXId?idSede=${id}`)
+    fetch(`http://spavehiculos.runasp.net/api/Sedes/ConsultarXId?idSede=${id}`)
       .then((res) => res.json())
       .then((data) => setSede(data))
       .catch(() => setError("Error al obtener la sede"));
   }, [id]);
 
   const handleEliminar = () => {
-    fetch(`https://localhost:44376/api/Sedes/EliminarXId?idSede=${id}`, {
+    fetch(`http://spavehiculos.runasp.net/api/Sedes/EliminarXId?idSede=${id}`, {
       method: "DELETE",
     })
       .then((res) => {

@@ -19,7 +19,7 @@ function CiudadDetalle() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`https://localhost:44376/api/Ciudades/ConsultarXId?idCiudad=${id}`)
+    fetch(`http://spavehiculos.runasp.net/api/Ciudades/ConsultarXId?idCiudad=${id}`)
       .then((res) => res.json())
       .then((data) => setCiudad(data))
       .catch((err) => console.error("Error al cargar la ciudad", err));

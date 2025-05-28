@@ -34,7 +34,7 @@ export default function SedeEditar() {
   });
 
   useEffect(() => {
-    fetch(`https://localhost:44376/api/Sedes/ConsultarXId?idSede=${id}`)
+    fetch(`http://spavehiculos.runasp.net/api/Sedes/ConsultarXId?idSede=${id}`)
       .then(async (res) => {
         if (res.status === 204) throw new Error("Sede no encontrada");
         if (!res.ok) throw new Error("Error al obtener sede");
@@ -50,7 +50,7 @@ export default function SedeEditar() {
 
   const onSubmit = async (data) => {
     try {
-      const res = await fetch("https://localhost:44376/api/Sedes/Actualizar", {
+      const res = await fetch("http://spavehiculos.runasp.net/api/Sedes/Actualizar", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

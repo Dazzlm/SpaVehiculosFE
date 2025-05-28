@@ -26,7 +26,7 @@ const ListaCiudades = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("https://localhost:44376/api/Ciudades/ConsultarTodos")
+    fetch("http://spavehiculos.runasp.net/api/Ciudades/ConsultarTodos")
       .then((response) => response.json())
       .then((data) => setCiudades(data))
       .catch((error) => console.error("Error al obtener ciudades:", error));

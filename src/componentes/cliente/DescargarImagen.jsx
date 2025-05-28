@@ -15,15 +15,15 @@ export default function DescargarImagen() {
   const navigate = useNavigate();
 
   const descargar = async () => {
-    if (!nombreArchivo) {
+    if (!nombreArchivo.trim()) {
       alert("Por favor, ingresa el nombre del archivo");
       return;
     }
 
     try {
       const response = await fetch(
-        `https://localhost:44376/api/UploadCliente/Descargar?nombreArchivo=${encodeURIComponent(
-          nombreArchivo
+        `http://spavehiculos.runasp.net/api/UploadCliente/Descargar?nombreArchivo=${encodeURIComponent(
+          nombreArchivo.trim()
         )}`
       );
 
@@ -33,11 +33,24 @@ export default function DescargarImagen() {
       }
 
       const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
 
+      const disposition = response.headers.get("Content-Disposition") || "";
+      let fileName = nombreArchivo;
+
+      const fileNameMatch = disposition.match(/filename\*=UTF-8''(.+)$/);
+      if (fileNameMatch && fileNameMatch.length > 1) {
+        fileName = decodeURIComponent(fileNameMatch[1]);
+      } else {
+        const fallbackMatch = disposition.match(/filename="?(.+)"?/);
+        if (fallbackMatch && fallbackMatch.length > 1) {
+          fileName = fallbackMatch[1];
+        }
+      }
+
+      const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = nombreArchivo;
+      a.download = fileName;
       document.body.appendChild(a);
       a.click();
 
@@ -61,7 +74,7 @@ export default function DescargarImagen() {
         </Typography>
 
         <Typography variant="body2" color="text.secondary" mb={3} textAlign="center">
-          Ingresa el nombre exacto del archivo que deseas descargar (ej: <em>imagen.png</em>)
+          Ingresa el nombre del archivo sin extensión (ej: <em>cliente_1</em>)
         </Typography>
 
         <Stack spacing={2}>

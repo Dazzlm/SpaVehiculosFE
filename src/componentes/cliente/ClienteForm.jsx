@@ -23,7 +23,7 @@ export default function ClienteForm() {
   const onSubmit = async (data) => {
     try {
       const response = await fetch(
-        "https://localhost:44376/api/Clientes/Insertar",
+        "http://spavehiculos.runasp.net/api/Clientes/Insertar",
         {
           method: "POST",
           headers: {

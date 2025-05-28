@@ -14,87 +14,26 @@ import {
   Stack,
   IconButton,
 } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ReceiptIcon from "@mui/icons-material/Receipt";
+import AddIcon from "@mui/icons-material/Add";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import DownloadIcon from "@mui/icons-material/Download";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import PlaceIcon from '@mui/icons-material/Place';
 
-const ListaFacturas = () => {
-  const [facturas, setFacturas] = useState([]);
+const ListaCiudades = () => {
+  const [ciudades, setCiudades] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("https://localhost:44376/api/Facturas/ConsultarTodas")
+    fetch("https://localhost:44376/api/Ciudades/ConsultarTodos")
       .then((response) => response.json())
-      .then((data) => setFacturas(data))
-      .catch((error) => console.error("Error al obtener facturas:", error));
+      .then((data) => setCiudades(data))
+      .catch((error) => console.error("Error al obtener ciudades:", error));
   }, []);
 
-  const verPDF = async (idFactura) => {
-    try {
-      const response = await fetch(
-        `https://localhost:44376/api/Facturas/VerPDF/${idFactura}`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/pdf",
-          },
-        }
-      );
-
-      if (!response.ok) throw new Error("No se pudo obtener el PDF");
-
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-
-      // Abrir en una nueva pestaña
-      window.open(url, "_blank");
-    } catch (error) {
-      console.error("Error al mostrar el PDF:", error);
-      alert("No se pudo mostrar el PDF.");
-    }
-  };
-
-  const descargarPDF = async (idFactura) => {
-    try {
-      const response = await fetch(
-        `https://localhost:44376/api/Facturas/VerPDF/${idFactura}`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/pdf",
-          },
-        }
-      );
-
-      if (!response.ok) throw new Error("No se pudo descargar el PDF");
-
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `Factura_${idFactura}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    } catch (error) {
-      console.error("Error al descargar el PDF:", error);
-      alert("No se pudo descargar el PDF.");
-    }
-  };
-
   return (
-    <Box
-      sx={{
-        width: "100%",
-        maxWidth: "1200px",
-        mx: "auto",
-        py: 3,
-        px: { xs: 1, sm: 2, md: 3 },
-      }}
-    >
+    <Box sx={{ width: "100%", maxWidth: "800px", mx: "auto", py: 3, px: { xs: 1, sm: 2, md: 3 } }}>
       <Stack
         direction="row"
         alignItems="center"
@@ -102,20 +41,20 @@ const ListaFacturas = () => {
         spacing={2}
         mb={3}
       >
-        <Button
-          variant="outlined"
-          startIcon={<ArrowBackIcon />}
-          onClick={() => navigate("/")}
-        >
-          Regresar
-        </Button>
-
-        <Stack direction="row" alignItems="center" spacing={1}>
-          <ReceiptIcon sx={{ fontSize: 36, color: "#444" }} />
+        <Stack paddingLeft={35} direction="row" alignItems="center" spacing={1}>
+          <PlaceIcon sx={{ fontSize: 36, color: "#444" }} />
           <Typography variant="h5" fontWeight="bold">
-            Lista de Facturas
+            Lista de Ciudades
           </Typography>
         </Stack>
+
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={() => navigate("/ciudades/crear")}
+        >
+          Crear Ciudad
+        </Button>
       </Stack>
 
       <Box sx={{ overflowX: "auto" }}>
@@ -123,70 +62,53 @@ const ListaFacturas = () => {
           component={Paper}
           sx={{
             borderRadius: 2,
-            minWidth: 800,
-            maxHeight: 700,
+            minWidth: 400,
+            maxHeight: 600,
             overflowY: "auto",
           }}
         >
           <Table stickyHeader>
             <TableHead>
-              <TableRow>
-                <TableCell>
-                  <b>ID Factura</b>
-                </TableCell>
-                <TableCell>
-                  <b>Fecha</b>
-                </TableCell>
-                <TableCell>
-                  <b>ID Cliente</b>
-                </TableCell>
-                <TableCell>
-                  <b>Total</b>
-                </TableCell>
-                <TableCell>
-                  <b>ID Sede</b>
-                </TableCell>
-                <TableCell align="center">
-                  <b>Acciones</b>
-                </TableCell>
+              <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+                <TableCell><b>ID</b></TableCell>
+                <TableCell><b>Nombre</b></TableCell>
+                <TableCell align="center"><b>Acciones</b></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {facturas.length > 0 ? (
-                facturas.map((factura) => (
-                  <TableRow key={factura.IdFactura} hover>
-                    <TableCell>{factura.IdFactura}</TableCell>
+              {ciudades.length > 0 ? (
+                ciudades.map((ciudad) => (
+                  <TableRow
+                    key={ciudad.IdCiudad}
+                    hover
+                    sx={{
+                      transition: "0.2s",
+                      "&:hover": { backgroundColor: "#f0f0f0" },
+                    }}
+                  >
+                    <TableCell>{ciudad.IdCiudad}</TableCell>
                     <TableCell>
-                      {new Date(factura.Fecha).toLocaleString()}
+                      <Typography>{ciudad.Nombre}</Typography>
                     </TableCell>
-                    <TableCell>{factura.IdCliente}</TableCell>
-                    <TableCell>${factura.Total.toLocaleString()}</TableCell>
-                    <TableCell>{factura.IdSede}</TableCell>
                     <TableCell align="center">
-                      <Stack
-                        direction="row"
-                        spacing={1}
-                        justifyContent="center"
-                      >
+                      <Stack direction="row" spacing={1} justifyContent="center">
                         <IconButton
                           color="primary"
-                          onClick={() =>
-                            navigate(`/facturas/ver/${factura.IdFactura}`)
-                          }
+                          onClick={() => navigate(`/ciudades/ver/${ciudad.IdCiudad}`)}
                         >
                           <VisibilityIcon />
                         </IconButton>
                         <IconButton
-                          color="secondary"
-                          onClick={() => verPDF(factura.IdFactura)}
+                          color="success"
+                          onClick={() => navigate(`/ciudades/editar/${ciudad.IdCiudad}`)}
                         >
-                          <PictureAsPdfIcon />
+                          <EditIcon />
                         </IconButton>
                         <IconButton
-                          color="success"
-                          onClick={() => descargarPDF(factura.IdFactura)}
+                          color="error"
+                          onClick={() => navigate(`/ciudades/eliminar/${ciudad.IdCiudad}`)}
                         >
-                          <DownloadIcon />
+                          <DeleteIcon />
                         </IconButton>
                       </Stack>
                     </TableCell>
@@ -194,12 +116,8 @@ const ListaFacturas = () => {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell
-                    colSpan={6}
-                    align="center"
-                    sx={{ py: 4, color: "gray" }}
-                  >
-                    No hay facturas registradas.
+                  <TableCell colSpan={3} align="center" sx={{ py: 4, color: "gray" }}>
+                    No hay ciudades registradas.
                   </TableCell>
                 </TableRow>
               )}
@@ -211,4 +129,4 @@ const ListaFacturas = () => {
   );
 };
 
-export default ListaFacturas;
+export default ListaCiudades;

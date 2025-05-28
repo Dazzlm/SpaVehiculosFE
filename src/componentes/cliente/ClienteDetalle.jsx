@@ -27,14 +27,13 @@ function ClienteDetalle() {
   const imagenPorDefecto = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
   useEffect(() => {
-    const baseUrl = 'https://localhost:44376/api/Clientes';
+    const baseUrl = 'http://spavehiculos.runasp.net/api/Clientes';
     fetch(`${baseUrl}/ConsultarXId?idCliente=${id}`)
       .then(res => res.json())
       .then(data => {
         setCliente(data);
 
-        // Intenta cargar la imagen del cliente
-        const imagenClienteUrl = `https://localhost:44376/api/UploadCliente/ImagenCliente?idCliente=${id}`;
+        const imagenClienteUrl = `http://spavehiculos.runasp.net/api/UploadCliente/ImagenCliente?idCliente=${id}`;
         fetch(imagenClienteUrl)
           .then(response => {
             if (response.ok) {

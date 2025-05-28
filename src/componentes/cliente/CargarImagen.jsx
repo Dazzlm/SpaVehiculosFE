@@ -16,26 +16,72 @@ export default function UploadImage() {
   const [mensaje, setMensaje] = useState('');
   const [error, setError] = useState(false);
 
+  const allowedExtensions = ['.jpg', '.jpeg', '.png'];
+  const maxFileSize = 2 * 1024 * 1024;
+
+  const validarIdCliente = (id) => {
+    const num = Number(id);
+    return Number.isInteger(num) && num > 0;
+  };
+
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    const selectedFile = e.target.files[0];
+    if (!selectedFile) {
+      setFile(null);
+      setError(false);
+      setMensaje('');
+      return;
+    }
+
+    const extension = selectedFile.name.substring(selectedFile.name.lastIndexOf('.')).toLowerCase();
+
+    if (!allowedExtensions.includes(extension)) {
+      setFile(null);
+      setError(true);
+      setMensaje('Extensión no permitida. Solo se permiten: .jpg, .jpeg, .png');
+      return;
+    }
+
+    if (selectedFile.size > maxFileSize) {
+      setFile(null);
+      setError(true);
+      setMensaje('El archivo excede el tamaño máximo permitido de 2 MB.');
+      return;
+    }
+
+    setFile(selectedFile);
+    setError(false);
+    setMensaje('');
   };
 
   const handleUpload = async () => {
-    if (!file || !idCliente.trim()) {
+    if (!file) {
       setError(true);
-      setMensaje('Selecciona un archivo y escribe un ID de cliente.');
+      setMensaje('Debes seleccionar un archivo.');
+      return;
+    }
+
+    if (!validarIdCliente(idCliente.trim())) {
+      setError(true);
+      setMensaje('El ID Cliente debe ser un número entero positivo.');
       return;
     }
 
     setError(false);
     setMensaje('');
 
+    const originalNameWithoutExt = file.name.substring(0, file.name.lastIndexOf('.'));
+    const extension = file.name.substring(file.name.lastIndexOf('.') + 1).toLowerCase();
+    const newFileName = `${originalNameWithoutExt}-${idCliente.trim()}.${extension}`;
+
+    const renamedFile = new File([file], newFileName, { type: file.type });
+
     const formData = new FormData();
-    formData.append('file', file);
-    formData.append('idCliente', idCliente);
+    formData.append('file', renamedFile);
+    formData.append('idCliente', idCliente.trim());
 
     try {
-      const response = await fetch('https://localhost:44376/api/UploadCliente/Subir', {
+      const response = await fetch('http://spavehiculos.runasp.net/api/UploadCliente/Subir', {
         method: 'POST',
         body: formData,
       });
@@ -76,21 +122,19 @@ export default function UploadImage() {
       </Typography>
 
       <Stack spacing={3}>
-        <Button
-          variant="outlined"
-          component="label"
-        >
+        <Button variant="outlined" component="label">
           Seleccionar archivo
           <input
             type="file"
             hidden
             onChange={handleFileChange}
-            accept="image/*"
+            accept=".png,.jpg,.jpeg"
           />
         </Button>
+
         {file && (
           <Typography variant="body2" color="text.secondary" textAlign="center">
-            Archivo seleccionado: {file.name}
+            Archivo seleccionado: {file.name} ({(file.size / 1024).toFixed(2)} KB)
           </Typography>
         )}
 
@@ -100,13 +144,15 @@ export default function UploadImage() {
           value={idCliente}
           onChange={(e) => setIdCliente(e.target.value)}
           fullWidth
+          helperText="Debe ser un número entero positivo"
+          error={idCliente !== '' && !validarIdCliente(idCliente)}
         />
 
         <Button
           variant="contained"
           color="primary"
           onClick={handleUpload}
-          disabled={!file || !idCliente.trim()}
+          disabled={!file || !idCliente.trim() || !validarIdCliente(idCliente)}
           fullWidth
         >
           Subir

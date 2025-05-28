@@ -33,7 +33,7 @@ export default function CiudadEditar() {
   });
 
   useEffect(() => {
-    fetch(`https://localhost:44376/api/Ciudades/ConsultarXId?idCiudad=${id}`)
+    fetch(`http://spavehiculos.runasp.net/api/Ciudades/ConsultarXId?idCiudad=${id}`)
       .then(async (res) => {
         if (res.status === 204) throw new Error("Ciudad no encontrada");
         if (!res.ok) throw new Error("Error al obtener ciudad");
@@ -49,7 +49,7 @@ export default function CiudadEditar() {
 
   const onSubmit = async (data) => {
     try {
-      const res = await fetch("https://localhost:44376/api/Ciudades/Actualizar", {
+      const res = await fetch("http://spavehiculos.runasp.net/api/Ciudades/Actualizar", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

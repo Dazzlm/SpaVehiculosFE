@@ -23,7 +23,7 @@ export default function SedeForm() {
   const onSubmit = async (data) => {
     try {
       const response = await fetch(
-        "https://localhost:44376/api/Sedes/Insertar",
+        "http://spavehiculos.runasp.net/api/Sedes/Insertar",
         {
           method: "POST",
           headers: {

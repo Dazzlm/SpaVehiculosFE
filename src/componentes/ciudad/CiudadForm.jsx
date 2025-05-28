@@ -23,7 +23,7 @@ export default function CiudadForm() {
   const onSubmit = async (data) => {
     try {
       const response = await fetch(
-        "https://localhost:44376/api/Ciudades/Insertar",
+        "http://spavehiculos.runasp.net/api/Ciudades/Insertar",
         {
           method: "POST",
           headers: {

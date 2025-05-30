@@ -24,7 +24,11 @@ import DescargarImagen from "./componentes/cliente/DescargarImagen";
 import Facturacion from "./views/Facturacion/Facturacion";
 import ListaFacturas from "./componentes/list-facturas/ListFacturas";
 import FacturaDetalle from "./componentes/factura-detalle/FacturaDetalle";
+import CrearServicio from "./views/servicios/CrearServicio";
+import ListaServicios from "./views/servicios/ListaServicios";
+import EditarServicio from "./views/servicios/EditarServicio";
 import "./App.css";
+
 
 function App() {
   return (
@@ -66,6 +70,13 @@ function App() {
           <Route path="/facturacion" element={<Facturacion />} />
           <Route path="/Facturas" element={<ListaFacturas />} />
           <Route path="/facturas/ver/:id" element={<FacturaDetalle />} />
+          <Route path="/servicios/crear" element={<CrearServicio />} />
+          <Route path="/servicios" element={<ListaServicios />} />
+          <Route path="/servicios/editar/:id" element={<EditarServicio />} />
+
+
+
+          
         </Route>
       </Routes>
     </BrowserRouter>

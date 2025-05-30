@@ -4,6 +4,9 @@ import { eliminarServicio } from '../../helpers/Servicios/deleteServicio';
 import styles from './ServiciosCards.module.css';
 import { useNavigate } from 'react-router-dom'; 
 import { Button } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import Swal from 'sweetalert2';
 
 export default function ListaServicios() {
@@ -64,7 +67,15 @@ const handleEliminarServicio = async (id) => {
 
   return (
     <div>
+      <div className={styles['header-container']}>
       <h1 className={styles['title-service']}>SERVICIOS DISPONIBLES</h1>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+        <Button
+        sx={{backgroundColor:'green', color:'white', '&:hover': {backgroundColor:'darkgreen'}}} 
+        onClick={()=> navigate('/servicios/crear')}
+        > + Añadir Servicio</Button>
+      </div>
+      </div>
       <div className={styles.container}>
         {servicios.map((item) => (
           <div
@@ -73,7 +84,7 @@ const handleEliminarServicio = async (id) => {
             onClick={() => setServicioSeleccionado(item)}
             style={{ cursor: 'pointer' }}
           >
- 
+
             <div className={styles["item-card-info"]}>
               <div className={styles["item-card-content"]}>
                 <h3 className={styles["item-card-title"]}>{item.Nombre}</h3>
@@ -84,6 +95,16 @@ const handleEliminarServicio = async (id) => {
                   Duración: {item.DuraciónMinutos ?? 'N/A'} min
                 </p>
               </div>
+            </div>
+             <div className={styles["item-card-actions"]}>
+                  <EditIcon
+                  sx={{color:'lightblue'}}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/servicios/editar/${item.IdServicio}`);
+                  }} />
+
+                  <DeleteIcon sx={{color:'pink'}} onClick={() => handleEliminarServicio(item.IdServicio)} />
             </div>
           </div>
         ))}
@@ -124,12 +145,7 @@ const handleEliminarServicio = async (id) => {
           </div>
         </div>
       )}
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-        <Button
-        sx={{backgroundColor:'green', color:'white', '&:hover': {backgroundColor:'darkgreen'}}} 
-        onClick={()=> navigate('/servicios/crear')}
-        > + Añadir Servicio</Button>
-      </div>
+      
     </div>
   );
 }

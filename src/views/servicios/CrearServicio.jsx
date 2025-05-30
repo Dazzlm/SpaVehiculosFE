@@ -79,7 +79,6 @@ export default function CrearServicio() {
         <TextField
           label="Precio"
           type="number"
-          inputProps={{ step: "0.01" }}
           {...register("Precio", {
             required: "El precio es obligatorio",
             valueAsNumber: true,

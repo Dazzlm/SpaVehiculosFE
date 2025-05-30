@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2"; 
 
 export default function EditarServicio() {
   const navigate = useNavigate();
@@ -46,6 +47,13 @@ export default function EditarServicio() {
   const onSubmit = async (data) => {
     try {
       await actualizarServicio(data);
+      Swal.fire({
+            icon: 'success',
+            title: 'Servicio Actualizado',
+            confirmButtonText: 'Aceptar',
+            text: 'El servicio se ha Actualizado correctamente',
+            confirmButtonColor: '#3085d6'
+          });
       navigate("/servicios");
     } catch (error) {
       console.error("Error al actualizar el servicio:", error.message);

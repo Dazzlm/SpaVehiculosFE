@@ -64,6 +64,7 @@ const handleEliminarServicio = async (id) => {
 
   return (
     <div>
+      <h1 className={styles['title-service']}>SERVICIOS DISPONIBLES</h1>
       <div className={styles.container}>
         {servicios.map((item) => (
           <div

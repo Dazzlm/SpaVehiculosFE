@@ -97,12 +97,14 @@ const handleEliminarServicio = async (id) => {
               </div>
             </div>
              <div className={styles["item-card-actions"]}>
-                  <EditIcon onClick={(e) => {
-                    e.stopPropagation(); // <-- Detiene el click general
-                    navigate(`/servicios/editar/${item.IdServicio}`); // Usa directamente item en vez de servicioSeleccionado
+                  <EditIcon
+                  sx={{color:'lightblue'}}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/servicios/editar/${item.IdServicio}`);
                   }} />
 
-                  <DeleteIcon onClick={() => handleEliminarServicio(item.IdServicio)} />
+                  <DeleteIcon sx={{color:'pink'}} onClick={() => handleEliminarServicio(item.IdServicio)} />
             </div>
           </div>
         ))}

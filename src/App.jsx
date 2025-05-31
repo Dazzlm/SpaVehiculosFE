@@ -1,5 +1,6 @@
+// src/App.jsx
 import Mainlayout from "./views/mainlayout/Mainlayout";
-import { BrowserRouter, Routes, Route } from "react-router";
+import { BrowserRouter, Routes, Route } from "react-router-dom"; // Asegúrate de importar 'Routes' y 'Route' de 'react-router-dom'
 import ClienteForm from "./componentes/cliente/ClienteForm";
 import ClientesLista from "./componentes/cliente/ClientesLista";
 import ClienteDetalle from "./componentes/cliente/ClienteDetalle";
@@ -32,15 +33,17 @@ import ListaReservas from "./views/Reserva/ListaReserva";
 import ActualizarReserva from "./views/Reserva/ActualizarReserva";
 import Facturacion from "./views/Facturacion/Facturacion.jsx";
 
+import Login from './componentes/Login/Login.jsx';
+
 import "./App.css";
-
-
-
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+     
+        <Route path="/login" element={<Login />} />
+
         <Route path="/" element={<Mainlayout />}>
           <Route path="*" element={<h1>No encontrado</h1>} />
           <Route path="/usuarios" element={<Usuarios />} />
@@ -84,12 +87,6 @@ function App() {
           <Route path="/reservas" element={<ListaReservas />} />
           <Route path="/reservas/crear" element={<CrearReserva />} />
           <Route path="/reservas/actualizar/:idReserva" element={<ActualizarReserva />} />
-          
-
-
-
-
-          
         </Route>
       </Routes>
     </BrowserRouter>

@@ -3,6 +3,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import styles from './Login.module.css'; 
 import logo from '../../assets/logo.jpeg'; 
 import { useSpaVehiculosStore } from '../../zustand/SpaVehiculosStore.js';
+import { parseJwt } from '../../helpers/parseJwt.js';
 function Login() {
   const [nombreUsuario, setNombreUsuario] = useState('');
   const [clave, setClave] = useState('');
@@ -51,18 +52,22 @@ function Login() {
       }
 
       const data = await response.json();
-      const jwtToken = data.Token; 
+      const payload = parseJwt(data.Token);
 
-      if (jwtToken) {
-       
-        localStorage.setItem('jwt_token', jwtToken);
-        setCurrentUser(data.Usuario);
-        localStorage.setItem('CurrentUser', data.Usuario);
-        console.log('Login exitoso. JWT almacenado:', jwtToken);
-        setNombreUsuario('');
-        setClave('');
-        navigate('/'); 
-      }
+      const userObject = {
+        usuario: data.Usuario,
+        perfil: data.Perfil,
+        paginaInicio: data.PaginaInicio,
+        token: data.Token,
+        exp: payload?.exp,
+      };
+
+      setCurrentUser(userObject);
+      localStorage.setItem("CurrentUser", JSON.stringify(userObject));
+      console.log('Login exitoso. JWT almacenado:', userObject.token);
+      setNombreUsuario('');
+      setClave('');
+      navigate('/');
 
     } catch (networkError) {
       setLoading(false);

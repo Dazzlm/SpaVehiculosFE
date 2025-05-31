@@ -138,7 +138,7 @@ export default function FacturaDetalle() {
           <Button
             variant="outlined"
             startIcon={<ArrowBackIcon />}
-            onClick={() => navigate("/facturas")}
+            onClick={() => navigate("/facturacion")}
           >
             Regresar
           </Button>

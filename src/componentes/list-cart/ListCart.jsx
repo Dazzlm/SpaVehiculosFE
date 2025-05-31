@@ -1,5 +1,6 @@
 import ItemCart from "../item-cart/ItemCart";
 import styles from "./ListCart.module.css";
+import emptyCart from "../../assets/imagenes/emptyCart.png";
 import { useSpaVehiculosStore } from "../../zustand/SpaVehiculosStore.js";
 
 export default function ListCart() {
@@ -12,7 +13,7 @@ export default function ListCart() {
         <div className={styles["empty-cart"]}>
           <img
             className={styles["empty-cart-image"]}
-            src="src/assets/imagenes/emptyCart.png"
+            src={emptyCart}
             alt="Carrito vacío"
           />
           <p className={styles["empty-cart"]}>

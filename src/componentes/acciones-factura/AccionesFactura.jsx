@@ -35,10 +35,11 @@ export default function AccionesFactura() {
     );
 
     const result = await Swal.fire({
-      title: "¿Está seguro?",
-      text: `Se generará una factura por un total de $${Total.toFixed(2)}. 
- Para el cliente: ${cliente.Nombre} ${cliente.Apellidos} ¿Desea continuar?`,
-      icon: "warning",
+      title: 'Confirmar factura',
+      html: `Se generará una factura por un total de <strong>$${Total.toFixed(2).toLocaleString()}</strong>.<br><br>
+         <strong>Cliente:</strong> ${cliente.Nombre} ${cliente.Apellidos}<br><br>
+         ¿Desea continuar?`,
+      icon: 'question',
       showCancelButton: true,
       confirmButtonText: "Sí, generar factura",
       cancelButtonText: "Cancelar",
@@ -53,13 +54,10 @@ export default function AccionesFactura() {
     setIsLoading(true);
     const exito = await postFactura(facturaPayload);
 
-    if (exito) {
+    if (exito.success) {
       Swal.fire("Éxito", "Factura generada correctamente.", "success");
       limpiarCarrito();
-      navigate("/dummy", { replace: true });
-      setTimeout(() => {
-        navigate("/facturacion");
-      }, 50);
+      navigate("/facturas/ver/"+exito.IdFactura);
     } else {
       Swal.fire("Error", "No se pudo generar la factura.", "error");
     }

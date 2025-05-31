@@ -1,6 +1,6 @@
-// src/App.jsx
+
 import Mainlayout from "./views/mainlayout/Mainlayout";
-import { BrowserRouter, Routes, Route } from "react-router-dom"; // Asegúrate de importar 'Routes' y 'Route' de 'react-router-dom'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ClienteForm from "./componentes/cliente/ClienteForm";
 import ClientesLista from "./componentes/cliente/ClientesLista";
 import ClienteDetalle from "./componentes/cliente/ClienteDetalle";

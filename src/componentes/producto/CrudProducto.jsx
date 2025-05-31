@@ -7,31 +7,35 @@ import {
   Paper,
   IconButton,
   Tooltip,
+  Button,
+  Stack,
 } from "@mui/material";
-import GroupIcon from "@mui/icons-material/Group";
-import PersonIcon from "@mui/icons-material/Person"; // para clientes
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings"; // para administradores
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import InventoryIcon from "@mui/icons-material/Inventory";       
+import StoreIcon from "@mui/icons-material/Store";              
+import LocalShippingIcon from '@mui/icons-material/LocalShipping'; // alternativa para stock
 
-export default function Usuarios() {
+export default function CrudProducto() {
   const navigate = useNavigate();
 
   const actions = [
     {
-      label: "Clientes",
-      icon: <PersonIcon fontSize="large" />,
+      label: "Productos",
+      icon: <InventoryIcon fontSize="large" />,
       color: "primary.main",
-      path: "/usuarios/cliente",
+      path: "/gestion/productos",
     },
     {
-      label: "Administradores",
-      icon: <AdminPanelSettingsIcon fontSize="large" />,
+      label: "Stock Sede",
+      icon: <LocalShippingIcon fontSize="large" />,
       color: "secondary.main",
-      path: "/usuarios/administradores",
+      path: "/gestion/stock",
     },
   ];
 
   return (
-    <Box sx={{ p: 4, maxWidth: 700, mx: "auto" }}>
+    <Box sx={{ p: 4, maxWidth: 900, mx: "auto" }}>
+
       <Box
         sx={{
           display: "flex",
@@ -41,33 +45,32 @@ export default function Usuarios() {
           mb: 4,
         }}
       >
-        <GroupIcon sx={{ fontSize: 40 }} />
+        <InventoryIcon sx={{ fontSize: 40 }} />
         <Typography variant="h4" fontWeight="bold">
-          Gestión de Usuarios
+          Gestión de Productos
         </Typography>
       </Box>
 
-      <Grid container spacing={4} justifyContent="center">
+      <Grid container spacing={3} justifyContent="center">
         {actions.map((action) => (
-          <Grid item xs={12} sm={6} md={4} key={action.label}>
+          <Grid item xs={12} sm={6} md={3} key={action.label}>
             <Paper
               elevation={6}
               sx={{
                 p: 3,
                 textAlign: "center",
                 borderRadius: 3,
-                cursor: "pointer",
                 transition: "transform 0.2s",
+                cursor: "pointer",
                 "&:hover": {
-                  transform: "scale(1.05)",
-                  boxShadow: 10,
+                  transform: "scale(1.03)",
+                  boxShadow: 8,
                 },
               }}
               onClick={() => navigate(action.path)}
             >
               <Tooltip title={action.label}>
                 <IconButton
-                  size="large"
                   sx={{
                     backgroundColor: action.color,
                     color: "white",
@@ -77,11 +80,12 @@ export default function Usuarios() {
                       opacity: 0.9,
                     },
                   }}
+                  size="large"
                 >
                   {action.icon}
                 </IconButton>
               </Tooltip>
-              <Typography variant="subtitle1" fontWeight={600}>
+              <Typography variant="subtitle1" fontWeight="500">
                 {action.label}
               </Typography>
             </Paper>

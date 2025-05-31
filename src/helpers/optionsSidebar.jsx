@@ -33,7 +33,7 @@ const optionsSidebar = [
     id: 3,
     title: "Productos",
     icon: <ShoppingBagIcon />,
-    Path: "/productos",
+    Path: "/gestion",
   },
   {
     id: 4,

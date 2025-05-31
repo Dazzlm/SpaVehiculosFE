@@ -42,6 +42,12 @@ import Login from './componentes/Login/Login.jsx';
 import NotFound from "./views/notfound/NotFound.jsx";
 
 import "./App.css";
+import ListaProductos from "./componentes/producto/ProductoLista.jsx";
+import ProductoForm from "./componentes/producto/ProductoForm.jsx";
+import ProductoEditar from "./componentes/producto/ProductoEditar.jsx";
+import ProductoDetalle from "./componentes/producto/ProductoDetalle.jsx";
+import ProductoEliminar from "./componentes/producto/ProductoEliminar.jsx";
+import CrudProducto from "./componentes/producto/CrudProducto.jsx";
 
 function App() {
   return (
@@ -97,6 +103,12 @@ function App() {
           <Route path='/usuarios/administrador/elminar/:id'element={<AdministradorEliminar/>}></Route>
           <Route path='/usuarios/administrador/editar/:id'element={<AdministradorEditar/>}></Route>
           <Route path='/usuarios/administrador/crear'element={<AdministradorCrear/>}></Route>
+          <Route path='/gestion'element={<CrudProducto/>}></Route>
+          <Route path='/gestion/productos'element={<ListaProductos/>}></Route>
+          <Route path='/gestion/productos/crear'element={<ProductoForm/>}></Route>
+          <Route path='/gestion/productos/editar/:id'element={<ProductoEditar/>}></Route>
+          <Route path='/gestion/productos/ver/:id'element={<ProductoDetalle/>}></Route>
+          <Route path="/gestion/productos/eliminar/:id" element={<ProductoEliminar />} />
 
 
         </Route>

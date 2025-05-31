@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import styles from './Login.module.css'; 
 import logo from '../../assets/logo.jpeg'; 
+import { useSpaVehiculosStore } from '../../zustand/SpaVehiculosStore.js';
 function Login() {
   const [nombreUsuario, setNombreUsuario] = useState('');
   const [clave, setClave] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false); 
   const navigate = useNavigate(); 
-
+  const {currentUser, setCurrentUser} = useSpaVehiculosStore();
+  const user = currentUser || localStorage.getItem('CurrentUser');
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError(null);
@@ -54,6 +56,8 @@ function Login() {
       if (jwtToken) {
        
         localStorage.setItem('jwt_token', jwtToken);
+        setCurrentUser(data.Usuario);
+        localStorage.setItem('CurrentUser', data.Usuario);
         console.log('Login exitoso. JWT almacenado:', jwtToken);
         setNombreUsuario('');
         setClave('');
@@ -66,6 +70,10 @@ function Login() {
       console.error('Error de red durante el login:', networkError);
     }
   };
+
+  if (user) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <div className={styles.loginBackground}> 

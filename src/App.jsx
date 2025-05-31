@@ -39,6 +39,7 @@ import ActualizarReserva from "./views/Reserva/ActualizarReserva";
 import Facturacion from "./views/Facturacion/Facturacion.jsx";
 
 import Login from './componentes/Login/Login.jsx';
+import NotFound from "./views/notfound/NotFound.jsx";
 
 import "./App.css";
 
@@ -48,9 +49,9 @@ function App() {
       <Routes>
      
         <Route path="/login" element={<Login />} />
-
+        <Route path="*" element={<NotFound />} />
         <Route path="/" element={<Mainlayout />}>
-          <Route path="*" element={<h1>No encontrado</h1>} />
+          
           <Route path="/usuarios" element={<Usuarios />} />
           <Route path="usuarios/cliente/crear" element={<ClienteForm />} />
           <Route path="usuarios/cliente" element={<ClientesLista />} />

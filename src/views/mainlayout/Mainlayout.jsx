@@ -1,30 +1,50 @@
-
 import Menu from '../../componentes/menu/Menu';
-import  Sidebar from '../../componentes/sidebar/Sidebar';
-import Topbar from'../../componentes/topbar/Topbar';
-import { Outlet } from "react-router-dom";
-import  styles from './Mainlayout.module.css';
-import {useSpaVehiculosStore} from '../../zustand/SpaVehiculosStore.js';
-import {Navigate} from 'react-router-dom';
-export default function Mainlayout( ) {
-  const {currentUser} = useSpaVehiculosStore();
+import Sidebar from '../../componentes/sidebar/Sidebar';
+import Topbar from '../../componentes/topbar/Topbar';
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import styles from './Mainlayout.module.css';
+import { useSpaVehiculosStore } from '../../zustand/SpaVehiculosStore.js';
+import { isTokenExpired } from '../../helpers/isTokenExpired.js';
+import { useEffect } from 'react';
 
-  const user = currentUser || localStorage.getItem('CurrentUser');
-  
-  if (!user) {
+export default function Mainlayout() {
+  const { currentUser, clearCurrentUser } = useSpaVehiculosStore();
+  const navigate = useNavigate();
 
+  const user = currentUser || JSON.parse(localStorage.getItem('CurrentUser') || "null");
+
+  useEffect(() => {
+    if (!user || isTokenExpired(user.exp)) {
+      clearCurrentUser();
+      navigate("/login", { replace: true });
+    }
+  }, []); 
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const storedUser = JSON.parse(localStorage.getItem("CurrentUser") || "null");
+      if (!storedUser || (storedUser?.exp && isTokenExpired(storedUser.exp))) {
+        clearCurrentUser();
+        navigate("/login", { replace: true });
+      }
+    }, 60 * 1000); // cada 1 minuto
+
+    return () => clearInterval(interval);
+  }, []);
+
+  if (!user || isTokenExpired(user.exp)) {
     return <Navigate to="/login" replace={true} />;
   }
+
   return (
     <div className={styles["main__layout"]}>
       <Sidebar className={styles["main__layout--sidebar"]} />
       <div className={styles["main__layout--content"]}>
-        <Topbar  />
-        <Menu >
-           <Outlet />
-        </Menu>  
+        <Topbar />
+        <Menu>
+          <Outlet />
+        </Menu>
       </div>
-      
     </div>
-  )
+  );
 }

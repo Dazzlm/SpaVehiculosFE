@@ -18,12 +18,12 @@ import {
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ReceiptIcon from "@mui/icons-material/Receipt";
-import { getFacturaID } from "../../helpers/getFacturaID";
-import { getFacturaPDF } from "../../helpers/getFacturaPDF";
-import { getProductos } from "../../helpers/getProductos";
-import { getServicios } from "../../helpers/getServicios";
-import { getClienteID } from "../../helpers/getClienteID";
-import { getSedeID } from "../../helpers/getSedeID";
+import { getFacturaID } from "../../helpers/Facturas/getFacturaID";
+import { getFacturaPDF } from "../../helpers/Facturas/getFacturaPDF";
+import { getProductos } from "../../helpers/Productos/getProductos";
+import { getServicios } from "../../helpers/Servicios/getServicios";
+import { getClienteID } from "../../helpers/Clientes/getClienteID";
+import { getSedeID } from "../../helpers/Sedes/getSedeID";
 import { filtrarProductosPorIds } from "../../helpers/filtrarIds";
 import { filtrarServiciosPorIds } from "../../helpers/filtrarIds";
 

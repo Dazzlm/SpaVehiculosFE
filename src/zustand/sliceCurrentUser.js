@@ -1,4 +1,4 @@
-import { isTokenExpired } from "../helpers/isTokenExpired";
+import { isTokenExpired } from "../helpers/Auth/isTokenExpired";
 
 
 export const sliceCurrentUser = (set) => ({

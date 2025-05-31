@@ -4,7 +4,7 @@ import Topbar from '../../componentes/topbar/Topbar';
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import styles from './Mainlayout.module.css';
 import { useSpaVehiculosStore } from '../../zustand/SpaVehiculosStore.js';
-import { isTokenExpired } from '../../helpers/isTokenExpired.js';
+import { isTokenExpired } from '../../helpers/Auth/isTokenExpired.js';
 import { useEffect } from 'react';
 
 export default function Mainlayout() {

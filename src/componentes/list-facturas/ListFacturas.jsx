@@ -19,8 +19,8 @@ import ReceiptIcon from "@mui/icons-material/Receipt";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import DownloadIcon from "@mui/icons-material/Download";
-import { getFacturas } from "../../helpers/getFacturas"; // Asegúrate de tener esta función para obtener las facturas
-import { getFacturaPDF } from "../../helpers/getFacturaPDF";
+import { getFacturas } from "../../helpers/Facturas/getFacturas"; // Asegúrate de tener esta función para obtener las facturas
+import { getFacturaPDF } from "../../helpers/Facturas/getFacturaPDF";
 
 const ListaFacturas = () => {
   const [facturas, setFacturas] = useState([]);

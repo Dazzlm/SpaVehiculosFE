@@ -1,11 +1,11 @@
 import { useSpaVehiculosStore } from "../../zustand/SpaVehiculosStore.js";
-import { postFactura } from "../../helpers/postFactura.js";
-import { getCliente } from "../../helpers/getCliente.js";
+import { postFactura } from "../../helpers/Facturas/postFactura.js";
+import { getCliente } from "../../helpers/Clientes/getCliente.js";
 import { useState } from "react"; // Asegúrate de importar useState
 import { Backdrop, CircularProgress } from "@mui/material";
 import styles from "./AccionesFactura.module.css";
 import Swal from "sweetalert2";
-import { getFacturaPayload } from "../../helpers/getFacturaPayload.js";
+import { getFacturaPayload } from "../../helpers/Facturas/getFacturaPayload.js";
 import { useNavigate } from "react-router";
 export default function AccionesFactura() {
   const { limpiarCarrito, carrito, currentSede, obtenerTotal } =

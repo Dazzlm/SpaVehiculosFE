@@ -1,4 +1,4 @@
-import { getSedes } from "../../helpers/getSedes";
+import { getSedes } from "../../helpers/Sedes/getSedes.js";
 import { useEffect, useState } from "react";
 import {
   FormControl,

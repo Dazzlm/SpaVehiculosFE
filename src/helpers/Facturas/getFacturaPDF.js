@@ -1,10 +1,12 @@
-
 export const getFacturaPDF = async (idFactura) => {
   try {
+    const user = JSON.parse(localStorage.getItem("CurrentUser"));
+
     const response = await fetch(`http://spavehiculos.runasp.net/api/GestorPDF/descargar?id=${idFactura}`, {
       method: "GET",
       headers: {
         Accept: "application/pdf",
+        Authorization: `Bearer ${user.token}`, 
       },
     });
 
@@ -13,9 +15,11 @@ export const getFacturaPDF = async (idFactura) => {
     const blob = await response.blob();
     const url = URL.createObjectURL(blob);
 
-    return url; 
+    return url;
   } catch (error) {
     console.error("Error al mostrar PDF:", error);
     return null;
   }
 };
+
+

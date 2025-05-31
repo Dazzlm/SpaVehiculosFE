@@ -8,10 +8,11 @@ export default function ListSedes() {
 
     const currentSede = useSpaVehiculosStore((state) => state.currentSede);
     const setCurrentSede = useSpaVehiculosStore((state) => state.setCurrentSede);
+    const limpiarCarrito = useSpaVehiculosStore((state) => state.limpiarCarrito);
 
     const handleChange = (event) => {
         setCurrentSede(event.target.value);
-        
+        limpiarCarrito();
     };
 
     useEffect(() => {

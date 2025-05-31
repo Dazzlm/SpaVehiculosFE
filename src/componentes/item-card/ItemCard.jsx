@@ -1,6 +1,9 @@
 import styles from "./ItemCard.module.css";
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
+import productoImg from "../../assets/imagenes/producto.png";
+import servicioImg from "../../assets/imagenes/servicio.png";
+
 import { useSpaVehiculosStore } from "../../zustand/SpaVehiculosStore.js";
 
 export default function ItemCard({ item, type }) {
@@ -9,7 +12,6 @@ export default function ItemCard({ item, type }) {
   const agregarServicio = useSpaVehiculosStore(state => state.agregarServicio);
   const eliminarServicio = useSpaVehiculosStore(state => state.eliminarServicio);
 
-  // Selector que suscribe el componente a los cambios del carrito para este item
   const enCarrito = useSpaVehiculosStore((state) => {
     if (type === "Producto") {
       return state.carrito.productos.some(p => p.IdProducto === item.IdProducto);
@@ -22,14 +24,13 @@ export default function ItemCard({ item, type }) {
   let imageUrl = "";
   switch (type) {
     case "Servicio":
-      imageUrl = "src/assets/imagenes/servicio.png";
+      imageUrl = servicioImg;
       break;
     case "Producto":
-      imageUrl = "src/assets/imagenes/producto.png";
+      imageUrl = productoImg;
       break;
-    default:
-      break;
-  }
+}
+
 
   const toggleCarrito = () => {
     if (!enCarrito) {
@@ -56,7 +57,7 @@ export default function ItemCard({ item, type }) {
           {type === "Producto" && (
             <p className={styles["item-card-Stock"]}>Stock: {item.Stock}</p>
           )}
-          <p className={styles["item-card-price"]}>Precio: $ {item.Precio.toFixed(2)}</p>
+          <p className={styles["item-card-price"]}>Precio: $ {item.Precio.toLocaleString()}</p>
         </div>
       </div>
 

@@ -1,10 +1,28 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.titulo {
+  padding: 8px;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+  background-color: white;
+  position: sticky; 
+  top: 0;
+  z-index: 1;
+}
+
+.scroll-container {
+  overflow-y: auto;
+  flex-grow: 1;
+  padding: 8px;
+}
+
 .list-productos {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
-}
-
-.titulo {
-    padding: 5px;
-    margin: 0;
 }

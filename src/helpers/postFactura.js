@@ -14,10 +14,10 @@ export const postFactura = async (facturaPayload) => {
             throw new Error(`Error al crear la factura: ${error}`);
         }
 
-        const data = await response.json();
-        console.log("Factura creada con éxito:", data);
+        const result = await response.json();
+        console.log("Factura creada con éxito:", result);
       
-        return true; 
+        return result; 
     } catch (error) {
       console.error("Error generando la factura:", error);
    

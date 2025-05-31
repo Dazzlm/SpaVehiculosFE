@@ -15,10 +15,8 @@ export default function ListProductos() {
 
         if (result === undefined || result === null) {
           setProductos([]);
-          console.error("Error fetching data");
           return;
         }
-        console.log(result);
 
         setProductos(result);
       };
@@ -26,20 +24,22 @@ export default function ListProductos() {
     }
   }, [currentSede, isSedeLoaded]);
 
-  return (
-    <div className={styles["container"]}>
-      {productos.length == 0 ? (
-        "No hay productos disponibles"
-      ) : (
-        <>
-          <h2 className={styles["titulo"]}>Elige los Productos a facturar</h2>
-          <div className={styles["list-productos"]}>
-            {productos.map((item, index) => (
-              <ItemCard key={index} item={item} type={"Producto"} />
-            ))}
-          </div>
-        </>
-      )}
-    </div>
-  );
+ return (
+  <div className={styles["container"]}>
+    <h2 className={styles["titulo"]}>Elige los Productos a facturar</h2>
+
+    {productos.length === 0 ? (
+      "No hay productos disponibles"
+    ) : (
+      <div className={styles["scroll-container"]}>
+        <div className={styles["list-productos"]}>
+          {productos.map((item, index) => (
+            <ItemCard key={index} item={item} type={"Producto"} />
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+);
+
 }

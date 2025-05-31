@@ -1,0 +1,66 @@
+/* Establece altura de viewport para toda la vista */
+.container-facturar {
+  display: flex;
+  flex-direction: column;
+  height: 91vh; /* Ajusta según sea necesario */
+  width: 100%;
+  box-sizing: border-box;
+  padding: 1rem;
+  overflow: hidden; /* clave: evita scroll general */
+}
+
+.container-facturacion {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  gap: 80px;
+  overflow: hidden;
+}
+
+.container-items-venta {
+  display: flex;
+  width: 50%;
+  flex-direction: column;
+  gap: 16px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.list-productos,
+.list-servicios {
+  flex: 1;
+  overflow-y: auto; /* cada uno maneja su scroll */
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.container-resumen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  width: 40%;
+  height: 100%;
+  gap: 16px;
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+  overflow-y: auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+}
+
+.acciones-factura{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 80px;
+  justify-content: center;
+  align-items: center;
+}

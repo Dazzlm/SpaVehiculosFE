@@ -1,10 +1,29 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.titulo {
+  padding: 8px;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: bold;
+  background-color:white;
+  position: sticky; /* útil si quieres que quede fijo al hacer scroll */
+  top: 0;
+  z-index: 1;
+}
+
+.scroll-container {
+  overflow-y: auto;
+  flex-grow: 1;
+  padding: 8px;
+  max-height: 400px; /* Ajusta según el diseño o hazlo dinámico */
+}
+
 .list-servicios {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
-}
-
-.titulo {
-    padding: 5px;
-    margin: 0;
 }

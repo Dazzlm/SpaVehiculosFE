@@ -86,8 +86,8 @@ const ListaFacturas = () => {
         <Button
           variant="outlined"
           startIcon={<ArrowBackIcon />}
-          onClick={() => navigate("/")}
-        >
+          onClick={() => navigate("/facturacion")}>    
+        
           Regresar
         </Button>
 
@@ -158,7 +158,7 @@ const ListaFacturas = () => {
                           <VisibilityIcon />
                         </IconButton>
                         <IconButton
-                          color="secondary"
+                          color="error"
                           onClick={() => verPDF(factura.IdFactura)}
                         >
                           <PictureAsPdfIcon />

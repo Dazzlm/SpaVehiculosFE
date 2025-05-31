@@ -1,6 +1,5 @@
-// src/App.jsx
 import Mainlayout from "./views/mainlayout/Mainlayout";
-import { BrowserRouter, Routes, Route } from "react-router-dom"; // Asegúrate de importar 'Routes' y 'Route' de 'react-router-dom'
+import { BrowserRouter, Routes, Route } from "react-router-dom"; 
 import ClienteForm from "./componentes/cliente/ClienteForm";
 import ClientesLista from "./componentes/cliente/ClientesLista";
 import ClienteDetalle from "./componentes/cliente/ClienteDetalle";
@@ -22,6 +21,35 @@ import CrudImagen from "./componentes/cliente/CrudImagen";
 import EliminarImagen from "./componentes/cliente/EliminarImagen";
 import ActualizarImagen from "./componentes/cliente/ActualizarImagen";
 import DescargarImagen from "./componentes/cliente/DescargarImagen";
+import Mainlayout from './views/mainlayout/Mainlayout';
+import { BrowserRouter,Routes,Route } from "react-router";
+import './App.css';
+import ClienteForm from './componentes/cliente/ClienteForm';
+import ClientesLista from './componentes/cliente/ClientesLista';
+import ClienteDetalle from './componentes/cliente/ClienteDetalle';
+import ClienteEditar from './componentes/cliente/ClienteEditar';
+import Usuarios from './componentes/usuarios/Usuarios';
+import SedesLista from './componentes/sedes/SedeLista';
+import ClienteEliminar from './componentes/cliente/ClienteEliminar';
+import SedeForm from './componentes/sedes/SedeForm';
+import SedeEditar from './componentes/sedes/SedeEditar';
+import SedeDetalle from './componentes/sedes/SedeDetalle';
+import SedeEliminar from './componentes/sedes/SedeEliminar';
+import ListaCiudades from './componentes/ciudad/CiudadLista';
+import CiudadForm from './componentes/ciudad/CiudadForm';
+import CiudadDetalle from './componentes/ciudad/CiudadDetalle';
+import CiudadEditar from './componentes/ciudad/CiudadEditar';
+import CiudadEliminar from './componentes/ciudad/CiudadEliminar';
+import UploadImage from './componentes/cliente/CargarImagen';
+import CrudImagen from './componentes/cliente/CrudImagen';
+import EliminarImagen from './componentes/cliente/EliminarImagen';
+import ActualizarImagen from './componentes/cliente/ActualizarImagen';
+import DescargarImagen from './componentes/cliente/DescargarImagen';
+import ListaAdministradores from "./componentes/Administrador/administrador"
+import AdministradorDetalle from './componentes/Administrador/AdministradorDetalle';
+import AdministradorEliminar from './componentes/Administrador/AdministradorEliminar';
+import AdministradorEditar from './componentes/Administrador/AdministradorEditar';
+import AdministradorCrear from './componentes/Administrador/AdministradorCrear';
 import Facturar from "./componentes/Facturar/Facturar.jsx";
 import ListaFacturas from "./componentes/list-facturas/ListFacturas";
 import FacturaDetalle from "./componentes/factura-detalle/FacturaDetalle";
@@ -71,7 +99,6 @@ function App() {
           <Route path="/ciudades/ver/:id" element={<CiudadDetalle />} />
           <Route path="/ciudades/editar/:id" element={<CiudadEditar />} />
           <Route path="/ciudades/eliminar/:id" element={<CiudadEliminar />} />
-
           <Route path="/imagen" element={<CrudImagen />} />
           <Route path="/imagen/asignar" element={<UploadImage />} />
           <Route path="/imagen/actualizar" element={<ActualizarImagen />} />
@@ -87,6 +114,13 @@ function App() {
           <Route path="/reservas" element={<ListaReservas />} />
           <Route path="/reservas/crear" element={<CrearReserva />} />
           <Route path="/reservas/actualizar/:idReserva" element={<ActualizarReserva />} />
+          <Route path='/usuarios/administradores'element ={<ListaAdministradores/>}></Route>
+          <Route path='/usuarios/administrador/ver/:id'element={<AdministradorDetalle/>}></Route>
+          <Route path='/usuarios/administrador/elminar/:id'element={<AdministradorEliminar/>}></Route>
+          <Route path='/usuarios/administrador/editar/:id'element={<AdministradorEditar/>}></Route>
+          <Route path='/usuarios/administrador/crear'element={<AdministradorCrear/>}></Route>
+
+
         </Route>
       </Routes>
     </BrowserRouter>

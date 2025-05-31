@@ -1,6 +1,6 @@
 import ItemCard from "../item-card/ItemCard";
 import styles from "./ListProductos.module.css";
-import { getProductosSede } from "../../helpers/getProductosSede.js";
+import { getProductosSede } from "../../helpers/Productos/getProductosSede.js";
 import { useState, useEffect } from "react";
 import { useSpaVehiculosStore } from "../../zustand/SpaVehiculosStore.js";
 export default function ListProductos() {

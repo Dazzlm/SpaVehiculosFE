@@ -3,7 +3,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import styles from './Login.module.css'; 
 import logo from '../../assets/logo.jpeg'; 
 import { useSpaVehiculosStore } from '../../zustand/SpaVehiculosStore.js';
-import { parseJwt } from '../../helpers/parseJwt.js';
+import { parseJwt } from '../../helpers/Auth/parseJwt.js';
 function Login() {
   const [nombreUsuario, setNombreUsuario] = useState('');
   const [clave, setClave] = useState('');

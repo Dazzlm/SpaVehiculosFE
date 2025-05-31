@@ -1,6 +1,6 @@
 import ItemCard from "../item-card/ItemCard";
 import styles from "./ListServicios.module.css";
-import { getServicios } from "../../helpers/getServicios";
+import { getServicios } from "../../helpers/Servicios/getServicios";
 import { useState, useEffect } from "react";
 export default function ListServicios() {
     const [servicios, setServicios] = useState([]);

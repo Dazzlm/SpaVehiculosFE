@@ -14,7 +14,7 @@ function Login() {
     setError(null);
     setLoading(true);
 
-    const apiUrl = 'http://spavehiculos.runasp.net//api/Login/Ingresar'; 
+    const apiUrl = 'http://spavehiculos.runasp.net/api/Login/Ingresar'; 
 
     try {
       const response = await fetch(apiUrl, {
@@ -89,7 +89,7 @@ function Login() {
             onChange={(e) => setNombreUsuario(e.target.value)}
             required
             className={styles.input}
-            disabled={loading} // Deshabilita los campos mientras carga
+            disabled={loading} 
           />
         </div>
         <div className={styles.formGroup}>
@@ -103,13 +103,13 @@ function Login() {
             onChange={(e) => setClave(e.target.value)}
             required
             className={styles.input}
-            disabled={loading} // Deshabilita los campos mientras carga
+            disabled={loading} 
           />
         </div>
         <button
           type="submit"
           className={styles.button}
-          disabled={loading} // Deshabilita el botón mientras carga
+          disabled={loading} 
         >
           {loading ? 'Ingresando...' : 'Ingresar'}
         </button>

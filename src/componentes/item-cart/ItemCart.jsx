@@ -13,7 +13,7 @@ export default function ItemCart({ item, type }) {
   } = useSpaVehiculosStore();
 
   const cantidad = item.cantidad || 1;
-  const subtotal = (item.Precio * cantidad).toFixed(2);
+  const subtotal = (item.Precio * cantidad).toLocaleString();
 
   return (
     <Paper elevation={3} className={styles["item-cart"]}>
@@ -22,7 +22,7 @@ export default function ItemCart({ item, type }) {
           {item.Nombre}
         </Typography>
         <Typography className={styles["item-price"]} variant="body2">
-          ${item.Precio.toFixed(2)}
+          ${item.Precio.toLocaleString()}
         </Typography>
       </div>
 

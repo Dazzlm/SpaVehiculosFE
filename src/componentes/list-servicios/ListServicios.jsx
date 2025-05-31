@@ -12,10 +12,8 @@ export default function ListServicios() {
 
               if (result === undefined || result === null) {
                   setServicios([]);
-                  console.error("Error fetching data");
                   return;
               }
-              console.log(result);
 
               setServicios(result);
           };
@@ -24,17 +22,21 @@ export default function ListServicios() {
 }, []);
     
   return (
-    <div className={styles["container"]}>
-      {servicios.length == 0 ? "No hay servicios disponibles" :
-      <>
-      <h2 className={styles["titulo"]}>Elige los Servicios a facturar</h2>
-      <div className={styles["list-servicios"]}>
-      {servicios.map((item, index) => (
-        <ItemCard key={index} item={item} type={"Servicio"} />
-      ))}
+  <div className={styles["container"]}>
+    <h2 className={styles["titulo"]}>Elige los Servicios a facturar</h2>
+
+    {servicios.length === 0 ? (
+      "No hay servicios disponibles"
+    ) : (
+      <div className={styles["scroll-container"]}>
+        <div className={styles["list-servicios"]}>
+          {servicios.map((item, index) => (
+            <ItemCard key={index} item={item} type={"Servicio"} />
+          ))}
+        </div>
       </div>
-      </>
-    }
-    </div>
-  );
+    )}
+  </div>
+);
+
 }

@@ -21,7 +21,7 @@ import CrudImagen from "./componentes/cliente/CrudImagen";
 import EliminarImagen from "./componentes/cliente/EliminarImagen";
 import ActualizarImagen from "./componentes/cliente/ActualizarImagen";
 import DescargarImagen from "./componentes/cliente/DescargarImagen";
-import Facturacion from "./views/Facturacion/Facturacion";
+import Facturar from "./componentes/Facturar/Facturar.jsx";
 import ListaFacturas from "./componentes/list-facturas/ListFacturas";
 import FacturaDetalle from "./componentes/factura-detalle/FacturaDetalle";
 import CrearServicio from "./views/servicios/CrearServicio";
@@ -30,6 +30,8 @@ import EditarServicio from "./views/servicios/EditarServicio";
 import CrearReserva from "./views/Reserva/CrearReserva";
 import ListaReservas from "./views/Reserva/ListaReserva";
 import ActualizarReserva from "./views/Reserva/ActualizarReserva";
+import Facturacion from "./views/Facturacion/Facturacion.jsx";
+
 import "./App.css";
 
 
@@ -73,7 +75,8 @@ function App() {
           <Route path="/imagen/eliminar" element={<EliminarImagen />} />
           <Route path="/imagen/descargar" element={<DescargarImagen />} />
           <Route path="/facturacion" element={<Facturacion />} />
-          <Route path="/Facturas" element={<ListaFacturas />} />
+          <Route path="/facturacion/registrar" element={<Facturar />} />
+          <Route path="/facturacion/lista" element={<ListaFacturas />} />
           <Route path="/facturas/ver/:id" element={<FacturaDetalle />} />
           <Route path="/servicios/crear" element={<CrearServicio />} />
           <Route path="/servicios" element={<ListaServicios />} />

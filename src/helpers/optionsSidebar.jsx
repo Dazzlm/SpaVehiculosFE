@@ -51,7 +51,7 @@ const optionsSidebar = [
     id: 6,
     title: "Reservar",
     icon: <EventAvailableIcon />,
-    Path: "/reservar",
+    Path: "/reservas",
   },
     {
     id: 7,

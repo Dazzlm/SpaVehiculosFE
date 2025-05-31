@@ -77,6 +77,10 @@
     transition: transform 0.2s ease-in-out;
 }
 
+.item-card:hover {
+    transform: scale(1.05);
+}
+
 .detalle-actions-buttons{
   display: flex;
   justify-content: center;

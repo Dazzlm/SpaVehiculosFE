@@ -98,13 +98,13 @@ const handleEliminarServicio = async (id) => {
             </div>
              <div className={styles["item-card-actions"]}>
                   <EditIcon
-                  sx={{color:'lightblue'}}
+                  sx={{color:'lightblue', '&:hover': {color:'blue'}}}
                   onClick={(e) => {
                     e.stopPropagation();
                     navigate(`/servicios/editar/${item.IdServicio}`);
                   }} />
 
-                  <DeleteIcon sx={{color:'pink'}} onClick={() => handleEliminarServicio(item.IdServicio)} />
+                  <DeleteIcon sx={{color:'pink', '&:hover':{color:'red'}}} onClick={() => handleEliminarServicio(item.IdServicio)} />
             </div>
           </div>
         ))}

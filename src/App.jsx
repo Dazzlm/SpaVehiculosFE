@@ -27,8 +27,14 @@ import FacturaDetalle from "./componentes/factura-detalle/FacturaDetalle";
 import CrearServicio from "./views/servicios/CrearServicio";
 import ListaServicios from "./views/servicios/ListaServicios";
 import EditarServicio from "./views/servicios/EditarServicio";
+import CrearReserva from "./views/Reserva/CrearReserva";
+import ListaReservas from "./views/Reserva/ListaReserva";
+import ActualizarReserva from "./views/Reserva/ActualizarReserva";
 import Facturacion from "./views/Facturacion/Facturacion.jsx";
+
 import "./App.css";
+
+
 
 
 function App() {
@@ -75,6 +81,11 @@ function App() {
           <Route path="/servicios/crear" element={<CrearServicio />} />
           <Route path="/servicios" element={<ListaServicios />} />
           <Route path="/servicios/editar/:id" element={<EditarServicio />} />
+          <Route path="/reservas" element={<ListaReservas />} />
+          <Route path="/reservas/crear" element={<CrearReserva />} />
+          <Route path="/reservas/actualizar/:idReserva" element={<ActualizarReserva />} />
+          
+
 
 
 

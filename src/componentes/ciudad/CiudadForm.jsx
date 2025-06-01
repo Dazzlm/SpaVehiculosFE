@@ -22,12 +22,21 @@ export default function CiudadForm() {
 
   const onSubmit = async (data) => {
     try {
+      // Obtener token desde localStorage
+      const storedUser = JSON.parse(localStorage.getItem('CurrentUser') || 'null');
+      const token = storedUser?.token || null;
+
+      if (!token) {
+        throw new Error("No se encontró el token de autenticación.");
+      }
+
       const response = await fetch(
         "http://spavehiculos.runasp.net/api/Ciudades/Insertar",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(data),
         }

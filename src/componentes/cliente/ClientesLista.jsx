@@ -21,17 +21,33 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PeopleIcon from "@mui/icons-material/People";
+import { useSpaVehiculosStore } from "../../zustand/SpaVehiculosStore";
 
 const ListaClientes = () => {
   const [clientes, setClientes] = useState([]);
   const navigate = useNavigate();
+  const { currentUser } = useSpaVehiculosStore();
 
   useEffect(() => {
-    fetch("http://spavehiculos.runasp.net/api/Clientes/ConsultarTodos")
+    const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
+    const token = currentUser?.token || storedUser?.token;
+
+    if (!token) {
+      console.warn("No se encontró token, no se realizará la petición.");
+      return;
+    }
+
+    fetch("http://spavehiculos.runasp.net/api/Clientes/ConsultarTodos", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => setClientes(data))
       .catch((error) => console.error("Error al obtener clientes:", error));
-  }, []);
+  }, [currentUser]);
 
   return (
     <Box
@@ -80,31 +96,19 @@ const ListaClientes = () => {
           sx={{
             borderRadius: 2,
             minWidth: 800,
-            maxHeight: 700,    
-            overflowY: "auto", 
+            maxHeight: 700,
+            overflowY: "auto",
           }}
         >
           <Table stickyHeader>
             <TableHead>
               <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-                <TableCell>
-                  <b>ID</b>
-                </TableCell>
-                <TableCell>
-                  <b>Nombre</b>
-                </TableCell>
-                <TableCell>
-                  <b>Email</b>
-                </TableCell>
-                <TableCell>
-                  <b>Teléfono</b>
-                </TableCell>
-                <TableCell>
-                  <b>Dirección</b>
-                </TableCell>
-                <TableCell align="center">
-                  <b>Acciones</b>
-                </TableCell>
+                <TableCell><b>ID</b></TableCell>
+                <TableCell><b>Nombre</b></TableCell>
+                <TableCell><b>Email</b></TableCell>
+                <TableCell><b>Teléfono</b></TableCell>
+                <TableCell><b>Dirección</b></TableCell>
+                <TableCell align="center"><b>Acciones</b></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -164,11 +168,7 @@ const ListaClientes = () => {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell
-                    colSpan={6}
-                    align="center"
-                    sx={{ py: 4, color: "gray" }}
-                  >
+                  <TableCell colSpan={6} align="center" sx={{ py: 4, color: "gray" }}>
                     No hay clientes registrados.
                   </TableCell>
                 </TableRow>

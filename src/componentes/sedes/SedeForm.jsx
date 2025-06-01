@@ -20,28 +20,37 @@ export default function SedeForm() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async (data) => {
-    try {
-      const response = await fetch(
-        "http://spavehiculos.runasp.net/api/Sedes/Insertar",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+const onSubmit = async (data) => {
+  try {
+    const storedUser = JSON.parse(localStorage.getItem('CurrentUser') || 'null');
+    const token = storedUser?.token || (typeof currentUser !== 'undefined' ? currentUser?.token : null);
 
-      if (!response.ok) {
-        throw new Error("Error al guardar la sede");
-      }
-
-      navigate("/sedes");
-    } catch (error) {
-      console.error("Error en la solicitud:", error.message);
+    if (!token) {
+      throw new Error("No se encontró el token de autenticación.");
     }
-  };
+
+    const response = await fetch(
+      "http://spavehiculos.runasp.net/api/Sedes/Insertar",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Error al guardar la sede");
+    }
+
+    navigate("/sedes");
+  } catch (error) {
+    console.error("Error en la solicitud:", error.message);
+  }
+};
+
 
   return (
     <Paper

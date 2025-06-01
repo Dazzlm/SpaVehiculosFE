@@ -18,8 +18,22 @@ function CiudadDetalle() {
   const [ciudad, setCiudad] = useState(null);
   const navigate = useNavigate();
 
+  const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
+    const token = storedUser?.token;
+
+    if (!token) {
+      console.warn("No se encontró token, redirigiendo al login...");
+      navigate("/login");
+      return;
+    }
   useEffect(() => {
-    fetch(`http://spavehiculos.runasp.net/api/Ciudades/ConsultarXId?idCiudad=${id}`)
+    fetch(`http://spavehiculos.runasp.net/api/Ciudades/ConsultarXId?idCiudad=${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => setCiudad(data))
       .catch((err) => console.error("Error al cargar la ciudad", err));

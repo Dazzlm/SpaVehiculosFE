@@ -56,40 +56,53 @@ const ActualizarImagenCliente = () => {
     return true;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!validarFormulario()) {
-      setMensaje('');
-      return;
+  if (!validarFormulario()) {
+    setMensaje('');
+    return;
+  }
+
+  const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
+  const token = storedUser?.token;
+
+  if (!token) {
+    setError('No autorizado. Por favor inicia sesión.');
+    setMensaje('');
+    navigate('/login');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('idCliente', idCliente);
+  formData.append('archivo', archivo);
+
+  try {
+    const response = await fetch('http://spavehiculos.runasp.net/api/UploadCliente/Actualizar', {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`, // <-- token aquí
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || 'Error al actualizar la imagen.');
     }
 
-    const formData = new FormData();
-    formData.append('idCliente', idCliente);
-    formData.append('archivo', archivo);
+    setMensaje('Imagen actualizada correctamente.');
+    setError('');
 
-    try {
-      const response = await fetch('http://spavehiculos.runasp.net/api/UploadCliente/Actualizar', {
-        method: 'PUT',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText || 'Error al actualizar la imagen.');
-      }
-
-      setMensaje('Imagen actualizada correctamente.');
-      setError('');
-
-      setTimeout(() => {
-        navigate('/imagen');
-      }, 1500);
-    } catch (error) {
-      setError(`Error: ${error.message}`);
-      setMensaje('');
-    }
-  };
+    setTimeout(() => {
+      navigate('/imagen');
+    }, 1500);
+  } catch (error) {
+    setError(`Error: ${error.message}`);
+    setMensaje('');
+  }
+};
 
   return (
     <Container maxWidth="sm" sx={{ mt: 6 }}>

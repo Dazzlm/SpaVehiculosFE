@@ -18,19 +18,34 @@ import AddIcon from "@mui/icons-material/Add";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
+import { useSpaVehiculosStore } from "../../zustand/SpaVehiculosStore";
 
 const ListaSedes = () => {
   const [sedes, setSedes] = useState([]);
   const navigate = useNavigate();
+  const { currentUser } = useSpaVehiculosStore();
 
   useEffect(() => {
-    fetch("http://spavehiculos.runasp.net/api/Sedes/ConsultarTodos")
+    const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
+    const token = currentUser?.token || storedUser?.token;
+
+    if (!token) {
+      console.warn("No se encontró token, no se realizará la petición.");
+      return;
+    }
+
+    fetch("http://spavehiculos.runasp.net/api/Sedes/ConsultarTodos", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((response) => response.json())
       .then((data) => setSedes(data))
       .catch((error) => console.error("Error al obtener sedes:", error));
-  }, []);
+  }, [currentUser]);
 
   return (
     <Box sx={{ width: "100%", maxWidth: "1200px", mx: "auto", py: 3, px: { xs: 1, sm: 2, md: 3 } }}>
@@ -41,7 +56,6 @@ const ListaSedes = () => {
         spacing={2}
         mb={3}
       >
-
         <Stack paddingLeft={60} direction="row" alignItems="center" spacing={1}>
           <LocationCityIcon sx={{ fontSize: 36, color: "#444" }} />
           <Typography variant="h5" fontWeight="bold">
@@ -64,8 +78,8 @@ const ListaSedes = () => {
           sx={{
             borderRadius: 2,
             minWidth: 800,
-            maxHeight: 700,       
-            overflowY: "auto",    
+            maxHeight: 700,
+            overflowY: "auto",
           }}
         >
           <Table stickyHeader>
@@ -83,7 +97,7 @@ const ListaSedes = () => {
               {sedes.length > 0 ? (
                 sedes.map((sede) => (
                   <TableRow
-                    key={sede.idSede}
+                    key={sede.IdSede}
                     hover
                     sx={{
                       transition: "0.2s",

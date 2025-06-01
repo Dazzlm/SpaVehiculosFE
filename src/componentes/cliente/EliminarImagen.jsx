@@ -15,6 +15,16 @@ function EliminarImagen() {
       return;
     }
 
+    const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
+    const token = storedUser?.token;
+
+    if (!token) {
+      setError(true);
+      setMensaje("No autorizado. Por favor inicia sesión.");
+      setTimeout(() => navigate("/login"), 1500);
+      return;
+    }
+
     setError(false);
     setMensaje("");
 
@@ -23,6 +33,10 @@ function EliminarImagen() {
         `http://spavehiculos.runasp.net/api/UploadCliente/EliminarPorCliente?idCliente=${idCliente}`,
         {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
         }
       );
 

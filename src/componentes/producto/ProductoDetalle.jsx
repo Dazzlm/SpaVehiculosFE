@@ -26,7 +26,7 @@ function ProductoDetalle() {
 
     if (!token) {
       console.warn("No se encontró token, redirigiendo al login...");
-      navigate("/");
+      navigate("/login");
       return;
     }
 
@@ -44,8 +44,6 @@ function ProductoDetalle() {
         return res.json();
       })
       .then((data) => {
-        // Asumo que la respuesta viene con estructura { success, data }
-        // Si no, ajusta según corresponda
         if (data.success) {
           setProducto(data.data);
         } else {

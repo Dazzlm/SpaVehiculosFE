@@ -22,33 +22,46 @@ function SedeDetalle() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
-    const token = storedUser?.token;
+    const fetchData = async () => {
+      const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
+      const token = storedUser?.token;
 
-    if (!token) {
-      console.warn("No se encontró token, redirigiendo al login...");
-      navigate("/login");
-      return;
-    }
+      if (!token) {
+        console.warn("No se encontró token, redirigiendo al login...");
+        navigate("/login");
+        return;
+      }
 
-    fetch(`http://spavehiculos.runasp.net/api/Sedes/ConsultarXId?idSede=${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`Error HTTP: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((data) => setSede(data))
-      .catch((err) => {
-        console.error("Error al cargar la sede:", err.message);
+      try {
+        // Obtener sede
+        const resSede = await fetch(`http://spavehiculos.runasp.net/api/Sedes/ConsultarXId?idSede=${id}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!resSede.ok) throw new Error("Error al obtener sede");
+        const sedeData = await resSede.json();
+
+        // Obtener ciudades
+        const resCiudades = await fetch("http://spavehiculos.runasp.net/api/Ciudades/ConsultarTodos", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!resCiudades.ok) throw new Error("Error al obtener ciudades");
+        const ciudades = await resCiudades.json();
+
+        const ciudad = ciudades.find(c => c.IdCiudad === sedeData.IdCiudad);
+        sedeData.NombreCiudad = ciudad?.Nombre || "Desconocida";
+
+        setSede(sedeData);
+
+      } catch (error) {
+        console.error("Error al cargar datos:", error.message);
         setSede(null);
-      });
+      }
+    };
+
+    fetchData();
   }, [id, navigate]);
 
   if (!sede)
@@ -66,76 +79,38 @@ function SedeDetalle() {
     { icon: <ApartmentIcon color="primary" sx={{ fontSize: 28 }} />, label: "Nombre:", value: sede.Nombre },
     { icon: <HomeIcon color="primary" sx={{ fontSize: 28 }} />, label: "Dirección:", value: sede.Dirección },
     { icon: <PhoneIcon color="primary" sx={{ fontSize: 28 }} />, label: "Teléfono:", value: sede.Teléfono },
-    {
-      icon: <LocationCityIcon color="primary" sx={{ fontSize: 28 }} />,
-      label: "Ciudad:",
-      value: sede.nombreCiudad ?? sede.IdCiudad,
-    },
+    { icon: <LocationCityIcon color="primary" sx={{ fontSize: 28 }} />, label: "Ciudad:", value: sede.NombreCiudad },
   ];
 
   return (
-    <Box
-      maxWidth={600}
-      mx="auto"
-      mt={6}
-      px={4}
-      py={5}
-      bgcolor="background.paper"
-      borderRadius={4}
-      boxShadow="0 4px 20px rgba(0,0,0,0.12)"
-    >
-      <Button
-        variant="outlined"
-        startIcon={<ArrowBackIcon />}
-        onClick={() => navigate("/sedes")}
-        sx={{
-          mb: 4,
-          color: "primary.main",
-          borderColor: "primary.main",
-          fontWeight: "bold",
-          textTransform: "none",
-          transition: "all 0.3s ease",
-          "&:hover": {
-            bgcolor: "primary.main",
-            color: "white",
-            borderColor: "primary.main",
-          },
-        }}
-      >
-        Regresar
-      </Button>
+    <Box display="flex" justifyContent="center" alignItems="center" mt={5}>
+      <Paper elevation={4} sx={{ p: 5, borderRadius: 4, width: "100%", maxWidth: 600 }}>
+        <Button
+          variant="outlined"
+          startIcon={<ArrowBackIcon />}
+          onClick={() => navigate("/sedes")}
+          sx={{ mb: 4 }}
+        >
+          Volver
+        </Button>
 
-      <Typography
-        variant="h4"
-        component="h2"
-        gutterBottom
-        textAlign="center"
-        fontWeight="700"
-        color="primary.main"
-      >
-        Detalle de la Sede
-      </Typography>
+        <Typography variant="h4" fontWeight="bold" color="primary" mb={3} align="center">
+          Detalles de la Sede
+        </Typography>
 
-      <Paper elevation={5} sx={{ p: 4, borderRadius: 3 }}>
         <Stack spacing={3}>
-          {detalles.map(({ icon, label, value }, i) => (
-            <Box key={i}>
-              <Stack direction="row" alignItems="center" spacing={2}>
-                {icon}
-                <Typography
-                  fontWeight={700}
-                  sx={{ minWidth: 130, color: "text.secondary" }}
-                >
-                  {label}
-                </Typography>
-                <Typography fontWeight={500} color="text.primary" sx={{ wordBreak: "break-word" }}>
-                  {value || "-"}
-                </Typography>
-              </Stack>
-              {i < detalles.length - 1 && <Divider sx={{ mt: 2 }} />}
+          {detalles.map((detalle, index) => (
+            <Box key={index} display="flex" alignItems="center" gap={2}>
+              {detalle.icon}
+              <Typography variant="subtitle1" fontWeight="bold">
+                {detalle.label}
+              </Typography>
+              <Typography variant="subtitle1">{detalle.value}</Typography>
             </Box>
           ))}
         </Stack>
+
+        <Divider sx={{ my: 4 }} />
       </Paper>
     </Box>
   );

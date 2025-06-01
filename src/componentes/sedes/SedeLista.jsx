@@ -27,25 +27,28 @@ const ListaSedes = () => {
   const { currentUser } = useSpaVehiculosStore();
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
-    const token = currentUser?.token || storedUser?.token;
+  const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
+  const token = currentUser?.token || storedUser?.token;
 
-    if (!token) {
-      console.warn("No se encontró token, no se realizará la petición.");
-      return;
-    }
+  if (!token) {
+    console.warn("No se encontró token, no se realizará la petición.");
+    return;
+  }
 
-    fetch("http://spavehiculos.runasp.net/api/Sedes/ConsultarTodos", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+  fetch("http://spavehiculos.runasp.net/api/Sedes/ConsultarTodos", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      const sedesOrdenadas = data.sort((a, b) => a.IdSede - b.IdSede);
+      setSedes(sedesOrdenadas);
     })
-      .then((response) => response.json())
-      .then((data) => setSedes(data))
-      .catch((error) => console.error("Error al obtener sedes:", error));
-  }, [currentUser]);
+    .catch((error) => console.error("Error al obtener sedes:", error));
+}, [currentUser]);
 
   return (
     <Box sx={{ width: "100%", maxWidth: "1200px", mx: "auto", py: 3, px: { xs: 1, sm: 2, md: 3 } }}>

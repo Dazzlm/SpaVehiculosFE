@@ -1,5 +1,5 @@
-import React from "react";
-import { useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import {
   TextField,
@@ -8,49 +8,85 @@ import {
   Typography,
   Paper,
   Stack,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+  FormHelperText,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export default function SedeForm() {
   const navigate = useNavigate();
 
+  const [ciudades, setCiudades] = useState([]);
+  const [loadingCiudades, setLoadingCiudades] = useState(true);
+  const [errorCiudades, setErrorCiudades] = useState(null);
+
+  useEffect(() => {
+  async function fetchCiudades() {
+    try {
+      const storedUser = JSON.parse(localStorage.getItem("CurrentUser") || "null");
+      const token = storedUser?.token || (typeof currentUser !== "undefined" ? currentUser?.token : null);
+
+      if (!token) {
+        throw new Error("No se encontró el token de autenticación.");
+      }
+
+      const response = await fetch("http://spavehiculos.runasp.net/api/Ciudades/ConsultarTodos", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) throw new Error("Error al cargar las ciudades");
+
+      const data = await response.json();
+      setCiudades(data);
+    } catch (error) {
+      setErrorCiudades(error.message);
+    } finally {
+      setLoadingCiudades(false);
+    }
+  }
+
+  fetchCiudades();
+}, []);
+
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm();
 
-const onSubmit = async (data) => {
-  try {
-    const storedUser = JSON.parse(localStorage.getItem('CurrentUser') || 'null');
-    const token = storedUser?.token || (typeof currentUser !== 'undefined' ? currentUser?.token : null);
+  const onSubmit = async (data) => {
+    try {
+      const storedUser = JSON.parse(localStorage.getItem("CurrentUser") || "null");
+      const token = storedUser?.token || (typeof currentUser !== "undefined" ? currentUser?.token : null);
 
-    if (!token) {
-      throw new Error("No se encontró el token de autenticación.");
-    }
+      if (!token) {
+        throw new Error("No se encontró el token de autenticación.");
+      }
 
-    const response = await fetch(
-      "http://spavehiculos.runasp.net/api/Sedes/Insertar",
-      {
+      const response = await fetch("http://spavehiculos.runasp.net/api/Sedes/Insertar", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al guardar la sede");
       }
-    );
 
-    if (!response.ok) {
-      throw new Error("Error al guardar la sede");
+      navigate("/sedes");
+    } catch (error) {
+      console.error("Error en la solicitud:", error.message);
     }
-
-    navigate("/sedes");
-  } catch (error) {
-    console.error("Error en la solicitud:", error.message);
-  }
-};
-
+  };
 
   return (
     <Paper
@@ -91,19 +127,35 @@ const onSubmit = async (data) => {
           helperText={errors.Dirección?.message}
           fullWidth
         />
-        <TextField
-          label="Id Ciudad"
-          type="number"
-          {...register("IdCiudad", {
-            required: "El Id de la ciudad es obligatorio",
-            valueAsNumber: true,
-            validate: (value) =>
-              value > 0 || "El Id de la ciudad debe ser mayor que 0",
-          })}
-          error={!!errors.IdCiudad}
-          helperText={errors.IdCiudad?.message}
-          fullWidth
-        />
+
+        <FormControl fullWidth error={!!errors.IdCiudad} disabled={loadingCiudades}>
+          <InputLabel id="select-ciudad-label">Ciudad</InputLabel>
+          <Controller
+            name="IdCiudad"
+            control={control}
+            defaultValue=""
+            rules={{
+              required: "La ciudad es obligatoria",
+              validate: (value) => value > 0 || "Debe seleccionar una ciudad válida",
+            }}
+            render={({ field }) => (
+              <Select labelId="select-ciudad-label" label="Ciudad" {...field}>
+                <MenuItem value="">
+                  <em>{loadingCiudades ? "Cargando ciudades..." : "Seleccione una ciudad"}</em>
+                </MenuItem>
+                {ciudades.map((ciudad) => (
+                  <MenuItem key={ciudad.IdCiudad} value={ciudad.IdCiudad}>
+                    {ciudad.Nombre}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
+          />
+          <FormHelperText>
+            {errors.IdCiudad ? errors.IdCiudad.message : errorCiudades ? errorCiudades : ""}
+          </FormHelperText>
+        </FormControl>
+
         <TextField
           label="Teléfono"
           {...register("Teléfono", { required: "El teléfono es obligatorio" })}

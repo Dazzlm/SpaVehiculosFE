@@ -1,5 +1,5 @@
-import React from "react";
-import { useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import {
   TextField,
@@ -8,40 +8,74 @@ import {
   Typography,
   Paper,
   Stack,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+  FormHelperText,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export default function ProductoForm() {
   const navigate = useNavigate();
+  const [proveedores, setProveedores] = useState([]);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    control,
   } = useForm();
 
-  const onSubmit = async (data) => {
-    data.Precio = parseFloat(data.Precio);
-
+  useEffect(() => {
+  const fetchProveedores = async () => {
     try {
-      const storedUser = JSON.parse(localStorage.getItem('CurrentUser') || 'null');
-      const token = storedUser?.token || (typeof currentUser !== 'undefined' ? currentUser?.token : null);
+      const storedUser = JSON.parse(localStorage.getItem("CurrentUser") || "null");
+      const token = storedUser?.token;
 
       if (!token) {
         throw new Error("No se encontró el token de autenticación.");
       }
 
-      const response = await fetch(
-        "http://spavehiculos.runasp.net/api/Productos/Crear",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,  
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch("http://spavehiculos.runasp.net/api/GestorProv/ConsultarTodos", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al obtener proveedores");
+      }
+
+      const data = await response.json();
+      setProveedores(data);
+    } catch (error) {
+      console.error("Error al obtener proveedores:", error.message);
+    }
+  };
+  fetchProveedores();
+}, []);
+
+
+  const onSubmit = async (data) => {
+    data.Precio = parseFloat(data.Precio);
+
+    try {
+      const storedUser = JSON.parse(localStorage.getItem("CurrentUser") || "null");
+      const token = storedUser?.token;
+
+      if (!token) {
+        throw new Error("No se encontró el token de autenticación.");
+      }
+
+      const response = await fetch("http://spavehiculos.runasp.net/api/Productos/Crear", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
 
       if (!response.ok) {
         throw new Error("Error al guardar el producto");
@@ -106,17 +140,25 @@ export default function ProductoForm() {
           fullWidth
         />
 
-        <TextField
-          label="Id Proveedor"
-          type="number"
-          {...register("IdProveedor", {
-            required: "El id del proveedor es obligatorio",
-            min: { value: 1, message: "Debe ser un id válido" },
-          })}
-          error={!!errors.IdProveedor}
-          helperText={errors.IdProveedor?.message}
-          fullWidth
-        />
+        <FormControl fullWidth error={!!errors.IdProveedor}>
+          <InputLabel id="proveedor-label">Proveedor</InputLabel>
+          <Controller
+            name="IdProveedor"
+            control={control}
+            defaultValue=""
+            rules={{ required: "El proveedor es obligatorio" }}
+            render={({ field }) => (
+              <Select labelId="proveedor-label" label="Proveedor" {...field}>
+                {proveedores.map((prov) => (
+                  <MenuItem key={prov.IdProveedor} value={prov.IdProveedor}>
+                    {prov.NombreEmpresa}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
+          />
+          <FormHelperText>{errors.IdProveedor?.message}</FormHelperText>
+        </FormControl>
 
         <Stack direction="row" spacing={2} justifyContent="space-between" mt={3}>
           <Button

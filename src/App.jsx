@@ -48,6 +48,10 @@ import ProductoEditar from "./componentes/producto/ProductoEditar.jsx";
 import ProductoDetalle from "./componentes/producto/ProductoDetalle.jsx";
 import ProductoEliminar from "./componentes/producto/ProductoEliminar.jsx";
 import CrudProducto from "./componentes/producto/CrudProducto.jsx";
+import StockLista from "./componentes/StockProductos/StockLista.jsx";
+import StockCrear from "./componentes/StockProductos/StockCrear.jsx";
+import StockEditar from "./componentes/StockProductos/StockEditar.jsx";
+import StockEliminar from "./componentes/StockProductos/StockEliminar.jsx";
 
 function App() {
   return (
@@ -109,7 +113,10 @@ function App() {
           <Route path='/gestion/productos/editar/:id'element={<ProductoEditar/>}></Route>
           <Route path='/gestion/productos/ver/:id'element={<ProductoDetalle/>}></Route>
           <Route path="/gestion/productos/eliminar/:id" element={<ProductoEliminar />} />
-
+          <Route path="/gestion/stock" element={<StockLista />} />
+          <Route path="/gestion/stock/crear" element={<StockCrear />} />
+          <Route path="/gestion/stock/editar/:id" element={<StockEditar />} />
+          <Route path="/gestion/stock/eliminar/:id" element={<StockEliminar />} />
 
         </Route>
       </Routes>

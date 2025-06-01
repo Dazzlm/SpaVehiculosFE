@@ -22,11 +22,11 @@ import EliminarImagen from "./componentes/cliente/EliminarImagen";
 import ActualizarImagen from "./componentes/cliente/ActualizarImagen";
 import DescargarImagen from "./componentes/cliente/DescargarImagen";
 import './App.css';
-import ListaAdministradores from "./componentes/administrador/Administrador.jsx"
-import AdministradorDetalle from './componentes/administrador/AdministradorDetalle.jsx';
-import AdministradorEliminar from './componentes/administrador/AdministradorEliminar.jsx';
-import AdministradorEditar from './componentes/administrador/AdministradorEditar.jsx';
-import AdministradorCrear from './componentes/administrador/AdministradorCrear.jsx';
+import ListaAdministradores from "./componentes/Administrador/Administrador.jsx"
+import AdministradorDetalle from './componentes/Administrador/AdministradorDetalle.jsx';
+import AdministradorEliminar from './componentes/Administrador/AdministradorEliminar.jsx';
+import AdministradorEditar from './componentes/Administrador/AdministradorEditar.jsx';
+import AdministradorCrear from './componentes/Administrador/AdministradorCrear.jsx';
 import Facturar from "./componentes/Facturar/Facturar.jsx";
 import ListaFacturas from "./componentes/list-facturas/ListFacturas";
 import FacturaDetalle from "./componentes/factura-detalle/FacturaDetalle";

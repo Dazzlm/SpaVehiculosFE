@@ -81,8 +81,18 @@ export default function UploadImage() {
     formData.append('idCliente', idCliente.trim());
 
     try {
+      const storedUser = JSON.parse(localStorage.getItem('CurrentUser') || 'null');
+      const token = storedUser?.token;
+
+      if (!token) {
+        throw new Error("No se encontró el token de autenticación.");
+      }
+
       const response = await fetch('http://spavehiculos.runasp.net/api/UploadCliente/Subir', {
         method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         body: formData,
       });
 

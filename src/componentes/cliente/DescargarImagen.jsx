@@ -20,11 +20,25 @@ export default function DescargarImagen() {
       return;
     }
 
+    const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
+    const token = storedUser?.token;
+
+    if (!token) {
+      alert("No se encontró token, por favor inicia sesión.");
+      navigate("/login");
+      return;
+    }
+
     try {
       const response = await fetch(
         `http://spavehiculos.runasp.net/api/UploadCliente/Descargar?nombreArchivo=${encodeURIComponent(
           nombreArchivo.trim()
-        )}`
+        )}`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
+        }
       );
 
       if (!response.ok) {

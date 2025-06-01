@@ -19,25 +19,55 @@ function ClienteEliminar() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`http://spavehiculos.runasp.net/api/Clientes/ConsultarXId?idCliente=${id}`)
+    const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
+    const token = storedUser?.token;
+
+    if (!token) {
+      setError("No autorizado. Por favor inicia sesión.");
+      setTimeout(() => navigate("/login"), 1500);
+      return;
+    }
+
+    fetch(`http://spavehiculos.runasp.net/api/Clientes/ConsultarXId?idCliente=${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => setCliente(data))
-      .catch((err) => setError("Error al obtener cliente"));
-  }, [id]);
+      .catch(() => setError("Error al obtener cliente"));
+  }, [id, navigate]);
 
   const handleEliminar = () => {
+    const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
+    const token = storedUser?.token;
+
+    if (!token) {
+      setError("No autorizado. Por favor inicia sesión.");
+      setTimeout(() => navigate("/login"), 1500);
+      return;
+    }
+
     fetch(`http://spavehiculos.runasp.net/api/Clientes/EliminarXId?IdCliente=${id}`, {
       method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
-      .then((res) => res.text())
-      .then((data) => {
+      .then((res) => {
+        if (!res.ok) throw new Error("Error al eliminar");
+        return res.text();
+      })
+      .then(() => {
         setMensaje("Cliente eliminado correctamente.");
         setTimeout(() => navigate("/usuarios/cliente"), 1000);
       })
-      .catch((err) => setError("Error al eliminar cliente."));
+      .catch(() => setError("Error al eliminar cliente."));
   };
 
-  if (!cliente) {
+  if (!cliente && !error) {
     return (
       <Typography align="center" mt={4} variant="h6">
         Cargando datos del cliente...
@@ -54,32 +84,34 @@ function ClienteEliminar() {
       {mensaje && <Alert severity="success" sx={{ mb: 2 }}>{mensaje}</Alert>}
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
-      <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
-        <Typography mb={2}>
-          ¿Estás seguro que deseas eliminar al siguiente cliente?
-        </Typography>
-        <Stack spacing={1}>
-          <Typography><strong>Nombre:</strong> {cliente.Nombre} {cliente.Apellidos}</Typography>
-          <Typography><strong>Email:</strong> {cliente.Email}</Typography>
-          <Typography><strong>Teléfono:</strong> {cliente.Teléfono}</Typography>
-          <Typography><strong>Dirección:</strong> {cliente.Dirección}</Typography>
-        </Stack>
+      {cliente && (
+        <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
+          <Typography mb={2}>
+            ¿Estás seguro que deseas eliminar al siguiente cliente?
+          </Typography>
+          <Stack spacing={1}>
+            <Typography><strong>Nombre:</strong> {cliente.Nombre} {cliente.Apellidos}</Typography>
+            <Typography><strong>Email:</strong> {cliente.Email}</Typography>
+            <Typography><strong>Teléfono:</strong> {cliente.Teléfono}</Typography>
+            <Typography><strong>Dirección:</strong> {cliente.Dirección}</Typography>
+          </Stack>
 
-        <Stack direction="row" spacing={2} mt={4}>
-          <Button
-            variant="contained"
-            color="error"
-            startIcon={<DeleteIcon />}
-            onClick={handleEliminar}
-          >
-            Confirmar Eliminación
-          </Button>
+          <Stack direction="row" spacing={2} mt={4}>
+            <Button
+              variant="contained"
+              color="error"
+              startIcon={<DeleteIcon />}
+              onClick={handleEliminar}
+            >
+              Confirmar Eliminación
+            </Button>
 
-          <Button variant="outlined" onClick={() => navigate("/usuarios/cliente")}>
-            Cancelar
-          </Button>
-        </Stack>
-      </Paper>
+            <Button variant="outlined" onClick={() => navigate("/usuarios/cliente")}>
+              Cancelar
+            </Button>
+          </Stack>
+        </Paper>
+      )}
     </Box>
   );
 }

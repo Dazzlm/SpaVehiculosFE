@@ -22,11 +22,34 @@ function SedeDetalle() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`http://spavehiculos.runasp.net/api/Sedes/ConsultarXId?idSede=${id}`)
-      .then((res) => res.json())
+    const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
+    const token = storedUser?.token;
+
+    if (!token) {
+      console.warn("No se encontró token, redirigiendo al login...");
+      navigate("/login");
+      return;
+    }
+
+    fetch(`http://spavehiculos.runasp.net/api/Sedes/ConsultarXId?idSede=${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Error HTTP: ${res.status}`);
+        }
+        return res.json();
+      })
       .then((data) => setSede(data))
-      .catch((err) => console.error("Error al cargar la sede", err));
-  }, [id]);
+      .catch((err) => {
+        console.error("Error al cargar la sede:", err.message);
+        setSede(null);
+      });
+  }, [id, navigate]);
 
   if (!sede)
     return (
@@ -43,7 +66,11 @@ function SedeDetalle() {
     { icon: <ApartmentIcon color="primary" sx={{ fontSize: 28 }} />, label: "Nombre:", value: sede.Nombre },
     { icon: <HomeIcon color="primary" sx={{ fontSize: 28 }} />, label: "Dirección:", value: sede.Dirección },
     { icon: <PhoneIcon color="primary" sx={{ fontSize: 28 }} />, label: "Teléfono:", value: sede.Teléfono },
-    { icon: <LocationCityIcon color="primary" sx={{ fontSize: 28 }} />, label: "Ciudad:", value: sede.nombreCiudad ?? sede.IdCiudad },
+    {
+      icon: <LocationCityIcon color="primary" sx={{ fontSize: 28 }} />,
+      label: "Ciudad:",
+      value: sede.nombreCiudad ?? sede.IdCiudad,
+    },
   ];
 
   return (
@@ -78,7 +105,14 @@ function SedeDetalle() {
         Regresar
       </Button>
 
-      <Typography variant="h4" component="h2" gutterBottom textAlign="center" fontWeight="700" color="primary.main">
+      <Typography
+        variant="h4"
+        component="h2"
+        gutterBottom
+        textAlign="center"
+        fontWeight="700"
+        color="primary.main"
+      >
         Detalle de la Sede
       </Typography>
 

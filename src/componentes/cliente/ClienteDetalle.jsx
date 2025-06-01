@@ -27,14 +27,43 @@ function ClienteDetalle() {
   const imagenPorDefecto = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
   useEffect(() => {
+    // Obtener token del localStorage
+    const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
+    const token = storedUser?.token;
+
+    if (!token) {
+      console.warn("No se encontró token, redirigiendo al login...");
+      navigate("/login");
+      return;
+    }
+
     const baseUrl = 'http://spavehiculos.runasp.net/api/Clientes';
-    fetch(`${baseUrl}/ConsultarXId?idCliente=${id}`)
-      .then(res => res.json())
+
+    // Primer fetch: datos del cliente
+    fetch(`${baseUrl}/ConsultarXId?idCliente=${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(res => {
+        if (!res.ok) {
+          throw new Error(`Error HTTP: ${res.status}`);
+        }
+        return res.json();
+      })
       .then(data => {
         setCliente(data);
 
+        // Segundo fetch: imagen del cliente (si la ruta está protegida, también enviamos token)
         const imagenClienteUrl = `http://spavehiculos.runasp.net/api/UploadCliente/ImagenCliente?idCliente=${id}`;
-        fetch(imagenClienteUrl)
+        fetch(imagenClienteUrl, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
           .then(response => {
             if (response.ok) {
               setImagenUrl(imagenClienteUrl);
@@ -46,8 +75,11 @@ function ClienteDetalle() {
             setImagenUrl(imagenPorDefecto);
           });
       })
-      .catch(err => console.error("Error al cargar cliente", err));
-  }, [id]);
+      .catch(err => {
+        console.error("Error al cargar cliente:", err.message);
+        setCliente(null);
+      });
+  }, [id, navigate]);
 
   if (!cliente)
     return (

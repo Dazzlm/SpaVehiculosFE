@@ -33,7 +33,22 @@ export default function CiudadEditar() {
   });
 
   useEffect(() => {
-    fetch(`http://spavehiculos.runasp.net/api/Ciudades/ConsultarXId?idCiudad=${id}`)
+    const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
+    const token = storedUser?.token;
+
+    if (!token) {
+      console.warn("No se encontró token, redirigiendo al login...");
+      navigate("/login");
+      return;
+    }
+
+    fetch(`http://spavehiculos.runasp.net/api/Ciudades/ConsultarXId?idCiudad=${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then(async (res) => {
         if (res.status === 204) throw new Error("Ciudad no encontrada");
         if (!res.ok) throw new Error("Error al obtener ciudad");
@@ -45,15 +60,28 @@ export default function CiudadEditar() {
         setMensaje("Error al cargar datos.");
         setLoading(false);
       });
-  }, [id, reset]);
+  }, [id, reset, navigate]);
 
   const onSubmit = async (data) => {
     try {
+      const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
+      const token = storedUser?.token;
+
+      if (!token) {
+        setMensaje("No autorizado. Por favor inicia sesión.");
+        navigate("/login");
+        return;
+      }
+
       const res = await fetch("http://spavehiculos.runasp.net/api/Ciudades/Actualizar", {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(data),
       });
+
       if (!res.ok) throw new Error("Error en la actualización");
       setMensaje("Ciudad actualizada correctamente");
       setTimeout(() => navigate("/ciudades"), 1500);
@@ -148,7 +176,7 @@ export default function CiudadEditar() {
                   error={!!errors.Nombre}
                   helperText={errors.Nombre?.message}
                   fullWidth
-                  size="large"
+                  size="medium"
                 />
               )}
             />

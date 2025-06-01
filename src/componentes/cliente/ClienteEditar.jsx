@@ -36,34 +36,62 @@ export default function ClienteEditar() {
   });
 
   useEffect(() => {
-    fetch(`http://spavehiculos.runasp.net/api/Clientes/ConsultarXId?idCliente=${id}`)
-      .then(async (res) => {
-        if (res.status === 204) throw new Error("Cliente no encontrado");
-        if (!res.ok) throw new Error("Error al obtener cliente");
-        const data = await res.json();
-        reset(data);
-        setLoading(false);
-      })
-      .catch(() => {
-        setMensaje("Error al cargar datos.");
-        setLoading(false);
-      });
-  }, [id, reset]);
+  const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
+  const token = storedUser?.token;
 
-  const onSubmit = async (data) => {
-    try {
-      const res = await fetch("http://spavehiculos.runasp.net/api/Clientes/Actualizar", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) throw new Error("Error en la actualización");
-      setMensaje("Cliente actualizado correctamente");
-      setTimeout(() => navigate("/usuarios/cliente"), 1500);
-    } catch {
-      setMensaje("Error al actualizar cliente");
+  if (!token) {
+    console.warn("No se encontró token, redirigiendo al login...");
+    navigate("/login");
+    return;
+  }
+
+  fetch(`http://spavehiculos.runasp.net/api/Clientes/ConsultarXId?idCliente=${id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then(async (res) => {
+      if (res.status === 204) throw new Error("Cliente no encontrado");
+      if (!res.ok) throw new Error("Error al obtener cliente");
+      const data = await res.json();
+      reset(data);
+      setLoading(false);
+    })
+    .catch(() => {
+      setMensaje("Error al cargar datos.");
+      setLoading(false);
+    });
+}, [id, navigate, reset]);
+
+const onSubmit = async (data) => {
+  try {
+    const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
+    const token = storedUser?.token;
+
+    if (!token) {
+      console.warn("No se encontró token, redirigiendo al login...");
+      navigate("/login");
+      return;
     }
-  };
+
+    const res = await fetch("http://spavehiculos.runasp.net/api/Clientes/Actualizar", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) throw new Error("Error en la actualización");
+    setMensaje("Cliente actualizado correctamente");
+    setTimeout(() => navigate("/usuarios/cliente"), 1500);
+  } catch {
+    setMensaje("Error al actualizar cliente");
+  }
+};
 
   if (loading)
     return (

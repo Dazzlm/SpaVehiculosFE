@@ -34,7 +34,22 @@ export default function SedeEditar() {
   });
 
   useEffect(() => {
-    fetch(`http://spavehiculos.runasp.net/api/Sedes/ConsultarXId?idSede=${id}`)
+    const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
+    const token = storedUser?.token;
+
+    if (!token) {
+      console.warn("No se encontró token, redirigiendo al login...");
+      navigate("/login");
+      return;
+    }
+
+    fetch(`http://spavehiculos.runasp.net/api/Sedes/ConsultarXId?idSede=${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then(async (res) => {
         if (res.status === 204) throw new Error("Sede no encontrada");
         if (!res.ok) throw new Error("Error al obtener sede");
@@ -46,13 +61,25 @@ export default function SedeEditar() {
         setMensaje("Error al cargar datos.");
         setLoading(false);
       });
-  }, [id, reset]);
+  }, [id, reset, navigate]);
 
   const onSubmit = async (data) => {
     try {
+      const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
+      const token = storedUser?.token;
+
+      if (!token) {
+        setMensaje("No autorizado. Por favor inicia sesión.");
+        navigate("/login");
+        return;
+      }
+
       const res = await fetch("http://spavehiculos.runasp.net/api/Sedes/Actualizar", {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(data),
       });
       if (!res.ok) throw new Error("Error en la actualización");
@@ -149,7 +176,6 @@ export default function SedeEditar() {
                   error={!!errors.Nombre}
                   helperText={errors.Nombre?.message}
                   fullWidth
-                  size="large"
                 />
               )}
             />
@@ -164,29 +190,22 @@ export default function SedeEditar() {
                   error={!!errors.Dirección}
                   helperText={errors.Dirección?.message}
                   fullWidth
-                  size="large"
                 />
               )}
             />
             <Controller
               name="IdCiudad"
               control={control}
-              rules={{
-                required: "El ID de la ciudad es obligatorio",
-                pattern: {
-                  value: /^[1-9]\d*$/,
-                  message: "Debe ser un número entero positivo",
-                },
-              }}
+              rules={{ required: "El ID de ciudad es obligatorio" }}
               render={({ field }) => (
                 <TextField
                   {...field}
                   label="ID Ciudad"
-                  type="number"
                   error={!!errors.IdCiudad}
                   helperText={errors.IdCiudad?.message}
                   fullWidth
-                  size="large"
+                  type="number"
+                  inputProps={{ min: "1" }}
                 />
               )}
             />
@@ -201,7 +220,6 @@ export default function SedeEditar() {
                   error={!!errors.Teléfono}
                   helperText={errors.Teléfono?.message}
                   fullWidth
-                  size="large"
                 />
               )}
             />

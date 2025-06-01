@@ -19,7 +19,22 @@ function CiudadEliminar() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`http://spavehiculos.runasp.net44376/api/Ciudades/ConsultarXId?idCiudad=${id}`)
+    const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
+    const token = storedUser?.token;
+
+    if (!token) {
+      setError("No autorizado. Por favor inicia sesión.");
+      setTimeout(() => navigate("/login"), 1500);
+      return;
+    }
+
+    fetch(`http://spavehiculos.runasp.net/api/Ciudades/ConsultarXId?idCiudad=${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => {
         if (res.status === 204) throw new Error("Ciudad no encontrada");
         if (!res.ok) throw new Error("Error al obtener la ciudad");
@@ -27,11 +42,23 @@ function CiudadEliminar() {
       })
       .then((data) => setCiudad(data))
       .catch(() => setError("Error al obtener la ciudad"));
-  }, [id]);
+  }, [id, navigate]);
 
   const handleEliminar = () => {
+    const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
+    const token = storedUser?.token;
+
+    if (!token) {
+      setError("No autorizado. Por favor inicia sesión.");
+      setTimeout(() => navigate("/login"), 1500);
+      return;
+    }
+
     fetch(`http://spavehiculos.runasp.net/api/Ciudades/EliminarXId?idCiudad=${id}`, {
       method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
       .then((res) => {
         if (!res.ok) throw new Error("Error al eliminar");
@@ -44,7 +71,7 @@ function CiudadEliminar() {
       .catch(() => setError("Error al eliminar la ciudad."));
   };
 
-  if (!ciudad) {
+  if (!ciudad && !error) {
     return (
       <Typography align="center" mt={4} variant="h6">
         Cargando datos de la ciudad...
@@ -61,29 +88,31 @@ function CiudadEliminar() {
       {mensaje && <Alert severity="success" sx={{ mb: 2 }}>{mensaje}</Alert>}
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
-      <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
-        <Typography mb={2}>
-          ¿Estás seguro que deseas eliminar la siguiente ciudad?
-        </Typography>
-        <Stack spacing={1}>
-          <Typography><strong>Nombre:</strong> {ciudad.Nombre}</Typography>
-        </Stack>
+      {ciudad && (
+        <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
+          <Typography mb={2}>
+            ¿Estás seguro que deseas eliminar la siguiente ciudad?
+          </Typography>
+          <Stack spacing={1}>
+            <Typography><strong>Nombre:</strong> {ciudad.Nombre}</Typography>
+          </Stack>
 
-        <Stack direction="row" spacing={2} mt={4}>
-          <Button
-            variant="contained"
-            color="error"
-            startIcon={<DeleteIcon />}
-            onClick={handleEliminar}
-          >
-            Confirmar Eliminación
-          </Button>
+          <Stack direction="row" spacing={2} mt={4}>
+            <Button
+              variant="contained"
+              color="error"
+              startIcon={<DeleteIcon />}
+              onClick={handleEliminar}
+            >
+              Confirmar Eliminación
+            </Button>
 
-          <Button variant="outlined" onClick={() => navigate("/ciudades")}>
-            Cancelar
-          </Button>
-        </Stack>
-      </Paper>
+            <Button variant="outlined" startIcon={<ArrowBackIcon />} onClick={() => navigate("/ciudades")}>
+              Cancelar
+            </Button>
+          </Stack>
+        </Paper>
+      )}
     </Box>
   );
 }

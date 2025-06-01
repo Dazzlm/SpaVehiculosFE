@@ -19,28 +19,43 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import PlaceIcon from '@mui/icons-material/Place';
+import PlaceIcon from "@mui/icons-material/Place";
+import { useSpaVehiculosStore } from "../../zustand/SpaVehiculosStore";
 
 const ListaCiudades = () => {
   const [ciudades, setCiudades] = useState([]);
   const navigate = useNavigate();
+  const { currentUser } = useSpaVehiculosStore();
 
   useEffect(() => {
-    fetch("http://spavehiculos.runasp.net/api/Ciudades/ConsultarTodos")
-      .then((response) => response.json())
+    const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
+    const token = currentUser?.token || storedUser?.token;
+
+    if (!token) {
+      console.warn("No se encontró token, no se realizará la petición.");
+      return;
+    }
+
+    fetch("http://spavehiculos.runasp.net/api/Ciudades/ConsultarTodos", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
       .then((data) => setCiudades(data))
       .catch((error) => console.error("Error al obtener ciudades:", error));
-  }, []);
+  }, [currentUser]);
 
   return (
     <Box sx={{ width: "100%", maxWidth: "800px", mx: "auto", py: 3, px: { xs: 1, sm: 2, md: 3 } }}>
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        spacing={2}
-        mb={3}
-      >
+      <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={2} mb={3}>
         <Stack paddingLeft={35} direction="row" alignItems="center" spacing={1}>
           <PlaceIcon sx={{ fontSize: 36, color: "#444" }} />
           <Typography variant="h5" fontWeight="bold">
@@ -70,9 +85,15 @@ const ListaCiudades = () => {
           <Table stickyHeader>
             <TableHead>
               <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-                <TableCell><b>ID</b></TableCell>
-                <TableCell><b>Nombre</b></TableCell>
-                <TableCell align="center"><b>Acciones</b></TableCell>
+                <TableCell>
+                  <b>ID</b>
+                </TableCell>
+                <TableCell>
+                  <b>Nombre</b>
+                </TableCell>
+                <TableCell align="center">
+                  <b>Acciones</b>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

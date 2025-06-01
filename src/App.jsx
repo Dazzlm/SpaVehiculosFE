@@ -52,6 +52,7 @@ import StockLista from "./componentes/StockProductos/StockLista.jsx";
 import StockCrear from "./componentes/StockProductos/StockCrear.jsx";
 import StockEditar from "./componentes/StockProductos/StockEditar.jsx";
 import StockEliminar from "./componentes/StockProductos/StockEliminar.jsx";
+import Inicio from "./componentes/inicio/Inicio.jsx";
 
 function App() {
   return (
@@ -117,6 +118,7 @@ function App() {
           <Route path="/gestion/stock/crear" element={<StockCrear />} />
           <Route path="/gestion/stock/editar/:id" element={<StockEditar />} />
           <Route path="/gestion/stock/eliminar/:id" element={<StockEliminar />} />
+          <Route path="/" element={<Inicio />} />
 
         </Route>
       </Routes>

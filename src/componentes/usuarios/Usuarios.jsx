@@ -9,8 +9,8 @@ import {
   Tooltip,
 } from "@mui/material";
 import GroupIcon from "@mui/icons-material/Group";
-import PersonIcon from "@mui/icons-material/Person"; // para clientes
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings"; // para administradores
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt"; 
+import SecurityIcon from "@mui/icons-material/Security";
 
 export default function Usuarios() {
   const navigate = useNavigate();
@@ -18,14 +18,14 @@ export default function Usuarios() {
   const actions = [
     {
       label: "Clientes",
-      icon: <PersonIcon fontSize="large" />,
-      color: "primary.main",
+      icon: <PeopleAltIcon fontSize="large" />,
+      color: "#1976d2",
       path: "/usuarios/cliente",
     },
     {
       label: "Administradores",
-      icon: <AdminPanelSettingsIcon fontSize="large" />,
-      color: "secondary.main",
+      icon: <SecurityIcon fontSize="large" />,
+      color: "#d32f2f", 
       path: "/usuarios/administradores",
     },
   ];
@@ -41,7 +41,7 @@ export default function Usuarios() {
           mb: 4,
         }}
       >
-        <GroupIcon sx={{ fontSize: 40 }} />
+        <GroupIcon sx={{ fontSize: 40, color: "#333" }} />
         <Typography variant="h4" fontWeight="bold">
           Gestión de Usuarios
         </Typography>
@@ -58,6 +58,12 @@ export default function Usuarios() {
                 borderRadius: 3,
                 cursor: "pointer",
                 transition: "transform 0.2s",
+                minHeight: 100,
+                minWidth: 120,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
                 "&:hover": {
                   transform: "scale(1.05)",
                   boxShadow: 10,
@@ -71,6 +77,8 @@ export default function Usuarios() {
                   sx={{
                     backgroundColor: action.color,
                     color: "white",
+                    width: 64,
+                    height: 64,
                     mb: 1,
                     "&:hover": {
                       backgroundColor: action.color,

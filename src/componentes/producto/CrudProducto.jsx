@@ -7,13 +7,10 @@ import {
   Paper,
   IconButton,
   Tooltip,
-  Button,
-  Stack,
 } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import InventoryIcon from "@mui/icons-material/Inventory";       
-import StoreIcon from "@mui/icons-material/Store";              
-import LocalShippingIcon from '@mui/icons-material/LocalShipping'; // alternativa para stock
+
+import StorefrontIcon from "@mui/icons-material/Storefront"; 
+import WarehouseIcon from "@mui/icons-material/Warehouse";   
 
 export default function CrudProducto() {
   const navigate = useNavigate();
@@ -21,21 +18,20 @@ export default function CrudProducto() {
   const actions = [
     {
       label: "Productos",
-      icon: <InventoryIcon fontSize="large" />,
-      color: "primary.main",
+      icon: <StorefrontIcon fontSize="large" />, 
+      color: "#1976d2", 
       path: "/gestion/productos",
     },
     {
       label: "Stock Sede",
-      icon: <LocalShippingIcon fontSize="large" />,
-      color: "secondary.main",
+      icon: <WarehouseIcon fontSize="large" />,
+      color: "#388e3c", 
       path: "/gestion/stock",
     },
   ];
 
   return (
     <Box sx={{ p: 4, maxWidth: 900, mx: "auto" }}>
-
       <Box
         sx={{
           display: "flex",
@@ -45,7 +41,7 @@ export default function CrudProducto() {
           mb: 4,
         }}
       >
-        <InventoryIcon sx={{ fontSize: 40 }} />
+        <StorefrontIcon sx={{ fontSize: 40, color: "#333" }} />
         <Typography variant="h4" fontWeight="bold">
           Gestión de Productos
         </Typography>
@@ -75,6 +71,8 @@ export default function CrudProducto() {
                     backgroundColor: action.color,
                     color: "white",
                     mb: 1,
+                    width: 64,
+                    height: 64,
                     "&:hover": {
                       backgroundColor: action.color,
                       opacity: 0.9,

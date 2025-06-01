@@ -22,7 +22,7 @@ import EliminarImagen from "./componentes/cliente/EliminarImagen";
 import ActualizarImagen from "./componentes/cliente/ActualizarImagen";
 import DescargarImagen from "./componentes/cliente/DescargarImagen";
 import './App.css';
-import ListaAdministradores from "./componentes/administrador/administrador.jsx"
+import ListaAdministradores from "./componentes/administrador/Administrador.jsx"
 import AdministradorDetalle from './componentes/administrador/AdministradorDetalle.jsx';
 import AdministradorEliminar from './componentes/administrador/AdministradorEliminar.jsx';
 import AdministradorEditar from './componentes/administrador/AdministradorEditar.jsx';

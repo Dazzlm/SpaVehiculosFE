@@ -27,7 +27,6 @@ function ClienteDetalle() {
   const imagenPorDefecto = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
   useEffect(() => {
-    // Obtener token del localStorage
     const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
     const token = storedUser?.token;
 
@@ -39,7 +38,6 @@ function ClienteDetalle() {
 
     const baseUrl = 'http://spavehiculos.runasp.net/api/Clientes';
 
-    // Primer fetch: datos del cliente
     fetch(`${baseUrl}/ConsultarXId?idCliente=${id}`, {
       method: "GET",
       headers: {
@@ -48,28 +46,26 @@ function ClienteDetalle() {
       },
     })
       .then(res => {
-        if (!res.ok) {
-          throw new Error(`Error HTTP: ${res.status}`);
-        }
+        if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
         return res.json();
       })
       .then(data => {
         setCliente(data);
 
-        // Segundo fetch: imagen del cliente (si la ruta está protegida, también enviamos token)
         const imagenClienteUrl = `http://spavehiculos.runasp.net/api/UploadCliente/ImagenCliente?idCliente=${id}`;
+
         fetch(imagenClienteUrl, {
-          method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
           },
         })
           .then(response => {
-            if (response.ok) {
-              setImagenUrl(imagenClienteUrl);
-            } else {
-              setImagenUrl(imagenPorDefecto);
-            }
+            if (!response.ok) throw new Error("No se pudo cargar la imagen");
+            return response.blob();
+          })
+          .then(blob => {
+            const imageObjectUrl = URL.createObjectURL(blob);
+            setImagenUrl(imageObjectUrl);
           })
           .catch(() => {
             setImagenUrl(imagenPorDefecto);
@@ -78,7 +74,14 @@ function ClienteDetalle() {
       .catch(err => {
         console.error("Error al cargar cliente:", err.message);
         setCliente(null);
+        setImagenUrl(imagenPorDefecto);
       });
+
+    return () => {
+      if (imagenUrl && imagenUrl.startsWith("blob:")) {
+        URL.revokeObjectURL(imagenUrl);
+      }
+    };
   }, [id, navigate]);
 
   if (!cliente)

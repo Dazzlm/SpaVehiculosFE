@@ -30,31 +30,52 @@ function ProductoDetalle() {
       return;
     }
 
-    fetch(`http://spavehiculos.runasp.net/api/Productos/ObtenerPorId?id=${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`Error HTTP: ${res.status}`);
+    const fetchProductoYProveedor = async () => {
+      try {
+        // Obtener producto
+        const resProducto = await fetch(
+          `http://spavehiculos.runasp.net/api/Productos/ObtenerPorId?id=${id}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (!resProducto.ok)
+          throw new Error(`Error al obtener producto: ${resProducto.status}`);
+        const dataProducto = await resProducto.json();
+
+        if (!dataProducto.success)
+          throw new Error("Error en la respuesta del servidor");
+
+        // Obtener nombre del proveedor
+        const idProveedor = dataProducto.data.IdProveedor;
+        let nombreProveedor = "Desconocido";
+        if (idProveedor) {
+          const resProveedor = await fetch(
+            `http://spavehiculos.runasp.net/api/GestorProv/ConsultarporID?idProveedor=${idProveedor}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          if (!resProveedor.ok)
+            throw new Error(`Error al obtener proveedor: ${resProveedor.status}`);
+          const dataProveedor = await resProveedor.json();
+          nombreProveedor = dataProveedor?.NombreEmpresa || "Desconocido";
         }
-        return res.json();
-      })
-      .then((data) => {
-        if (data.success) {
-          setProducto(data.data);
-        } else {
-          console.error("Error en la respuesta del servidor:", data);
-          setProducto(null);
-        }
-      })
-      .catch((err) => {
-        console.error("Error al cargar el producto:", err.message);
+
+        // Actualizar estado producto con proveedor incluido
+        setProducto({ ...dataProducto.data, NombreProveedor: nombreProveedor });
+      } catch (error) {
+        console.error("Error al cargar datos:", error.message);
         setProducto(null);
-      });
+      }
+    };
+
+    fetchProductoYProveedor();
   }, [id, navigate]);
 
   if (!producto)
@@ -93,8 +114,8 @@ function ProductoDetalle() {
     },
     {
       icon: <LocalShippingIcon color="primary" sx={{ fontSize: 28 }} />,
-      label: "ID Proveedor:",
-      value: producto.IdProveedor,
+      label: "Proveedor:",
+      value: producto.NombreProveedor || "-",
     },
   ];
 

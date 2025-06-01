@@ -66,7 +66,7 @@ export default function ProductoEliminar() {
       })
       .then(() => {
         setMensaje("Producto eliminado correctamente.");
-        setTimeout(() => navigate("/productos"), 1500);
+        setTimeout(() => navigate("/gestion/productos"), 1500);
       })
       .catch(() => setError("Error al eliminar el producto."));
   };

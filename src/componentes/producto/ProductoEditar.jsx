@@ -8,6 +8,11 @@ import {
   Typography,
   Alert,
   CircularProgress,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormHelperText,
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -18,6 +23,7 @@ export default function ProductoEditar() {
   const navigate = useNavigate();
   const [mensaje, setMensaje] = useState("");
   const [loading, setLoading] = useState(true);
+  const [proveedores, setProveedores] = useState([]);
 
   const {
     control,
@@ -34,27 +40,58 @@ export default function ProductoEditar() {
   });
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
-    const token = storedUser?.token;
+    // Cargar proveedores
+    const fetchProveedores = async () => {
+      try {
+        const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
+        const token = storedUser?.token;
 
-    if (!token) {
-      console.warn("No se encontró token, redirigiendo al login...");
-      navigate("/login");
-      return;
-    }
+        if (!token) {
+          throw new Error("No se encontró el token de autenticación.");
+        }
 
-    fetch(`http://spavehiculos.runasp.net/api/Productos/ObtenerPorId?id=${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(async (res) => {
+        const res = await fetch("http://spavehiculos.runasp.net/api/GestorProv/ConsultarTodos", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) throw new Error("Error al obtener proveedores");
+
+        const data = await res.json();
+        setProveedores(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchProveedores();
+  }, []);
+
+  useEffect(() => {
+    const fetchProducto = async () => {
+      try {
+        const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
+        const token = storedUser?.token;
+
+        if (!token) {
+          console.warn("No se encontró token, redirigiendo al login...");
+          navigate("/login");
+          return;
+        }
+
+        const res = await fetch(`http://spavehiculos.runasp.net/api/Productos/ObtenerPorId?id=${id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
         if (res.status === 204) throw new Error("Producto no encontrado");
         if (!res.ok) throw new Error("Error al obtener producto");
-        const response = await res.json();
 
+        const response = await res.json();
         const data = response.data;
 
         reset({
@@ -65,11 +102,13 @@ export default function ProductoEditar() {
         });
 
         setLoading(false);
-      })
-      .catch(() => {
+      } catch {
         setMensaje("Error al cargar datos.");
         setLoading(false);
-      });
+      }
+    };
+
+    fetchProducto();
   }, [id, reset, navigate]);
 
   const onSubmit = async (data) => {
@@ -85,20 +124,18 @@ export default function ProductoEditar() {
 
       data.IdProducto = id;
 
-      const res = await fetch(
-        "http://spavehiculos.runasp.net/api/Productos/Actualizar",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const res = await fetch("http://spavehiculos.runasp.net/api/Productos/Actualizar", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+
       if (!res.ok) throw new Error("Error en la actualización");
       setMensaje("Producto actualizado correctamente");
-      setTimeout(() => navigate("/productos"), 1500);
+      setTimeout(() => navigate("/gestion/productos"), 1500);
     } catch {
       setMensaje("Error al actualizar producto");
     }
@@ -106,12 +143,7 @@ export default function ProductoEditar() {
 
   if (loading)
     return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="50vh"
-      >
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="50vh">
         <CircularProgress />
       </Box>
     );
@@ -127,16 +159,7 @@ export default function ProductoEditar() {
         backgroundColor: "transparent",
       }}
     >
-      <Paper
-        elevation={6}
-        sx={{
-          maxWidth: 450,
-          width: "100%",
-          p: 5,
-          borderRadius: 4,
-          bgcolor: "white",
-        }}
-      >
+      <Paper elevation={6} sx={{ maxWidth: 450, width: "100%", p: 5, borderRadius: 4, bgcolor: "white" }}>
         <Button
           variant="outlined"
           startIcon={<ArrowBackIcon />}
@@ -158,21 +181,12 @@ export default function ProductoEditar() {
           Volver
         </Button>
 
-        <Typography
-          variant="h4"
-          fontWeight="bold"
-          color="#1565c0"
-          mb={4}
-          align="center"
-        >
+        <Typography variant="h4" fontWeight="bold" color="#1565c0" mb={4} align="center">
           Editar Producto
         </Typography>
 
         {mensaje && (
-          <Alert
-            severity={mensaje.includes("Error") ? "error" : "success"}
-            sx={{ mb: 3, borderRadius: 2 }}
-          >
+          <Alert severity={mensaje.includes("Error") ? "error" : "success"} sx={{ mb: 3, borderRadius: 2 }}>
             {mensaje}
           </Alert>
         )}
@@ -184,14 +198,7 @@ export default function ProductoEditar() {
               control={control}
               rules={{ required: "El nombre es obligatorio" }}
               render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Nombre"
-                  error={!!errors.Nombre}
-                  helperText={errors.Nombre?.message}
-                  fullWidth
-                  size="medium"
-                />
+                <TextField {...field} label="Nombre" error={!!errors.Nombre} helperText={errors.Nombre?.message} fullWidth size="medium" />
               )}
             />
 
@@ -237,23 +244,24 @@ export default function ProductoEditar() {
               )}
             />
 
-            <Controller
-              name="IdProveedor"
-              control={control}
-              rules={{ required: "El ID de proveedor es obligatorio" }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="ID Proveedor"
-                  error={!!errors.IdProveedor}
-                  helperText={errors.IdProveedor?.message}
-                  fullWidth
-                  size="medium"
-                  type="number"
-                  inputProps={{ min: "1" }}
-                />
-              )}
-            />
+            <FormControl fullWidth error={!!errors.IdProveedor}>
+              <InputLabel id="proveedor-label">Proveedor</InputLabel>
+              <Controller
+                name="IdProveedor"
+                control={control}
+                rules={{ required: "El proveedor es obligatorio" }}
+                render={({ field }) => (
+                  <Select labelId="proveedor-label" label="Proveedor" {...field}>
+                    {proveedores.map((prov) => (
+                      <MenuItem key={prov.IdProveedor} value={prov.IdProveedor}>
+                        {prov.NombreEmpresa}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                )}
+              />
+              <FormHelperText>{errors.IdProveedor?.message}</FormHelperText>
+            </FormControl>
 
             <Button
               type="submit"

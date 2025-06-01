@@ -18,7 +18,6 @@ import AddIcon from "@mui/icons-material/Add";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PlaceIcon from "@mui/icons-material/Place";
 import { useSpaVehiculosStore } from "../../zustand/SpaVehiculosStore";
 
@@ -49,13 +48,30 @@ const ListaCiudades = () => {
         }
         return response.json();
       })
-      .then((data) => setCiudades(data))
+      .then((data) => {
+        const ciudadesOrdenadas = data.sort((a, b) => a.IdCiudad - b.IdCiudad);
+        setCiudades(ciudadesOrdenadas);
+      })
       .catch((error) => console.error("Error al obtener ciudades:", error));
   }, [currentUser]);
 
   return (
-    <Box sx={{ width: "100%", maxWidth: "800px", mx: "auto", py: 3, px: { xs: 1, sm: 2, md: 3 } }}>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={2} mb={3}>
+    <Box
+      sx={{
+        width: "100%",
+        maxWidth: "800px",
+        mx: "auto",
+        py: 3,
+        px: { xs: 1, sm: 2, md: 3 },
+      }}
+    >
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        spacing={2}
+        mb={3}
+      >
         <Stack paddingLeft={35} direction="row" alignItems="center" spacing={1}>
           <PlaceIcon sx={{ fontSize: 36, color: "#444" }} />
           <Typography variant="h5" fontWeight="bold">

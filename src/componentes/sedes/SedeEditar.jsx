@@ -8,6 +8,11 @@ import {
   Typography,
   Alert,
   CircularProgress,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  FormHelperText,
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -18,6 +23,9 @@ export default function SedeEditar() {
   const navigate = useNavigate();
   const [mensaje, setMensaje] = useState("");
   const [loading, setLoading] = useState(true);
+  const [ciudades, setCiudades] = useState([]);
+  const [loadingCiudades, setLoadingCiudades] = useState(true);
+  const [errorCiudades, setErrorCiudades] = useState(null);
 
   const {
     control,
@@ -60,6 +68,26 @@ export default function SedeEditar() {
       .catch(() => {
         setMensaje("Error al cargar datos.");
         setLoading(false);
+      });
+
+    fetch("http://spavehiculos.runasp.net/api/Ciudades/ConsultarTodos", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(async (res) => {
+        if (!res.ok) throw new Error("Error al cargar las ciudades");
+        const data = await res.json();
+        // Ordenar ciudades por nombre
+        const ciudadesOrdenadas = data.sort((a, b) =>
+          a.Nombre.localeCompare(b.Nombre)
+        );
+        setCiudades(ciudadesOrdenadas);
+        setLoadingCiudades(false);
+      })
+      .catch((error) => {
+        setErrorCiudades(error.message);
+        setLoadingCiudades(false);
       });
   }, [id, reset, navigate]);
 
@@ -193,22 +221,33 @@ export default function SedeEditar() {
                 />
               )}
             />
-            <Controller
-              name="IdCiudad"
-              control={control}
-              rules={{ required: "El ID de ciudad es obligatorio" }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="ID Ciudad"
-                  error={!!errors.IdCiudad}
-                  helperText={errors.IdCiudad?.message}
-                  fullWidth
-                  type="number"
-                  inputProps={{ min: "1" }}
-                />
-              )}
-            />
+            <FormControl fullWidth error={!!errors.IdCiudad} disabled={loadingCiudades}>
+              <InputLabel id="select-ciudad-label">Ciudad</InputLabel>
+              <Controller
+                name="IdCiudad"
+                control={control}
+                defaultValue=""
+                rules={{
+                  required: "La ciudad es obligatoria",
+                  validate: (value) => value > 0 || "Debe seleccionar una ciudad válida",
+                }}
+                render={({ field }) => (
+                  <Select labelId="select-ciudad-label" label="Ciudad" {...field}>
+                    <MenuItem value="">
+                      <em>{loadingCiudades ? "Cargando ciudades..." : "Seleccione una ciudad"}</em>
+                    </MenuItem>
+                    {ciudades.map((ciudad) => (
+                      <MenuItem key={ciudad.IdCiudad} value={ciudad.IdCiudad}>
+                        {ciudad.Nombre}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                )}
+              />
+              <FormHelperText>
+                {errors.IdCiudad ? errors.IdCiudad.message : errorCiudades ? errorCiudades : ""}
+              </FormHelperText>
+            </FormControl>
             <Controller
               name="Teléfono"
               control={control}

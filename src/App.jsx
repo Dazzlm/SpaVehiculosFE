@@ -53,6 +53,11 @@ import StockCrear from "./componentes/StockProductos/StockCrear.jsx";
 import StockEditar from "./componentes/StockProductos/StockEditar.jsx";
 import StockEliminar from "./componentes/StockProductos/StockEliminar.jsx";
 import Inicio from "./componentes/inicio/Inicio.jsx";
+import ProveedorForm from "./componentes/proveedores/ProveedorForm.jsx";
+import ProveedoresLista from "./componentes/proveedores/Proveedores.jsx";
+import ProveedorDetalle from "./componentes/proveedores/ProveedorDetalle.jsx";
+import ProveedorEditar from "./componentes/proveedores/ProveedorEditar.jsx";
+import ProveedorEliminar from "./componentes/proveedores/ProveedorEliminar.jsx";
 
 function App() {
   return (
@@ -119,7 +124,11 @@ function App() {
           <Route path="/gestion/stock/editar/:id" element={<StockEditar />} />
           <Route path="/gestion/stock/eliminar/:id" element={<StockEliminar />} />
           <Route path="/" element={<Inicio />} />
-
+          <Route path="usuarios/proveedor/crear" element={<ProveedorForm />} />
+          <Route path="usuarios/proveedor" element={<ProveedoresLista />} />
+          <Route path="/usuarios/proveedor/ver/:id"element={<ProveedorDetalle />} />
+          <Route path="/usuarios/proveedor/editar/:id" element={<ProveedorEditar />} />
+          <Route path="/usuarios/proveedor/eliminar/:id"element={<ProveedorEliminar />} />
         </Route>
       </Routes>
     </BrowserRouter>

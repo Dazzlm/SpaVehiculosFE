@@ -30,16 +30,20 @@ export default function AdministradorForm() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await fetch(
-        "http://spavehiculos.runasp.net/api/GestorAdmin/CrearAdmin",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const user = JSON.parse(localStorage.getItem("CurrentUser"));
+
+const response = await fetch(
+  "http://spavehiculos.runasp.net/api/GestorAdmin/CrearAdmin",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${user?.token}`,
+    },
+    body: JSON.stringify(data),
+  }
+);
+
 
       if (!response.ok) {
         throw new Error("Error al guardar el administrador");

@@ -36,33 +36,49 @@ export default function AdministradorEditar() {
   });
 
   useEffect(() => {
-    fetch(`http://spavehiculos.runasp.net/api/GestorAdmin/ConsultarPorID?idAdmin=${id}`)
-      .then(async (res) => {
-        if (res.status === 204) throw new Error("Administrador no encontrado");
-        if (!res.ok) throw new Error("Error al obtener administrador");
-        const data = await res.json();
-        reset(data);
-        setLoading(false);
-      })
-      .catch(() => {
-        setMensaje("Error al cargar datos.");
-        setLoading(false);
-      });
+   const user = JSON.parse(localStorage.getItem("CurrentUser"));
+
+fetch(`http://spavehiculos.runasp.net/api/GestorAdmin/ConsultarPorID?idAdmin=${id}`, {
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${user?.token}`,
+  },
+})
+  .then(async (res) => {
+    if (res.status === 204) throw new Error("Administrador no encontrado");
+    if (!res.ok) throw new Error("Error al obtener administrador");
+    const data = await res.json();
+    reset(data);
+    setLoading(false);
+  })
+  .catch(() => {
+    setMensaje("Error al cargar datos.");
+    setLoading(false);
+  });
+
   }, [id, reset]);
 
   const onSubmit = async (data) => {
     try {
-      const res = await fetch("http://spavehiculos.runasp.net/api/GestorAdmin/ActualizarAdmin", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) throw new Error("Error en la actualización");
-      setMensaje("Administrador actualizado correctamente");
-      setTimeout(() => navigate("/usuarios/administrador"), 1500);
-    } catch {
-      setMensaje("Error al actualizar administrador");
-    }
+     const user = JSON.parse(localStorage.getItem("CurrentUser"));
+
+const res = await fetch("http://spavehiculos.runasp.net/api/GestorAdmin/ActualizarAdmin", {
+  method: "PUT",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${user?.token}`,
+  },
+  body: JSON.stringify(data),
+});
+
+if (!res.ok) throw new Error("Error en la actualización");
+setMensaje("Administrador actualizado correctamente");
+setTimeout(() => navigate("/usuarios/administradores"), 1500);
+} catch {
+  setMensaje("Error al actualizar administrador");
+}
+
   };
 
   if (loading)

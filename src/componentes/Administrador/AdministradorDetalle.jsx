@@ -8,7 +8,6 @@ import {
   Stack,
   Divider,
   CircularProgress,
-  Avatar,
 } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import BadgeIcon from '@mui/icons-material/Badge';
@@ -23,20 +22,27 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 function AdministradorDetalle() {
   const { id } = useParams();
   const [administrador, setAdministrador] = useState(null);
-  const [imagenUrl, setImagenUrl] = useState(null);
   const navigate = useNavigate();
 
-  const imagenPorDefecto = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
 
   useEffect(() => {
-    const baseUrl = 'http://spavehiculos.runasp.net/';
-    fetch(`${baseUrl}api/GestorAdmin/ConsultarPorID?idAdmin=${id}`)
-      .then(res => res.json())
-      .then(data => {
-        setAdministrador(data);
+   const baseUrl = 'http://spavehiculos.runasp.net/';
+const user = JSON.parse(localStorage.getItem("CurrentUser"));
 
-      })
-      .catch(err => console.error("Error al cargar administrador", err));
+fetch(`${baseUrl}api/GestorAdmin/ConsultarPorID?idAdmin=${id}`, {
+  method: "GET",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${user?.token}`,
+  },
+})
+  .then(res => res.json())
+  .then(data => {
+    setAdministrador(data);
+  })
+  .catch(err => console.error("Error al cargar administrador", err));
+
   }, [id]);
 
   if (!administrador)
@@ -95,11 +101,7 @@ function AdministradorDetalle() {
           Regresar
         </Button>
 
-        <Avatar
-          src={imagenUrl || imagenPorDefecto}
-          alt="Imagen del administrador"
-          sx={{ width: 60, height: 60 }}
-        />
+       
       </Box>
 
       <Typography

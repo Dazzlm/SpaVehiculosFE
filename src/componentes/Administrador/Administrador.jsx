@@ -31,29 +31,64 @@ const ListaAdministradores = () => {
     cargarAdministradores();
   }, []);
 
-  const cargarAdministradores = () => {
-    fetch("http://spavehiculos.runasp.net/api/GestorAdmin/ConsultarTodos")
-      .then((response) => response.json())
-      .then((data) => setAdministradores(data))
-      .catch((error) => console.error("Error al obtener administradores:", error));
-  };
-
-  const eliminarAdministrador = (id) => {
-    if (window.confirm("¿Estás seguro de que deseas eliminar este administrador?")) {
-      fetch(`http://spavehiculos.runasp.net/api/GestorAdmin/EliminarAdmin?idAdmin=${id}`, {
-        method: "DELETE",
-      })
-        .then((res) => {
-          if (res.ok) {
-            alert("Administrador eliminado correctamente.");
-            cargarAdministradores();
-          } else {
-            alert("Error al eliminar el administrador.");
-          }
-        })
-        .catch((err) => console.error("Error al eliminar administrador:", err));
+ const cargarAdministradores = async () => {
+  try {
+    const user = JSON.parse(localStorage.getItem("CurrentUser"));
+    if (!user?.token) {
+      throw new Error("No estás autenticado.");
     }
-  };
+
+    const response = await fetch("http://spavehiculos.runasp.net/api/GestorAdmin/ConsultarTodos", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Error al obtener administradores");
+    }
+
+    setAdministradores(data);
+  } catch (error) {
+    console.error("Error al obtener administradores:", error);
+  }
+};
+
+const eliminarAdministrador = async (id) => {
+  try {
+    const user = JSON.parse(localStorage.getItem("CurrentUser"));
+    if (!user?.token) {
+      throw new Error("No estás autenticado.");
+    }
+
+    if (window.confirm("¿Estás seguro de que deseas eliminar este administrador?")) {
+      const response = await fetch(`http://spavehiculos.runasp.net/api/GestorAdmin/EliminarAdmin?idAdmin=${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Error al eliminar el administrador.");
+      }
+
+      alert("Administrador eliminado correctamente.");
+      cargarAdministradores();
+    }
+  } catch (error) {
+    console.error("Error al eliminar administrador:", error);
+    alert("Ocurrió un error al eliminar el administrador.");
+  }
+};
+
 
   return (
     <Box

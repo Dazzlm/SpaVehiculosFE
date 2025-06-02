@@ -11,6 +11,7 @@ import {
 import GroupIcon from "@mui/icons-material/Group";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt"; 
 import SecurityIcon from "@mui/icons-material/Security";
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 
 export default function Usuarios() {
   const navigate = useNavigate();
@@ -27,6 +28,12 @@ export default function Usuarios() {
       icon: <SecurityIcon fontSize="large" />,
       color: "#d32f2f", 
       path: "/usuarios/administradores",
+    },
+     {
+      label: "Proveedores",
+      icon: <LocalShippingIcon fontSize="large" />,
+      color: "#a5bae0",
+      path: "/usuarios/Proveedor",
     },
   ];
 

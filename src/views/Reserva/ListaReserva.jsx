@@ -261,7 +261,7 @@ const ListaReservas = () => {
         </Button>
       </Stack>
 
-      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="center" mb={3}>
+      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="center" mb={1}>
         <TextField
           label="Buscar por ID, Cliente, Servicio, Sede"
           variant="outlined"

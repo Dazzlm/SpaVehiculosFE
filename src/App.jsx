@@ -24,7 +24,6 @@ import DescargarImagen from "./componentes/cliente/DescargarImagen";
 import './App.css';
 import ListaAdministradores from "./componentes/Administrador/Administrador.jsx"
 import AdministradorDetalle from './componentes/Administrador/AdministradorDetalle.jsx';
-import AdministradorEliminar from './componentes/Administrador/AdministradorEliminar.jsx';
 import AdministradorEditar from './componentes/Administrador/AdministradorEditar.jsx';
 import AdministradorCrear from './componentes/Administrador/AdministradorCrear.jsx';
 import Facturar from "./componentes/Facturar/Facturar.jsx";
@@ -110,7 +109,6 @@ function App() {
           <Route path="/reservas/actualizar/:idReserva" element={<ActualizarReserva />} />
           <Route path='/usuarios/administradores'element ={<ListaAdministradores/>}></Route>
           <Route path='/usuarios/administrador/ver/:id'element={<AdministradorDetalle/>}></Route>
-          <Route path='/usuarios/administrador/elminar/:id'element={<AdministradorEliminar/>}></Route>
           <Route path='/usuarios/administrador/editar/:id'element={<AdministradorEditar/>}></Route>
           <Route path='/usuarios/administrador/crear'element={<AdministradorCrear/>}></Route>
           <Route path='/gestion'element={<CrudProducto/>}></Route>

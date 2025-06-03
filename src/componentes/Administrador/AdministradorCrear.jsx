@@ -9,7 +9,11 @@ import {
   Paper,
   Stack,
   InputAdornment,
+  FormControl,
+   InputLabel, Select,
+    MenuItem, FormHelperText,
 } from "@mui/material";
+import LockIcon from '@mui/icons-material/Lock';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
@@ -18,6 +22,8 @@ import BadgeIcon from "@mui/icons-material/Badge";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
+
 
 export default function AdministradorForm() {
   const navigate = useNavigate();
@@ -33,7 +39,7 @@ export default function AdministradorForm() {
       const user = JSON.parse(localStorage.getItem("CurrentUser"));
 
 const response = await fetch(
-  "http://spavehiculos.runasp.net/api/GestorAdmin/CrearAdmin",
+  "http://spavehiculos.runasp.net/api/GestorAdmin/InsertarAdminUsuario",
   {
     method: "POST",
     headers: {
@@ -105,26 +111,6 @@ const response = await fetch(
           flexDirection="column"
           gap={3}
         >
-          <TextField
-            label="ID Administrador"
-            type="number"
-            {...register("IdAdmin", {
-              required: "El IdAdmin es obligatorio",
-              valueAsNumber: true,
-              validate: (value) => value > 0 || "El IdAdmin debe ser mayor que 0",
-            })}
-            error={!!errors.IdAdmin}
-            helperText={errors.IdAdmin?.message}
-            fullWidth
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <BadgeIcon sx={{ color: "primary.main" }} />
-                </InputAdornment>
-              ),
-            }}
-          />
-
           <TextField
             label="Nombre"
             {...register("Nombre", { required: "El nombre es obligatorio" })}
@@ -216,7 +202,6 @@ const response = await fetch(
               ),
             }}
           />
-
           <TextField
             label="Fecha de Nacimiento"
             type="date"
@@ -251,26 +236,71 @@ const response = await fetch(
             }}
           />
 
-          <TextField
-            label="ID Usuario"
-            type="number"
-            {...register("IdUsuario", {
-              required: "El IdUsuario es obligatorio",
-              valueAsNumber: true,
-              validate: (value) =>
-                value > 0 || "El IdUsuario debe ser mayor que 0",
-            })}
-            error={!!errors.IdUsuario}
-            helperText={errors.IdUsuario?.message}
+           <TextField
+            label="Usuario"
+            {...register("NombreUsuario", {
+              required: "El nombre de usuario es obligatorio",
+            },
+            )}
+            error={!!errors.NombreUsuario}
+            helperText={errors.NombreUsuario?.message}
             fullWidth
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <AccountCircleIcon sx={{ color: "primary.main" }} />
+                  <BadgeIcon sx={{ color: "primary.main" }} />
                 </InputAdornment>
               ),
             }}
           />
+
+          <TextField
+            label="Contraseña"
+            type="password"
+            {...register("Contrasena", {
+              required: "La contraseña es obligatoria",
+              minLength: {
+                value: 6,
+                message: "La contraseña debe tener al menos 6 caracteres",
+              },
+              pattern: {
+                value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/,
+                message: "Debe contener letras y números",
+              },
+            })}
+            error={!!errors.Contrasena}
+            helperText={errors.Contrasena?.message}
+            fullWidth
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockIcon sx={{ color: "primary.main" }} />
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          <FormControl fullWidth error={!!errors.Estado}>
+            <InputLabel id="estado-label">Estado</InputLabel>
+            <Select
+              labelId="estado-label"
+              label="Estado"
+              defaultValue=""
+              {...register("Estado", {
+                required: "El estado es obligatorio",
+              })}
+              startAdornment={
+                <InputAdornment position="start">
+                  <AccountCircleIcon sx={{ color: "primary.main", mr: 1 }} />
+                </InputAdornment>
+              }
+            >
+              <MenuItem value={0}>Inactivo</MenuItem>
+              <MenuItem value={1}>Activo</MenuItem>
+              
+            </Select>
+            <FormHelperText>{errors.Estado?.message}</FormHelperText>
+          </FormControl>
 
           <Stack direction="row" spacing={2} justifyContent="space-between" mt={3} mb={2}>
             <Button

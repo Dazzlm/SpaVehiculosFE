@@ -14,9 +14,11 @@ import BadgeIcon from '@mui/icons-material/Badge';
 import PersonIcon from '@mui/icons-material/Person';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import WorkIcon from '@mui/icons-material/Work';
+import ConnectWithoutContactIcon from '@mui/icons-material/ConnectWithoutContact';
+
 
 
 function AdministradorDetalle() {
@@ -24,13 +26,20 @@ function AdministradorDetalle() {
   const [administrador, setAdministrador] = useState(null);
   const navigate = useNavigate();
 
+  const FormatFecha =(fecha) =>{
+    const date = new Date(fecha);
+    return date.toLocaleDateString('es-ES')
+  };
+
+  const estado = (estadoBooleano) => estadoBooleano ? "Inactivo" : "Activo";
+
 
 
   useEffect(() => {
    const baseUrl = 'http://spavehiculos.runasp.net/';
 const user = JSON.parse(localStorage.getItem("CurrentUser"));
 
-fetch(`${baseUrl}api/GestorAdmin/ConsultarPorID?idAdmin=${id}`, {
+fetch(`${baseUrl}api/GestorAdmin/ConsultarAdminUsuario?id=${id}`, {
   method: "GET",
   headers: {
     "Content-Type": "application/json",
@@ -61,11 +70,13 @@ fetch(`${baseUrl}api/GestorAdmin/ConsultarPorID?idAdmin=${id}`, {
   { icon: <PersonIcon color="primary" sx={{ fontSize: 28 }} />, label: "Nombre:", value: administrador.Nombre },
   { icon: <PersonIcon color="primary" sx={{ fontSize: 28 }} />, label: "Apellidos:", value: administrador.Apellidos },
   { icon: <EmailIcon color="primary" sx={{ fontSize: 28 }} />, label: "Email:", value: administrador.Email },
-  { icon: <PhoneIcon color="primary" sx={{ fontSize: 28 }} />, label: "Teléfono:", value: administrador.Teléfono },
+  { icon: <PhoneIcon color="primary" sx={{ fontSize: 28 }} />, label: "Teléfono:", value: administrador.Telefono },
   { icon: <BadgeIcon color="primary" sx={{ fontSize: 28 }} />, label: "Cédula:", value: administrador.Cedula },
-  { icon: <CalendarTodayIcon color="primary" sx={{ fontSize: 28 }} />, label: "Fecha de nacimiento:", value: administrador.FechaNacimiento },
-  { icon: <SupervisorAccountIcon color="primary" sx={{ fontSize: 28 }} />, label: "Cargo:", value: administrador.Cargo },
-  { icon: <AccountCircleIcon color="primary" sx={{ fontSize: 28 }} />, label: "ID Usuario:", value: administrador.IdUsuario },
+  { icon: <AccountBoxIcon color = "primary" x={{ fontSize: 28 }}/>, label: "Usuario", value: administrador.NombreUsuario},
+  { icon: <CalendarTodayIcon color="primary" sx={{ fontSize: 28 }} />, label: "Fecha de nacimiento:", value: FormatFecha(administrador.FechaNacimiento)},
+  { icon: <WorkIcon color="primary" sx={{ fontSize: 28 }} />, label: "Cargo:", value: administrador.Cargo },
+  { icon: <ConnectWithoutContactIcon color ="primary" sx={{ fontSize: 28 }}/>, label: "Estado", value: estado(administrador.Estado)}
+
 ];
 
   

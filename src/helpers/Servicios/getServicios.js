@@ -1,6 +1,10 @@
 export async function getServicios() {
   try {
     const user = JSON.parse(localStorage.getItem("CurrentUser"));
+    
+    if (!user?.token) {
+      throw new Error("No estás autenticado.");
+    }
 
     const response = await fetch(`http://spavehiculos.runasp.net/api/Servicios/ConsultarTodos`, {
       method: "GET",
@@ -18,9 +22,7 @@ export async function getServicios() {
 
     return result;
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error al obtener servicios:", error.message);
     return [];
   }
 }
-
-    

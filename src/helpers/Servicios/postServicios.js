@@ -1,12 +1,17 @@
-
 export async function crearServicio(servicio) {
   try {
+    const user = JSON.parse(localStorage.getItem("CurrentUser"));
+    if (!user?.token) {
+      throw new Error("No estás autenticado.");
+    }
+
     const response = await fetch('http://spavehiculos.runasp.net/api/Servicios/CrearServicio', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${user.token}`,
       },
-      body: JSON.stringify(servicio)
+      body: JSON.stringify(servicio),
     });
 
     if (!response.ok) {
@@ -17,7 +22,7 @@ export async function crearServicio(servicio) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error creando servicio:', error);
+    console.error('Error creando servicio:', error.message);
     throw error;
   }
 }

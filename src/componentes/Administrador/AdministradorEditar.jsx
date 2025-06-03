@@ -269,28 +269,7 @@ setTimeout(() => navigate("/usuarios/administradores"), 1500);
                 />
               )}
             />
-            <Controller
-              name="IdUsuario"
-              control={control}
-              rules={{
-                required: "El ID Usuario es obligatorio",
-                pattern: {
-                  value: /^[1-9]\d*$/,
-                  message: "Debe ser un número entero positivo",
-                },
-              }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="ID Usuario"
-                  type="number"
-                  error={!!errors.IdUsuario}
-                  helperText={errors.IdUsuario?.message}
-                  fullWidth
-                  size="large"
-                />
-              )}
-            />
+
             <Button
               type="submit"
               variant="contained"

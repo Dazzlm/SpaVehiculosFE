@@ -45,7 +45,7 @@ function Login() {
         } catch (jsonError) {
           console.error("Error al parsear la respuesta de error:", jsonError);
          
-          errorMessage = `Error ${response.status}: Algo salió mal en el servidor.`;
+          errorMessage = `Usuario o Contraseña Inválida.`;
         }
         setError(errorMessage);
         return; 

@@ -22,6 +22,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import Swal from "sweetalert2";
 
 const ListaAdministradores = () => {
   const [administradores, setAdministradores] = useState([]);
@@ -31,64 +32,79 @@ const ListaAdministradores = () => {
     cargarAdministradores();
   }, []);
 
- const cargarAdministradores = async () => {
-  try {
-    const user = JSON.parse(localStorage.getItem("CurrentUser"));
-    if (!user?.token) {
-      throw new Error("No estás autenticado.");
-    }
+  const cargarAdministradores = async () => {
+    try {
+      const user = JSON.parse(localStorage.getItem("CurrentUser"));
+      if (!user?.token) {
+        throw new Error("No estás autenticado.");
+      }
 
-    const response = await fetch("http://spavehiculos.runasp.net/api/GestorAdmin/ConsultarTodos", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user.token}`,
-      },
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || "Error al obtener administradores");
-    }
-
-    setAdministradores(data);
-  } catch (error) {
-    console.error("Error al obtener administradores:", error);
-  }
-};
-
-const eliminarAdministrador = async (id) => {
-  try {
-    const user = JSON.parse(localStorage.getItem("CurrentUser"));
-    if (!user?.token) {
-      throw new Error("No estás autenticado.");
-    }
-
-    if (window.confirm("¿Estás seguro de que deseas eliminar este administrador?")) {
-      const response = await fetch(`http://spavehiculos.runasp.net/api/GestorAdmin/EliminarAdmin?idAdmin=${id}`, {
-        method: "DELETE",
+      const response = await fetch("http://spavehiculos.runasp.net/api/GestorAdmin/ConsultarTodos", {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${user.token}`,
         },
       });
 
-      const result = await response.json();
+      const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.message || "Error al eliminar el administrador.");
+        throw new Error(data.message || "Error al obtener administradores");
       }
 
-      alert("Administrador eliminado correctamente.");
-      cargarAdministradores();
+      setAdministradores(data);
+    } catch (error) {
+      console.error("Error al obtener administradores:", error);
+      Swal.fire("Error", error.message || "Error al obtener administradores", "error");
     }
-  } catch (error) {
-    console.error("Error al eliminar administrador:", error);
-    alert("Ocurrió un error al eliminar el administrador.");
-  }
-};
+  };
 
+  const eliminarAdministrador = async (id) => {
+    const user = JSON.parse(localStorage.getItem("CurrentUser"));
+    if (!user?.token) {
+      Swal.fire("Error", "No estás autenticado.", "error");
+      return;
+    }
+
+    const confirmacion = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Esta acción eliminará al administrador.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    });
+
+    if (confirmacion.isConfirmed) {
+      try {
+        const response = await fetch(
+          `http://spavehiculos.runasp.net/api/GestorAdmin/EliminarAdminUsuario?idAdmin=${id}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.message || "Error al eliminar el administrador.");
+        }
+
+        await Swal.fire("Eliminado", "El administrador ha sido eliminado correctamente.", "success");
+        cargarAdministradores();
+      } catch (error) {
+        console.error("Error al eliminar administrador:", error);
+        Swal.fire("Error", "Ocurrió un error al eliminar el administrador.", "error");
+      }
+    }
+  };
 
   return (
     <Box
@@ -147,6 +163,7 @@ const eliminarAdministrador = async (id) => {
                 <TableCell><b>ID</b></TableCell>
                 <TableCell><b>Nombre</b></TableCell>
                 <TableCell><b>Email</b></TableCell>
+                <TableCell><b>Cargo</b></TableCell>
                 <TableCell align="center"><b>Acciones</b></TableCell>
               </TableRow>
             </TableHead>
@@ -168,6 +185,7 @@ const eliminarAdministrador = async (id) => {
                       </Stack>
                     </TableCell>
                     <TableCell>{admin.Email}</TableCell>
+                    <TableCell>{admin.Cargo}</TableCell>
                     <TableCell align="center">
                       <Stack direction="row" spacing={1} justifyContent="center">
                         <Tooltip title="Ver">
@@ -191,7 +209,7 @@ const eliminarAdministrador = async (id) => {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={4} align="center" sx={{ py: 4, color: "gray" }}>
+                  <TableCell colSpan={5} align="center" sx={{ py: 4, color: "gray" }}>
                     No hay administradores registrados.
                   </TableCell>
                 </TableRow>

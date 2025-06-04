@@ -98,4 +98,3 @@ Tu carro merece más que un lavado, merece una experiencia de SPA 🚘💦
 
 ---
 
-¿Deseas que te lo genere en Markdown descargable o con imágenes de ejemplo para las secciones?

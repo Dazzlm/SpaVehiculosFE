@@ -1,12 +1,101 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+---
 
-Currently, two official plugins are available:
+# 🚗✨ **AutoSpa App - El cuidado que tu vehículo merece**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Bienvenido a **AutoSpa App**, una aplicación web moderna y eficiente desarrollada para la gestión completa de un **SPA para vehículos**, donde se ofrece una amplia variedad de servicios de limpieza, mantenimiento y productos especializados 🧼🛠️🧽.
+---
+La página web es -> http://spavehiculos.surge.sh/login
+---
 
-## Expanding the ESLint configuration
+## 🧑‍💻 Desarrolladores del proyecto
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Este proyecto fue desarrollado con dedicación y pasión por el equipo:
+
+* 👨‍💻 **Daniel Marín Marín**
+* 👨‍💻 **David Zuluaga Ceballos**
+* 👨‍💻 **Yhann Camilo Carmona Usme**
+* 👨‍💻 **Julián Andrés Tamayo Carmona**
+
+## Estudiantes de Tecnología en Desarrollo de Software del ITM
+
+---
+
+## 🚙 Funcionalidades principales
+
+✨ La aplicación cuenta con una variedad de características pensadas para mejorar la experiencia del cliente y la administración del negocio:
+
+* 👤 **Registro de clientes** para personalizar compras y servicios.
+* 💰 **Ventas de productos** de limpieza y cuidado automotriz.
+* 🧾 **Generación de facturas en PDF** y envío automático al cliente.
+* 👨‍💼 **Registro y gestión de administradores** del sistema.
+* 📦 **CRUD de productos** disponibles en la tienda.
+* 🏪 **Gestión de inventario por sede** (multi-sede).
+* 🛠️ **CRUD de servicios** como lavado sencillo, encerado, polichado, desmontaje de cojinería, entre otros.
+* 📆 **Reservas** para programar servicios automotrices.
+* 🏢 **CRUD para sedes** disponibles del AutoSpa.
+
+---
+
+## 🛠️ Tecnologías utilizadas
+
+El sistema está dividido en frontend y backend, aprovechando las mejores herramientas del desarrollo moderno:
+
+### 🔮 Frontend (Interfaz de usuario)
+
+* ⚛️ **React**
+* ⚡ **Vite**
+* 🚦 **React Router**
+
+### 🔙 Backend
+
+* ☕ **C# .NET ENTITY FRAMEWORK**
+* 📥 **MICROSERVICIOS**
+* 🐘 **SQL SERVER**
+* 📩 **API REST**
+
+---
+
+## 🚀 Instalación y ejecución
+
+### 📥 Clonación del repositorio
+
+```bash
+git clone https://github.com/tu_usuario/auto-spa-app.git
+cd auto-spa-app
+```
+
+### 📦 Instalación de dependencias
+
+```bash
+npm install
+```
+
+> Asegúrate de tener instalados:
+>
+> * Node.js
+> * Java 17 o superior
+> * SQLserver
+> * .NET 4.8
+
+### ▶️ Ejecución del proyecto
+
+```bash
+npm run dev
+```
+---
+
+## 📧 Contacto y soporte
+
+Si tienes dudas, sugerencias o deseas contribuir, no dudes en contactarnos. ¡Estamos encantados de recibir feedback y colaboraciones! 🙌
+
+---
+
+## ⭐ ¡Gracias por usar AutoSpa App!
+
+Tu carro merece más que un lavado, merece una experiencia de SPA 🚘💦
+¡Haz tu reserva hoy mismo y cuídalo como se merece!
+
+---
+
+¿Deseas que te lo genere en Markdown descargable o con imágenes de ejemplo para las secciones?

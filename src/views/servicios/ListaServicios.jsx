@@ -76,6 +76,7 @@ const handleEliminarServicio = async (id) => {
         > + Añadir Servicio</Button>
       </div>
       </div>
+      <div className={styles['scroll-wrapper']}>
       <div className={styles.container}>
         {servicios.map((item) => (
           <div
@@ -108,6 +109,7 @@ const handleEliminarServicio = async (id) => {
             </div>
           </div>
         ))}
+      </div>
       </div>
 
       {servicioSeleccionado && (

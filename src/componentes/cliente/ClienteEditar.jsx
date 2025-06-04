@@ -29,138 +29,116 @@ export default function ClienteEditar() {
       Nombre: "",
       Apellidos: "",
       Email: "",
-      Teléfono: "",
-      Dirección: "",
-      IdUsuario: "",
+      Telefono: "",
+      Direccion: "",
+      DocumentoUsuario: "",
+      NombreUsuario: "",
     },
   });
 
   useEffect(() => {
-  const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
-  const token = storedUser?.token;
-
-  if (!token) {
-    console.warn("No se encontró token, redirigiendo al login...");
-    navigate("/login");
-    return;
-  }
-
-  fetch(`http://spavehiculos.runasp.net/api/Clientes/ConsultarXId?idCliente=${id}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then(async (res) => {
-      if (res.status === 204) throw new Error("Cliente no encontrado");
-      if (!res.ok) throw new Error("Error al obtener cliente");
-      const data = await res.json();
-      reset(data);
-      setLoading(false);
-    })
-    .catch(() => {
-      setMensaje("Error al cargar datos.");
-      setLoading(false);
-    });
-}, [id, navigate, reset]);
-
-const onSubmit = async (data) => {
-  try {
     const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
     const token = storedUser?.token;
 
     if (!token) {
-      console.warn("No se encontró token, redirigiendo al login...");
       navigate("/login");
       return;
     }
 
-    const res = await fetch("http://spavehiculos.runasp.net/api/Clientes/Actualizar", {
-      method: "PUT",
+    fetch(`http://spavehiculos.runasp.net/api/Clientes/ConsultarClienteUsuario?id=${id}`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(data),
-    });
+    })
+      .then(async (res) => {
+        if (res.status === 204) throw new Error("Cliente no encontrado");
+        if (!res.ok) throw new Error("Error al obtener cliente");
+        const data = await res.json();
+        reset(data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setMensaje("Error al cargar datos.");
+        setLoading(false);
+      });
+  }, [id, navigate, reset]);
 
-    if (!res.ok) throw new Error("Error en la actualización");
-    setMensaje("Cliente actualizado correctamente");
-    setTimeout(() => navigate("/usuarios/cliente"), 1500);
-  } catch {
-    setMensaje("Error al actualizar cliente");
-  }
-};
+  const onSubmit = async (data) => {
+    try {
+      const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
+      const token = storedUser?.token;
+
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+
+      const datosActualizados = {
+        ...data,
+        IdCliente: parseInt(id),
+      };
+
+      const res = await fetch(
+        "http://spavehiculos.runasp.net/api/Clientes/ActualizarClienteUsuario",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(datosActualizados),
+        }
+      );
+
+      const mensajeRespuesta = await res.text();
+
+      if (!res.ok) throw new Error(mensajeRespuesta);
+
+      setMensaje(mensajeRespuesta);
+      setTimeout(() => navigate("/usuarios/cliente"), 1500);
+    } catch (error) {
+      setMensaje(error.message || "Error al actualizar cliente");
+    }
+  };
 
   if (loading)
     return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="50vh"
-      >
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="50vh">
         <CircularProgress />
       </Box>
     );
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "flex-start",
-        p: 2,
-        minHeight: "auto",
-        backgroundColor: "transparent",
-      }}
-    >
-      <Paper
-        elevation={6}
-        sx={{
-          maxWidth: 450,
-          width: "100%",
-          p: 5,
-          borderRadius: 4,
-          bgcolor: "white",
-        }}
-      >
+    <Box display="flex" justifyContent="center" p={2}>
+      <Paper elevation={6} sx={{ maxWidth: 400, width: "100%", p: 3, borderRadius: 2 }}>
         <Button
           variant="outlined"
           startIcon={<ArrowBackIcon />}
           onClick={() => navigate("/usuarios/cliente")}
-          sx={{ 
-            mb: 4,
-          color: "primary.main",
-          borderColor: "primary.main",
-          fontWeight: "bold",
-          textTransform: "none",
-          transition: "all 0.3s ease",
-          "&:hover": {
-            bgcolor: "primary.main",
-            color: "white",
+          sx={{
+            mb: 3,
+            fontWeight: "bold",
             borderColor: "primary.main",
+            color: "primary.main",
+            "&:hover": {
+              bgcolor: "primary.main",
+              color: "white",
             },
-           }}
+          }}
         >
           Volver
         </Button>
 
-        <Typography
-          variant="h4"
-          fontWeight="bold"
-          color="#1565c0"
-          mb={4}
-          align="center"
-        >
+        <Typography variant="h4" fontWeight="bold" color="primary" mb={3} align="center">
           Editar Cliente
         </Typography>
 
         {mensaje && (
           <Alert
-            severity={mensaje.includes("Error") ? "error" : "success"}
-            sx={{ mb: 3, borderRadius: 2 }}
+            severity={mensaje.includes("Error") || mensaje.includes("error") ? "error" : "success"}
+            sx={{ mb: 2, borderRadius: 2 }}
           >
             {mensaje}
           </Alert>
@@ -171,109 +149,52 @@ const onSubmit = async (data) => {
             <Controller
               name="Nombre"
               control={control}
-              rules={{ required: "El nombre es obligatorio" }}
               render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Nombre"
-                  error={!!errors.Nombre}
-                  helperText={errors.Nombre?.message}
-                  fullWidth
-                  size="large"
-                />
+                <TextField {...field} label="Nombre" fullWidth size="large" />
               )}
             />
             <Controller
               name="Apellidos"
               control={control}
-              rules={{ required: "Los apellidos son obligatorios" }}
               render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Apellidos"
-                  error={!!errors.Apellidos}
-                  helperText={errors.Apellidos?.message}
-                  fullWidth
-                  size="large"
-                />
+                <TextField {...field} label="Apellidos" fullWidth size="large" />
               )}
             />
             <Controller
               name="Email"
               control={control}
-              rules={{
-                required: "El email es obligatorio",
-                pattern: {
-                  value:
-                    /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-                  message: "Email no válido",
-                },
-              }}
               render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Email"
-                  type="email"
-                  error={!!errors.Email}
-                  helperText={errors.Email?.message}
-                  fullWidth
-                  size="large"
-                />
+                <TextField {...field} label="Email" type="email" fullWidth size="large" />
               )}
             />
             <Controller
-              name="Teléfono"
+              name="Telefono"
               control={control}
-              rules={{ required: "El teléfono es obligatorio" }}
               render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Teléfono"
-                  error={!!errors.Teléfono}
-                  helperText={errors.Teléfono?.message}
-                  fullWidth
-                  size="large"
-                />
+                <TextField {...field} label="Teléfono" fullWidth size="large" />
               )}
             />
             <Controller
-              name="Dirección"
+              name="Direccion"
               control={control}
-              rules={{ required: "La dirección es obligatoria" }}
               render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Dirección"
-                  error={!!errors.Dirección}
-                  helperText={errors.Dirección?.message}
-                  fullWidth
-                  size="large"
-                />
+                <TextField {...field} label="Dirección" fullWidth size="large" />
               )}
             />
             <Controller
-              name="IdUsuario"
+              name="DocumentoUsuario"
               control={control}
-              rules={{
-                required: "El ID Usuario es obligatorio",
-                pattern: {
-                  value: /^[1-9]\d*$/,
-                  message: "Debe ser un número entero positivo",
-                },
-              }}
               render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="ID Usuario"
-                  type="number"
-                  error={!!errors.IdUsuario}
-                  helperText={errors.IdUsuario?.message}
-                  fullWidth
-                  size="large"
-                />
+                <TextField {...field} label="Documento Usuario" fullWidth size="large" />
               )}
             />
-
+            <Controller
+              name="NombreUsuario"
+              control={control}
+              render={({ field }) => (
+                <TextField {...field} label="Nombre Usuario" fullWidth size="large" />
+              )}
+            />
             <Button
               type="submit"
               variant="contained"
@@ -281,12 +202,7 @@ const onSubmit = async (data) => {
               size="large"
               startIcon={<SaveIcon />}
               disabled={isSubmitting}
-              sx={{
-                mt: 2,
-                fontWeight: "bold",
-                py: 1.5,
-                borderRadius: 3,
-              }}
+              sx={{ mt: 2, fontWeight: "bold", borderRadius: 3 }}
             >
               {isSubmitting ? "Guardando..." : "Guardar Cambios"}
             </Button>

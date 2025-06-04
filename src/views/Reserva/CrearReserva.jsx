@@ -88,11 +88,16 @@ const CrearReserva = () => {
           icon: "success",
           title: "Reserva creada",
           text: "La reserva se ha creado correctamente.",
-          confirmButtonColor: "#3085d6",
+         
         });
         navigate("/reservas");
       } else {
-        console.log("error")
+        swal.fire({
+          icon:"alert",
+          title:"❌ Error en la reserva",
+          text:"La fecha y hora de la reserva no pueden ser anteriores al momento actual.",
+          confirmButtonColor: "red"
+        })
       }
     } catch (error) {
       console.error("Error al crear reserva:", error);

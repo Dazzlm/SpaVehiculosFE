@@ -8,6 +8,10 @@ import {
   Typography,
   Alert,
   CircularProgress,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -23,62 +27,80 @@ export default function AdministradorEditar() {
     control,
     handleSubmit,
     reset,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
       Nombre: "",
       Apellidos: "",
       Email: "",
-      Teléfono: "",
-      Dirección: "",
-      IdUsuario: "",
+      Telefono: "",
+      Cedula: "",
+      NombreUsuario: "",
+      FechaNacimiento: "",
+      Cargo: "",
+      Estado: true,
     },
   });
 
   useEffect(() => {
-   const user = JSON.parse(localStorage.getItem("CurrentUser"));
+    const user = JSON.parse(localStorage.getItem("CurrentUser"));
 
-fetch(`http://spavehiculos.runasp.net/api/GestorAdmin/ConsultarPorID?idAdmin=${id}`, {
-  method: "GET",
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${user?.token}`,
-  },
-})
-  .then(async (res) => {
-    if (res.status === 204) throw new Error("Administrador no encontrado");
-    if (!res.ok) throw new Error("Error al obtener administrador");
-    const data = await res.json();
-    reset(data);
-    setLoading(false);
-  })
-  .catch(() => {
-    setMensaje("Error al cargar datos.");
-    setLoading(false);
-  });
+    fetch(
+      `http://spavehiculos.runasp.net/api/GestorAdmin/ConsultarAdminUsuario?id=${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user?.token}`,
+        },
+      }
+    )
+      .then(async (res) => {
+        if (res.status === 204) throw new Error("Administrador no encontrado");
+        if (!res.ok) throw new Error("Error al obtener administrador");
+        const data = await res.json();
 
+        if (data.FechaNacimiento)
+          data.FechaNacimiento = data.FechaNacimiento.split("T")[0];
+        reset(data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setMensaje("Error al cargar datos.");
+        setLoading(false);
+      });
   }, [id, reset]);
 
   const onSubmit = async (data) => {
     try {
-     const user = JSON.parse(localStorage.getItem("CurrentUser"));
+      const user = JSON.parse(localStorage.getItem("CurrentUser"));
+      const valores = getValues();
 
-const res = await fetch("http://spavehiculos.runasp.net/api/GestorAdmin/ActualizarAdmin", {
-  method: "PUT",
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${user?.token}`,
-  },
-  body: JSON.stringify(data),
-});
+      const payload = {
+        ...data,
+        IdAdmin: parseInt(id),
+        Contrasena: valores.Contrasena ?? "",
+      };
 
-if (!res.ok) throw new Error("Error en la actualización");
-setMensaje("Administrador actualizado correctamente");
-setTimeout(() => navigate("/usuarios/administradores"), 1500);
-} catch {
-  setMensaje("Error al actualizar administrador");
-}
+      const res = await fetch(
+        "http://spavehiculos.runasp.net/api/GestorAdmin/ActualizarAdminUsuario",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user?.token}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
 
+      if (!res.ok) throw new Error("Error en la actualización");
+      setMensaje("Administrador actualizado correctamente");
+      setTimeout(() => navigate("/usuarios/administradores"), 1500);
+    } catch {
+      setMensaje("Error al actualizar administrador");
+    }
   };
 
   if (loading)
@@ -100,38 +122,31 @@ setTimeout(() => navigate("/usuarios/administradores"), 1500);
         justifyContent: "center",
         alignItems: "flex-start",
         p: 2,
-        minHeight: "auto",
-        backgroundColor: "transparent",
       }}
     >
-     <Paper
-  elevation={6}
-  sx={{
-    maxWidth: 450,
-    width: "100%",
-    p: 5,
-    borderRadius: 4,
-    bgcolor: "white",
-    maxHeight: '60vh', 
-    overflowY: 'auto',
-  }}
->
-
+      <Paper
+        elevation={6}
+        sx={{
+          maxWidth: 500,
+          width: "100%",
+          p: 5,
+          borderRadius: 4,
+          bgcolor: "white",
+          maxHeight: "65vh",
+          overflowY: "auto",
+        }}
+      >
         <Button
           variant="outlined"
           startIcon={<ArrowBackIcon />}
           onClick={() => navigate("/usuarios/administradores")}
           sx={{
             mb: 4,
-            color: "primary.main",
-            borderColor: "primary.main",
             fontWeight: "bold",
             textTransform: "none",
-            transition: "all 0.3s ease",
             "&:hover": {
               bgcolor: "primary.main",
               color: "white",
-              borderColor: "primary.main",
             },
           }}
         >
@@ -139,11 +154,11 @@ setTimeout(() => navigate("/usuarios/administradores"), 1500);
         </Button>
 
         <Typography
-          variant="h4"
+          variant="h5"
           fontWeight="bold"
-          color="#1565c0"
-          mb={4}
+          color="primary"
           align="center"
+          mb={3}
         >
           Editar Administrador
         </Typography>
@@ -151,7 +166,7 @@ setTimeout(() => navigate("/usuarios/administradores"), 1500);
         {mensaje && (
           <Alert
             severity={mensaje.includes("Error") ? "error" : "success"}
-            sx={{ mb: 3, borderRadius: 2 }}
+            sx={{ mb: 3 }}
           >
             {mensaje}
           </Alert>
@@ -159,19 +174,6 @@ setTimeout(() => navigate("/usuarios/administradores"), 1500);
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <Box display="flex" flexDirection="column" gap={2}>
-            <Controller
-              name="IdAdmin"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="ID Administrador"
-                  disabled
-                  fullWidth
-                  size="large"
-                />
-              )}
-            />
             <Controller
               name="Nombre"
               control={control}
@@ -183,7 +185,6 @@ setTimeout(() => navigate("/usuarios/administradores"), 1500);
                   error={!!errors.Nombre}
                   helperText={errors.Nombre?.message}
                   fullWidth
-                  size="large"
                 />
               )}
             />
@@ -198,7 +199,6 @@ setTimeout(() => navigate("/usuarios/administradores"), 1500);
                   error={!!errors.Apellidos}
                   helperText={errors.Apellidos?.message}
                   fullWidth
-                  size="large"
                 />
               )}
             />
@@ -208,7 +208,8 @@ setTimeout(() => navigate("/usuarios/administradores"), 1500);
               rules={{
                 required: "El email es obligatorio",
                 pattern: {
-                  value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+                  value:
+                    /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
                   message: "Email no válido",
                 },
               }}
@@ -220,22 +221,48 @@ setTimeout(() => navigate("/usuarios/administradores"), 1500);
                   error={!!errors.Email}
                   helperText={errors.Email?.message}
                   fullWidth
-                  size="large"
                 />
               )}
             />
             <Controller
-              name="Teléfono"
+              name="Telefono"
               control={control}
               rules={{ required: "El teléfono es obligatorio" }}
               render={({ field }) => (
                 <TextField
                   {...field}
                   label="Teléfono"
-                  error={!!errors.Teléfono}
-                  helperText={errors.Teléfono?.message}
+                  error={!!errors.Telefono}
+                  helperText={errors.Telefono?.message}
                   fullWidth
-                  size="large"
+                />
+              )}
+            />
+            <Controller
+              name="Cedula"
+              control={control}
+              rules={{ required: "La cédula es obligatoria" }}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Cédula"
+                  error={!!errors.Cedula}
+                  helperText={errors.Cedula?.message}
+                  fullWidth
+                />
+              )}
+            />
+            <Controller
+              name="NombreUsuario"
+              control={control}
+              rules={{ required: "El nombre de usuario es obligatorio" }}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Nombre de Usuario"
+                  error={!!errors.NombreUsuario}
+                  helperText={errors.NombreUsuario?.message}
+                  fullWidth
                 />
               )}
             />
@@ -269,20 +296,44 @@ setTimeout(() => navigate("/usuarios/administradores"), 1500);
                 />
               )}
             />
+            <Controller
+              name="Estado"
+              control={control}
+              rules={{
+                validate: (value) =>
+                  value === true || value === false || "El estado es obligatorio",
+              }}
+              render={({ field }) => (
+                <FormControl fullWidth error={!!errors.Estado}>
+                  <InputLabel id="estado-label">Estado</InputLabel>
+                  <Select
+                    labelId="estado-label"
+                    label="Estado"
+                    value={field.value}
+                    onChange={(e) => field.onChange(e.target.value === "true")}
+                  >
+                    <MenuItem value={"true"}>Inactivo</MenuItem>
+                    <MenuItem value={"false"}>Activo</MenuItem>
+                  </Select>
+                  {errors.Estado && (
+                    <Typography variant="caption" color="error">
+                      {errors.Estado.message}
+                    </Typography>
+                  )}
+                </FormControl>
+              )}
+            />
+
+
+
 
             <Button
               type="submit"
               variant="contained"
               color="primary"
-              size="large"
               startIcon={<SaveIcon />}
               disabled={isSubmitting}
-              sx={{
-                mt: 2,
-                fontWeight: "bold",
-                py: 1.5,
-                borderRadius: 3,
-              }}
+              sx={{ mt: 2, fontWeight: "bold", py: 1.5, borderRadius: 3 }}
             >
               {isSubmitting ? "Guardando..." : "Guardar Cambios"}
             </Button>

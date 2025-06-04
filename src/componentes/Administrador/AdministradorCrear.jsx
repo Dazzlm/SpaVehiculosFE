@@ -167,7 +167,7 @@ const response = await fetch(
 
           <TextField
             label="Teléfono"
-            {...register("Teléfono", {
+            {...register("Telefono", {
               required: "El teléfono es obligatorio",
             })}
             error={!!errors.Teléfono}

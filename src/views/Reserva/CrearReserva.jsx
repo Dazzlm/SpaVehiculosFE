@@ -7,14 +7,19 @@ import {
   MenuItem,
   Button,
   Stack,
-  Alert, 
+  Alert,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import axios from "axios";
-import dayjs from "dayjs"; 
-import swal from "sweetalert2"; 
+import dayjs from "dayjs";
+import swal from "sweetalert2";
+import {
+  obtenerClientes,
+  obtenerServicios,
+  obtenerSedes,
+  crearReserva,
+} from "../../helpers/Reservas/reservaHelper";
 
 const CrearReserva = () => {
   const {
@@ -28,30 +33,29 @@ const CrearReserva = () => {
       IdServicio: "",
       IdSede: "",
       Fecha: dayjs().format("YYYY-MM-DD"),
-      HoraInicio: "09:00", 
+      HoraInicio: "09:00",
     },
   });
 
   const [clientes, setClientes] = useState([]);
   const [servicios, setServicios] = useState([]);
   const [sedes, setSedes] = useState([]);
-  const [apiError, setApiError] = useState(null); 
+  const [apiError, setApiError] = useState(null);
 
   const navigate = useNavigate();
-  const API_BASE = "http://spavehiculos.runasp.net/api";
+
   useEffect(() => {
     const cargarDatos = async () => {
       try {
         setApiError(null);
         const [clientesRes, serviciosRes, sedesRes] = await Promise.all([
-          axios.get(`${API_BASE}/Clientes/ConsultarTodos`),
-          axios.get(`${API_BASE}/Servicios/ConsultarTodos`),
-          axios.get(`${API_BASE}/Sedes/ConsultarTodos`),
+          obtenerClientes(),
+          obtenerServicios(),
+          obtenerSedes(),
         ]);
-
-        setClientes(clientesRes.data);
-        setServicios(serviciosRes.data);
-        setSedes(sedesRes.data);
+        setClientes(clientesRes);
+        setServicios(serviciosRes);
+        setSedes(sedesRes);
       } catch (error) {
         console.error("Error cargando datos iniciales:", error);
         setApiError(
@@ -59,70 +63,62 @@ const CrearReserva = () => {
         );
       }
     };
-
     cargarDatos();
   }, []);
 
-  const onSubmit = async (data) => {
-  setApiError(null); 
-  try {
-    const fechaFormateada = dayjs(data.Fecha).format("YYYY-MM-DD");
-    const body = {
-      IdCliente: parseInt(data.IdCliente),
-      IdServicio: parseInt(data.IdServicio),
-      IdSede: parseInt(data.IdSede),
-      Fecha: `${fechaFormateada}T00:00:00`,
-      HoraInicio: `${data.HoraInicio}:00`,
-    };
+ const onSubmit = async (data) => {
+    setApiError(null);
+    try {
+      const fechaFormateada = dayjs(data.Fecha).format("YYYY-MM-DD");
 
-    const response = await axios.post(`${API_BASE}/Reservas/CrearReserva`, body);
+      const body = {
+        IdCliente: parseInt(data.IdCliente),
+        IdServicio: parseInt(data.IdServicio),
+        IdSede: parseInt(data.IdSede),
+        Fecha: `${fechaFormateada}T00:00:00`,
+        HoraInicio: `${data.HoraInicio}:00`,
+      };
 
-    if (response.data && typeof response.data === "object" && response.data.Message) {
-      if (response.data.Message === "Reserva creada con éxito") {
+      const response = await crearReserva(body);
+
+      const responseMessage = response.Message;
+     
+      if (responseMessage === "Reserva creada con éxito") {
         swal.fire({
           icon: "success",
-            title: "Reserva creada",
-            text: "La reserva se ha creado correctamente.",
-            confirmButtonColor: "#3085d6",
+          title: "Reserva creada",
+          text: "La reserva se ha creado correctamente.",
+          confirmButtonColor: "#3085d6",
         });
         navigate("/reservas");
       } else {
-        setApiError(response.data.Message);
+        console.log("error")
       }
-    } else if (typeof response.data === "string") {
-      if (response.data === "Reserva creada con éxito") {
-        navigate("/reservas");
-      } else {
-        setApiError(response.data);
-      }
-    } else {
-      setApiError("Formato de respuesta de éxito inesperado del servidor.");
-    }
+    } catch (error) {
+      console.error("Error al crear reserva:", error);
 
-  } catch (error) {
-    console.error("Error al crear reserva:", error);
-    let errorMessage = "Error desconocido al crear la reserva.";
+      const errData = error.response?.data;
+      let errorMessage = "Error desconocido al crear la reserva.";
 
-    if (error.response && error.response.data) {
-      if (typeof error.response.data === "string") {
-        errorMessage = error.response.data;
-      } else if (typeof error.response.data === "object") {
+      if (typeof errData === "string") {
+        errorMessage = errData;
+      } else if (typeof errData === "object") {
         errorMessage =
-          error.response.data.message ||
-          error.response.data.error ||
-          error.response.data.title ||
-          error.response.data.detail ||
-          (error.response.data.Message || JSON.stringify(error.response.data)); 
+          errData.message ||
+          errData.error ||
+          errData.title ||
+          errData.detail ||
+          errData.Message ||
+          JSON.stringify(errData);
+      } else if (error.request) {
+        errorMessage = "No se recibió respuesta del servidor. Verifique su conexión.";
+      } else {
+        errorMessage = "Error al configurar la solicitud.";
       }
-    } else if (error.request) {
-      errorMessage =
-        "No se recibió respuesta del servidor. Verifique su conexión de red";
-    } else {
-      errorMessage = "Error al configurar la solicitud.";
+
+      setApiError(`Error al crear la reserva: ${errorMessage}`);
     }
-    setApiError(`Error al crear la reserva: ${errorMessage}`);
-  }
-};
+  };
 
   return (
     <Paper
@@ -229,6 +225,7 @@ const CrearReserva = () => {
             </TextField>
           )}
         />
+
         <TextField
           label="Fecha"
           type="date"
@@ -237,7 +234,7 @@ const CrearReserva = () => {
             validate: (value) => {
               const selectedDate = dayjs(value);
               const today = dayjs();
-              if (selectedDate.isBefore(today, 'day')) {
+              if (selectedDate.isBefore(today, "day")) {
                 return "La fecha de la reserva no puede ser anterior al día actual.";
               }
               return true;

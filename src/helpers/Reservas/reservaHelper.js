@@ -2,13 +2,13 @@ import axios from "axios";
 
 const API_BASE = "http://spavehiculos.runasp.net/api";
 
-const getAuthHeaders = () => {
+export const getAuthHeaders = () => {
   const user = JSON.parse(localStorage.getItem("CurrentUser"));
   if (!user?.token) {
     throw new Error("No estás autenticado.");
   }
   return {
-    Authorization: `Bearer ${user.token}`,
+    Authorization: `Bearer ${user.token}`, 
     "Content-Type": "application/json",
   };
 };
@@ -36,6 +36,13 @@ export const obtenerSedes = async () => {
 
 export const crearReserva = async (reserva) => {
   const response = await axios.post(`${API_BASE}/Reservas/CrearReserva`, reserva, {
+    headers: getAuthHeaders(),
+  });
+  return response.data;
+};
+
+export const crearServicio = async (servicio) => {
+  const response = await axios.post(`${API_BASE}/Servicios/CrearServicio`, servicio, {
     headers: getAuthHeaders(),
   });
   return response.data;

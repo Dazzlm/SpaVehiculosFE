@@ -94,7 +94,7 @@ const ListaCiudades = () => {
           sx={{
             borderRadius: 2,
             minWidth: 400,
-            maxHeight: 600,
+            maxHeight: 765,
             overflowY: "auto",
           }}
         >

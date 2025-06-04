@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { getServicio } from '../../helpers/Servicios/getServicio';
+import { getServicios } from '../../helpers/Servicios/getServicios';
 import { eliminarServicio } from '../../helpers/Servicios/deleteServicio';
 import styles from './ServiciosCards.module.css';
 import { useNavigate } from 'react-router-dom'; 
 import { Button } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import Swal from 'sweetalert2';
 
 export default function ListaServicios() {
@@ -53,7 +52,7 @@ const handleEliminarServicio = async (id) => {
   useEffect(() => {
     async function cargarServicios() {
       try {
-        const data = await getServicio();
+        const data = await getServicios();
         setServicios(data);
       } catch (error) {
         console.error(error.message);

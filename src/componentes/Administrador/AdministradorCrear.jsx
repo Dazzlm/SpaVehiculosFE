@@ -282,25 +282,20 @@ const response = await fetch(
 
           <FormControl fullWidth error={!!errors.Estado}>
             <InputLabel id="estado-label">Estado</InputLabel>
-            <Select
-              labelId="estado-label"
-              label="Estado"
-              defaultValue=""
-              {...register("Estado", {
-                required: "El estado es obligatorio",
-              })}
-              startAdornment={
-                <InputAdornment position="start">
-                  <AccountCircleIcon sx={{ color: "primary.main", mr: 1 }} />
-                </InputAdornment>
-              }
-            >
-              <MenuItem value={0}>Inactivo</MenuItem>
-              <MenuItem value={1}>Activo</MenuItem>
-              
-            </Select>
-            <FormHelperText>{errors.Estado?.message}</FormHelperText>
-          </FormControl>
+              <Select
+                labelId="estado-label"
+                label="Estado"
+               defaultValue=""
+                {...register("Estado", {
+                 validate: (value) =>
+                    value === "true" || value === "false" || "El estado es obligatorio",
+                })}
+              >
+                <MenuItem value="true">Inactivo</MenuItem>
+                <MenuItem value="false">Activo</MenuItem>
+              </Select>
+              <FormHelperText>{errors.Estado?.message}</FormHelperText>
+            </FormControl>
 
           <Stack direction="row" spacing={2} justifyContent="space-between" mt={3} mb={2}>
             <Button

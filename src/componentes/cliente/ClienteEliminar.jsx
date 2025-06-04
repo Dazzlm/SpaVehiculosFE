@@ -7,15 +7,16 @@ import {
   Paper,
   Stack,
   Alert,
+  CircularProgress,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 function ClienteEliminar() {
   const { id } = useParams();
   const [cliente, setCliente] = useState(null);
   const [mensaje, setMensaje] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,12 +36,22 @@ function ClienteEliminar() {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((res) => res.json())
-      .then((data) => setCliente(data))
-      .catch(() => setError("Error al obtener cliente"));
+      .then(async (res) => {
+        if (res.status === 204) throw new Error("Cliente no encontrado");
+        if (!res.ok) throw new Error("Error al obtener cliente");
+        const data = await res.json();
+        setCliente(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message || "Error al obtener cliente");
+        setLoading(false);
+      });
   }, [id, navigate]);
 
-  const handleEliminar = () => {
+  const handleEliminar = async () => {
+    setMensaje("");
+    setError("");
     const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
     const token = storedUser?.token;
 
@@ -50,63 +61,89 @@ function ClienteEliminar() {
       return;
     }
 
-    fetch(`http://spavehiculos.runasp.net/api/Clientes/EliminarXId?IdCliente=${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Error al eliminar");
-        return res.text();
-      })
-      .then(() => {
-        setMensaje("Cliente eliminado correctamente.");
-        setTimeout(() => navigate("/usuarios/cliente"), 1000);
-      })
-      .catch(() => setError("Error al eliminar cliente."));
+    try {
+      const res = await fetch(
+        `http://spavehiculos.runasp.net/api/Clientes/EliminarClienteUsuario?idCliente=${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const respuestaTexto = await res.text();
+
+      if (!res.ok) throw new Error(respuestaTexto);
+
+      setMensaje(respuestaTexto);
+      setTimeout(() => navigate("/usuarios/cliente"), 1500);
+    } catch (err) {
+      setError(err.message || "Error al eliminar cliente");
+    }
   };
 
-  if (!cliente && !error) {
+  if (loading) {
     return (
-      <Typography align="center" mt={4} variant="h6">
-        Cargando datos del cliente...
-      </Typography>
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="40vh">
+        <CircularProgress />
+      </Box>
     );
   }
 
   return (
-    <Box maxWidth="600px" mx="auto" mt={6} px={3}>
-      <Typography variant="h4" textAlign="center" mb={3}>
+    <Box maxWidth="500px" mx="auto" mt={4} px={2}>
+      <Typography variant="h5" textAlign="center" mb={2}>
         Eliminar Cliente
       </Typography>
 
-      {mensaje && <Alert severity="success" sx={{ mb: 2 }}>{mensaje}</Alert>}
-      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+      {mensaje && (
+        <Alert severity="success" sx={{ mb: 1 }}>
+          {mensaje}
+        </Alert>
+      )}
+      {error && (
+        <Alert severity="error" sx={{ mb: 1 }}>
+          {error}
+        </Alert>
+      )}
 
       {cliente && (
-        <Paper elevation={3} sx={{ p: 3, borderRadius: 2 }}>
-          <Typography mb={2}>
-            ¿Estás seguro que deseas eliminar al siguiente cliente?
+        <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
+          <Typography mb={1} fontWeight="medium" fontSize="1rem">
+            ¿Seguro que deseas eliminar este cliente?
           </Typography>
-          <Stack spacing={1}>
-            <Typography><strong>Nombre:</strong> {cliente.Nombre} {cliente.Apellidos}</Typography>
-            <Typography><strong>Email:</strong> {cliente.Email}</Typography>
-            <Typography><strong>Teléfono:</strong> {cliente.Teléfono}</Typography>
-            <Typography><strong>Dirección:</strong> {cliente.Dirección}</Typography>
+          <Stack spacing={0.5} mb={3}>
+            <Typography variant="body2">
+              <strong>Nombre:</strong> {cliente.Nombre} {cliente.Apellidos}
+            </Typography>
+            <Typography variant="body2">
+              <strong>Email:</strong> {cliente.Email}
+            </Typography>
+            <Typography variant="body2">
+              <strong>Teléfono:</strong> {cliente.Teléfono}
+            </Typography>
+            <Typography variant="body2">
+              <strong>Dirección:</strong> {cliente.Dirección}
+            </Typography>
           </Stack>
 
-          <Stack direction="row" spacing={2} mt={4}>
+          <Stack direction="row" spacing={1} justifyContent="flex-end">
             <Button
               variant="contained"
               color="error"
+              size="small"
               startIcon={<DeleteIcon />}
               onClick={handleEliminar}
             >
-              Confirmar Eliminación
+              Eliminar
             </Button>
 
-            <Button variant="outlined" onClick={() => navigate("/usuarios/cliente")}>
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => navigate("/usuarios/cliente")}
+            >
               Cancelar
             </Button>
           </Stack>

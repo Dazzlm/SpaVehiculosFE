@@ -81,7 +81,7 @@ export default function ProductoForm() {
         throw new Error("Error al guardar el producto");
       }
 
-      navigate("/productos");
+      navigate("/gestion/productos");
     } catch (error) {
       console.error("Error en la solicitud:", error.message);
     }

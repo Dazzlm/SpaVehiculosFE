@@ -297,7 +297,7 @@ const ListaReservas = () => {
           sx={{
             borderRadius: 2,
             minWidth: 800,
-            maxHeight: 700,
+            maxHeight: 640,
             overflowY: "auto",
           }}
         >

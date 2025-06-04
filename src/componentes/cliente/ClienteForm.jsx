@@ -20,36 +20,36 @@ export default function ClienteForm() {
     formState: { errors },
   } = useForm();
 
- const onSubmit = async (data) => {
-  try {
-    const storedUser = JSON.parse(localStorage.getItem('CurrentUser') || 'null');
-    const token = storedUser?.token || (typeof currentUser !== 'undefined' ? currentUser?.token : null);
+  const onSubmit = async (data) => {
+    try {
+      const storedUser = JSON.parse(localStorage.getItem("CurrentUser") || "null");
+      const token = storedUser?.token || null;
 
-    if (!token) {
-      throw new Error("No se encontró el token de autenticación.");
-    }
-
-    const response = await fetch(
-      "http://spavehiculos.runasp.net/api/Clientes/Insertar",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(data),
+      if (!token) {
+        throw new Error("No se encontró el token de autenticación.");
       }
-    );
 
-    if (!response.ok) {
-      throw new Error("Error al guardar el cliente");
+      const response = await fetch(
+        "http://spavehiculos.runasp.net/api/Clientes/InsertarClienteUsuario",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error al guardar el cliente");
+      }
+
+      navigate("/usuarios/cliente");
+    } catch (error) {
+      console.error("Error en la solicitud:", error.message);
     }
-
-    navigate("/usuarios/cliente");
-  } catch (error) {
-    console.error("Error en la solicitud:", error.message);
-  }
-};
+  };
 
   return (
     <Paper
@@ -64,7 +64,7 @@ export default function ClienteForm() {
       }}
     >
       <Typography variant="h5" fontWeight="bold" mb={4} textAlign="center">
-        Formulario Cliente
+        Registro de Cliente y Usuario
       </Typography>
 
       <Box
@@ -96,8 +96,7 @@ export default function ClienteForm() {
           {...register("Email", {
             required: "El email es obligatorio",
             pattern: {
-              value:
-                /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+              value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
               message: "Email no es válido",
             },
           })}
@@ -107,29 +106,36 @@ export default function ClienteForm() {
         />
         <TextField
           label="Teléfono"
-          {...register("Teléfono", { required: "El teléfono es obligatorio" })}
-          error={!!errors.Teléfono}
-          helperText={errors.Teléfono?.message}
+          {...register("Telefono", { required: "El teléfono es obligatorio" })}
+          error={!!errors.Telefono}
+          helperText={errors.Telefono?.message}
           fullWidth
         />
         <TextField
           label="Dirección"
-          {...register("Dirección", { required: "La dirección es obligatoria" })}
-          error={!!errors.Dirección}
-          helperText={errors.Dirección?.message}
+          {...register("Direccion", { required: "La dirección es obligatoria" })}
+          error={!!errors.Direccion}
+          helperText={errors.Direccion?.message}
           fullWidth
         />
+
         <TextField
-          label="Id Usuario"
-          type="number"
-          {...register("IdUsuario", {
-            required: "El IdUsuario es obligatorio",
-            valueAsNumber: true,
-            validate: (value) =>
-              value > 0 || "El IdUsuario debe ser mayor que 0",
+          label="Nombre de Usuario"
+          {...register("NombreUsuario", {
+            required: "El nombre de usuario es obligatorio",
           })}
-          error={!!errors.IdUsuario}
-          helperText={errors.IdUsuario?.message}
+          error={!!errors.NombreUsuario}
+          helperText={errors.NombreUsuario?.message}
+          fullWidth
+        />
+
+        <TextField
+          label="Documento"
+          {...register("DocumentoUsuario", {
+            required: "El documento es obligatorio",
+          })}
+          error={!!errors.DocumentoUsuario}
+          helperText={errors.DocumentoUsuario?.message}
           fullWidth
         />
 

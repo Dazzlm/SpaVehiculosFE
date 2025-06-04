@@ -16,11 +16,12 @@ import PersonIcon from '@mui/icons-material/Person';
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
 import HomeIcon from '@mui/icons-material/Home';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import FingerprintIcon from '@mui/icons-material/Fingerprint';
 
 function ClienteDetalle() {
   const { id } = useParams();
-  const [cliente, setCliente] = useState(null);
+  const [clienteUsuario, setClienteUsuario] = useState(null);
   const [imagenUrl, setImagenUrl] = useState(null);
   const navigate = useNavigate();
 
@@ -38,7 +39,7 @@ function ClienteDetalle() {
 
     const baseUrl = 'http://spavehiculos.runasp.net/api/Clientes';
 
-    fetch(`${baseUrl}/ConsultarXId?idCliente=${id}`, {
+    fetch(`${baseUrl}/ConsultarClienteUsuario?id=${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -50,10 +51,9 @@ function ClienteDetalle() {
         return res.json();
       })
       .then(data => {
-        setCliente(data);
+        setClienteUsuario(data);
 
         const imagenClienteUrl = `http://spavehiculos.runasp.net/api/UploadCliente/ImagenCliente?idCliente=${id}`;
-
         fetch(imagenClienteUrl, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -73,7 +73,7 @@ function ClienteDetalle() {
       })
       .catch(err => {
         console.error("Error al cargar cliente:", err.message);
-        setCliente(null);
+        setClienteUsuario(null);
         setImagenUrl(imagenPorDefecto);
       });
 
@@ -84,7 +84,7 @@ function ClienteDetalle() {
     };
   }, [id, navigate]);
 
-  if (!cliente)
+  if (!clienteUsuario)
     return (
       <Box display="flex" flexDirection="column" alignItems="center" mt={8}>
         <CircularProgress color="primary" />
@@ -95,18 +95,21 @@ function ClienteDetalle() {
     );
 
   const detalles = [
-    { icon: <BadgeIcon color="primary" sx={{ fontSize: 28 }} />, label: "ID Cliente:", value: cliente.IdCliente },
-    { icon: <PersonIcon color="primary" sx={{ fontSize: 28 }} />, label: "Nombre:", value: cliente.Nombre },
-    { icon: <PersonIcon color="primary" sx={{ fontSize: 28 }} />, label: "Apellidos:", value: cliente.Apellidos },
-    { icon: <EmailIcon color="primary" sx={{ fontSize: 28 }} />, label: "Email:", value: cliente.Email },
-    { icon: <PhoneIcon color="primary" sx={{ fontSize: 28 }} />, label: "Teléfono:", value: cliente.Teléfono },
-    { icon: <HomeIcon color="primary" sx={{ fontSize: 28 }} />, label: "Dirección:", value: cliente.Dirección },
-    { icon: <AccountCircleIcon color="primary" sx={{ fontSize: 28 }} />, label: "ID Usuario:", value: cliente.IdUsuario },
+    { icon: <BadgeIcon color="primary" sx={{ fontSize: 28 }} />, label: "ID Cliente:", value: clienteUsuario.IdCliente },
+    { icon: <PersonIcon color="primary" sx={{ fontSize: 28 }} />, label: "Nombre:", value: clienteUsuario.Nombre },
+    { icon: <PersonIcon color="primary" sx={{ fontSize: 28 }} />, label: "Apellidos:", value: clienteUsuario.Apellidos },
+    { icon: <FingerprintIcon color="primary" sx={{ fontSize: 28 }} />, label: "Documento:", value: clienteUsuario.DocumentoUsuario },
+    { icon: <AccountBoxIcon color="primary" sx={{ fontSize: 28 }} />, label: "Nombre Usuario:", value: clienteUsuario.NombreUsuario },
+    { icon: <EmailIcon color="primary" sx={{ fontSize: 28 }} />, label: "Email:", value: clienteUsuario.Email },
+    { icon: <PhoneIcon color="primary" sx={{ fontSize: 28 }} />, label: "Teléfono:", value: clienteUsuario.Telefono },
+    { icon: <HomeIcon color="primary" sx={{ fontSize: 28 }} />, label: "Dirección:", value: clienteUsuario.Direccion },
   ];
 
   return (
     <Box
       maxWidth={600}
+      maxHeight="70vh"
+      overflow="auto"
       mx="auto"
       mt={6}
       px={4}
@@ -159,7 +162,7 @@ function ClienteDetalle() {
             <Box key={i}>
               <Stack direction="row" alignItems="center" spacing={2}>
                 {icon}
-                <Typography fontWeight={700} sx={{ minWidth: 130, color: "text.secondary" }}>
+                <Typography fontWeight={700} sx={{ minWidth: 150, color: "text.secondary" }}>
                   {label}
                 </Typography>
                 <Typography fontWeight={500} color="text.primary" sx={{ wordBreak: "break-word" }}>

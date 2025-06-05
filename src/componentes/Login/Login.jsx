@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import styles from './Login.module.css'; 
 import logo from '../../assets/logo.jpeg'; 
+import fondo from '../../assets/bkg2.png';
 import { useSpaVehiculosStore } from '../../zustand/SpaVehiculosStore.js';
 import { parseJwt } from '../../helpers/Auth/parseJwt.js';
 function Login() {
@@ -81,6 +82,8 @@ function Login() {
   }
 
   return (
+    <div>
+      <img className={styles.imgbackground} src={fondo} alt="imagen de fondo" />
     <div className={styles.loginBackground}> 
        <div className={styles.headerContainer}>
         <h1>BIENVENIDO <br /> SISTEMA DE SPA <br /> VEHICULAR</h1>
@@ -130,6 +133,7 @@ function Login() {
       </form>
       </div>
       </div>
+    </div>
     </div>
   );
 }

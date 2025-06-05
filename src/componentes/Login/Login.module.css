@@ -1,5 +1,7 @@
 
 .loginContainer {
+  background-color: white;
+  color: black;
   text-align:center;
   width: 40%;
   margin: 50px auto;
@@ -64,7 +66,21 @@
 }
 
 .loginBackground{
+  color: #ccc;
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
+}
+
+
+.imgbackground{
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0.7; 
+    z-index: -1; 
 }

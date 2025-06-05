@@ -32,8 +32,8 @@ const CrearReserva = () => {
       IdCliente: "",
       IdServicio: "",
       IdSede: "",
-      Fecha: dayjs().format("YYYY-MM-DD"),
-      HoraInicio: "09:00",
+      Fecha: dayjs().add(1, 'day').format("YYYY-MM-DD"),
+      HoraInicio: "08:00", 
     },
   });
 
@@ -95,7 +95,7 @@ const CrearReserva = () => {
         swal.fire({
           icon:"alert",
           title:"❌ Error en la reserva",
-          text:"La fecha y hora de la reserva no pueden ser anteriores al momento actual.",
+          text:"La fecha y hora de la reserva no pueden ser de HOY.",
           confirmButtonColor: "red"
         })
       }

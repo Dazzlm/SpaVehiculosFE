@@ -18,7 +18,7 @@ function Login() {
     setError(null);
     setLoading(true);
 
-    const apiUrl = 'http://spavehiculos.runasp.net/api/Login/Ingresar'; 
+    const apiUrl = 'https://spavehiculos.runasp.net/api/Login/Ingresar'; 
 
     try {
       const response = await fetch(apiUrl, {

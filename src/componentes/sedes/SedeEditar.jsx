@@ -51,7 +51,7 @@ export default function SedeEditar() {
       return;
     }
 
-    fetch(`http://spavehiculos.runasp.net/api/Sedes/ConsultarXId?idSede=${id}`, {
+    fetch(`https://spavehiculos.runasp.net/api/Sedes/ConsultarXId?idSede=${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -70,7 +70,7 @@ export default function SedeEditar() {
         setLoading(false);
       });
 
-    fetch("http://spavehiculos.runasp.net/api/Ciudades/ConsultarTodos", {
+    fetch("https://spavehiculos.runasp.net/api/Ciudades/ConsultarTodos", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -102,7 +102,7 @@ export default function SedeEditar() {
         return;
       }
 
-      const res = await fetch("http://spavehiculos.runasp.net/api/Sedes/Actualizar", {
+      const res = await fetch("https://spavehiculos.runasp.net/api/Sedes/Actualizar", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

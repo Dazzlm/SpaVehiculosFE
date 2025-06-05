@@ -29,7 +29,7 @@ const ListaProveedores = () => {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("CurrentUser"));
 
-fetch("http://spavehiculos.runasp.net/api/GestorProv/ConsultarTodos", {
+fetch("https://spavehiculos.runasp.net/api/GestorProv/ConsultarTodos", {
   method: "GET",
   headers: {
     "Content-Type": "application/json",

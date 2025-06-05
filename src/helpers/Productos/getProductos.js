@@ -2,7 +2,7 @@ export async function getProductos() {
   try {
     const user = JSON.parse(localStorage.getItem("CurrentUser")); // Obtener el token
 
-    const response = await fetch(`http://spavehiculos.runasp.net/api/Productos/ObtenerTodos`, {
+    const response = await fetch(`https://spavehiculos.runasp.net/api/Productos/ObtenerTodos`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

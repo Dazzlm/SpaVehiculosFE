@@ -2,7 +2,7 @@ export async function getSedes() {
   try {
     const user = JSON.parse(localStorage.getItem("CurrentUser"));
 
-    const response = await fetch('http://spavehiculos.runasp.net/api/Sedes/ConsultarTodos', {
+    const response = await fetch('https://spavehiculos.runasp.net/api/Sedes/ConsultarTodos', {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

@@ -33,7 +33,7 @@ export default function SedeForm() {
         throw new Error("No se encontró el token de autenticación.");
       }
 
-      const response = await fetch("http://spavehiculos.runasp.net/api/Ciudades/ConsultarTodos", {
+      const response = await fetch("https://spavehiculos.runasp.net/api/Ciudades/ConsultarTodos", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -69,7 +69,7 @@ export default function SedeForm() {
         throw new Error("No se encontró el token de autenticación.");
       }
 
-      const response = await fetch("http://spavehiculos.runasp.net/api/Sedes/Insertar", {
+      const response = await fetch("https://spavehiculos.runasp.net/api/Sedes/Insertar", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

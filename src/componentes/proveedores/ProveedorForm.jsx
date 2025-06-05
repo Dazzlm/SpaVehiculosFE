@@ -25,7 +25,7 @@ export default function ProveedorForm() {
     const user = JSON.parse(localStorage.getItem("CurrentUser"));
 
 const response = await fetch(
-  "http://spavehiculos.runasp.net/api/GestorProv/CrearProveedor",
+  "https://spavehiculos.runasp.net/api/GestorProv/CrearProveedor",
   {
     method: "POST",
     headers: {

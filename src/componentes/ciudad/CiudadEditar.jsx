@@ -42,7 +42,7 @@ export default function CiudadEditar() {
       return;
     }
 
-    fetch(`http://spavehiculos.runasp.net/api/Ciudades/ConsultarXId?idCiudad=${id}`, {
+    fetch(`https://spavehiculos.runasp.net/api/Ciudades/ConsultarXId?idCiudad=${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -73,7 +73,7 @@ export default function CiudadEditar() {
         return;
       }
 
-      const res = await fetch("http://spavehiculos.runasp.net/api/Ciudades/Actualizar", {
+      const res = await fetch("https://spavehiculos.runasp.net/api/Ciudades/Actualizar", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://spavehiculos.runasp.net/api";
+const API_BASE_URL = "https://spavehiculos.runasp.net/api";
 
 const getAuthHeaders = () => {
   const user = JSON.parse(localStorage.getItem("CurrentUser"));

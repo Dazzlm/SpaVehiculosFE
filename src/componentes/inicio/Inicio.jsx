@@ -145,7 +145,7 @@ useEffect(() => {
         };
 
         const promesas = tarjetas_config.map(config => 
-          axios.get(`http://spavehiculos.runasp.net/api/${config.endpoint}`, { headers })
+          axios.get(`https://spavehiculos.runasp.net/api/${config.endpoint}`, { headers })
         );
 
         const resultados = await Promise.all(promesas);

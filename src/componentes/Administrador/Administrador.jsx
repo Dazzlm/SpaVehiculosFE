@@ -39,7 +39,7 @@ const ListaAdministradores = () => {
         throw new Error("No estás autenticado.");
       }
 
-      const response = await fetch("http://spavehiculos.runasp.net/api/GestorAdmin/ConsultarTodos", {
+      const response = await fetch("https://spavehiculos.runasp.net/api/GestorAdmin/ConsultarTodos", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -81,7 +81,7 @@ const ListaAdministradores = () => {
     if (confirmacion.isConfirmed) {
       try {
         const response = await fetch(
-          `http://spavehiculos.runasp.net/api/GestorAdmin/EliminarAdminUsuario?idAdmin=${id}`,
+          `https://spavehiculos.runasp.net/api/GestorAdmin/EliminarAdminUsuario?idAdmin=${id}`,
           {
             method: "DELETE",
             headers: {

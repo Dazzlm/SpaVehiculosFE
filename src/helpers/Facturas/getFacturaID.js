@@ -3,7 +3,7 @@ export async function getFacturaID(idFactura) {
     const user = JSON.parse(localStorage.getItem("CurrentUser")); 
 
     const response = await fetch(
-      `http://spavehiculos.runasp.net/api/Facturas/ConsultarFacturaXId?id=${idFactura}`,
+      `https://spavehiculos.runasp.net/api/Facturas/ConsultarFacturaXId?id=${idFactura}`,
       {
         method: "GET",
         headers: {

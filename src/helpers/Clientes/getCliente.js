@@ -21,7 +21,7 @@ export const getCliente = async () => {
     }
 
     const response = await fetch(
-      `http://spavehiculos.runasp.net/api/Clientes/ConsultarXCC?CC=${cc}`,
+      `https://spavehiculos.runasp.net/api/Clientes/ConsultarXCC?CC=${cc}`,
       {
         method: "GET",
         headers: {

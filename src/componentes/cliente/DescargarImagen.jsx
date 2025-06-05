@@ -31,7 +31,7 @@ export default function DescargarImagen() {
 
     try {
       const response = await fetch(
-        `http://spavehiculos.runasp.net/api/UploadCliente/Descargar?nombreArchivo=${encodeURIComponent(
+        `https://spavehiculos.runasp.net/api/UploadCliente/Descargar?nombreArchivo=${encodeURIComponent(
           nombreArchivo.trim()
         )}`, {
           method: "GET",

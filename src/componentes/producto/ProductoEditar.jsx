@@ -50,7 +50,7 @@ export default function ProductoEditar() {
           throw new Error("No se encontró el token de autenticación.");
         }
 
-        const res = await fetch("http://spavehiculos.runasp.net/api/GestorProv/ConsultarTodos", {
+        const res = await fetch("https://spavehiculos.runasp.net/api/GestorProv/ConsultarTodos", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -80,7 +80,7 @@ export default function ProductoEditar() {
           return;
         }
 
-        const res = await fetch(`http://spavehiculos.runasp.net/api/Productos/ObtenerPorId?id=${id}`, {
+        const res = await fetch(`https://spavehiculos.runasp.net/api/Productos/ObtenerPorId?id=${id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -124,7 +124,7 @@ export default function ProductoEditar() {
 
       data.IdProducto = id;
 
-      const res = await fetch("http://spavehiculos.runasp.net/api/Productos/Actualizar", {
+      const res = await fetch("https://spavehiculos.runasp.net/api/Productos/Actualizar", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

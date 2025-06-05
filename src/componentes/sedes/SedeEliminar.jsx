@@ -28,7 +28,7 @@ function SedeEliminar() {
       return;
     }
 
-    fetch(`http://spavehiculos.runasp.net/api/Sedes/ConsultarXId?idSede=${id}`, {
+    fetch(`https://spavehiculos.runasp.net/api/Sedes/ConsultarXId?idSede=${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -50,7 +50,7 @@ function SedeEliminar() {
       return;
     }
 
-    fetch(`http://spavehiculos.runasp.net/api/Sedes/EliminarXId?idSede=${id}`, {
+    fetch(`https://spavehiculos.runasp.net/api/Sedes/EliminarXId?idSede=${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,

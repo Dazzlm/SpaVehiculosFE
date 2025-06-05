@@ -38,7 +38,7 @@ const ListaProductos = () => {
 
     console.log("Token para autorización:", token);
 
-    fetch("http://spavehiculos.runasp.net/api/Productos/ObtenerTodos", {
+    fetch("https://spavehiculos.runasp.net/api/Productos/ObtenerTodos", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

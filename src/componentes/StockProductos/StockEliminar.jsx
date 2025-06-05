@@ -31,7 +31,7 @@ export default function StockEliminar() {
         setLoading(true);
 
         const resStock = await fetch(
-          `http://spavehiculos.runasp.net/api/StockSedes/ConsultarPorIdSedeProducto?idSedeProducto=${id}`,
+          `https://spavehiculos.runasp.net/api/StockSedes/ConsultarPorIdSedeProducto?idSedeProducto=${id}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -44,7 +44,7 @@ export default function StockEliminar() {
         setStockInfo(dataStock.data);
 
         const resProd = await fetch(
-          `http://spavehiculos.runasp.net/api/Productos/ObtenerPorId?id=${dataStock.data.IdProducto}`,
+          `https://spavehiculos.runasp.net/api/Productos/ObtenerPorId?id=${dataStock.data.IdProducto}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -70,7 +70,7 @@ export default function StockEliminar() {
   const handleEliminar = async () => {
     try {
       const res = await fetch(
-        `http://spavehiculos.runasp.net/api/StockSedes/EliminarPorId?idSedeProducto=${id}`,
+        `https://spavehiculos.runasp.net/api/StockSedes/EliminarPorId?idSedeProducto=${id}`,
         {
           method: "DELETE",
           headers: {

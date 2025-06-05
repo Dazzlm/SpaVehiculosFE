@@ -37,7 +37,7 @@ const AgregarProductoASede = () => {
   const [productosSede, setProductosSede] = useState([]);
   const [apiError, setApiError] = useState(null);
 
-  const API_BASE = "http://spavehiculos.runasp.net/api";
+  const API_BASE = "https://spavehiculos.runasp.net/api";
 
   const getAuthHeaders = () => {
     const user = JSON.parse(localStorage.getItem("CurrentUser"));

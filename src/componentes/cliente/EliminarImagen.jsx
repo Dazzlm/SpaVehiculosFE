@@ -30,7 +30,7 @@ function EliminarImagen() {
 
     try {
       const response = await fetch(
-        `http://spavehiculos.runasp.net/api/UploadCliente/EliminarPorCliente?idCliente=${idCliente}`,
+        `https://spavehiculos.runasp.net/api/UploadCliente/EliminarPorCliente?idCliente=${idCliente}`,
         {
           method: "DELETE",
           headers: {

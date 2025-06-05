@@ -2,7 +2,7 @@ export const getFacturaPDF = async (idFactura) => {
   try {
     const user = JSON.parse(localStorage.getItem("CurrentUser"));
 
-    const response = await fetch(`http://spavehiculos.runasp.net/api/GestorPDF/descargar?id=${idFactura}`, {
+    const response = await fetch(`https://spavehiculos.runasp.net/api/GestorPDF/descargar?id=${idFactura}`, {
       method: "GET",
       headers: {
         Accept: "application/pdf",

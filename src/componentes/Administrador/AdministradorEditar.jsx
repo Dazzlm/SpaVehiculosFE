@@ -47,7 +47,7 @@ export default function AdministradorEditar() {
     const user = JSON.parse(localStorage.getItem("CurrentUser"));
 
     fetch(
-      `http://spavehiculos.runasp.net/api/GestorAdmin/ConsultarAdminUsuario?id=${id}`,
+      `https://spavehiculos.runasp.net/api/GestorAdmin/ConsultarAdminUsuario?id=${id}`,
       {
         method: "GET",
         headers: {
@@ -84,7 +84,7 @@ export default function AdministradorEditar() {
       };
 
       const res = await fetch(
-        "http://spavehiculos.runasp.net/api/GestorAdmin/ActualizarAdminUsuario",
+        "https://spavehiculos.runasp.net/api/GestorAdmin/ActualizarAdminUsuario",
         {
           method: "PUT",
           headers: {

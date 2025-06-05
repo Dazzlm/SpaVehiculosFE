@@ -6,7 +6,7 @@ export async function getClienteID(IdCliente) {
     }
 
     const response = await fetch(
-      `http://spavehiculos.runasp.net/api/Clientes/ConsultarXId?IdCliente=${IdCliente}`,
+      `https://spavehiculos.runasp.net/api/Clientes/ConsultarXId?IdCliente=${IdCliente}`,
       {
         method: "GET",
         headers: {

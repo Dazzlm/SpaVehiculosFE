@@ -28,7 +28,7 @@ function CiudadEliminar() {
       return;
     }
 
-    fetch(`http://spavehiculos.runasp.net/api/Ciudades/ConsultarXId?idCiudad=${id}`, {
+    fetch(`https://spavehiculos.runasp.net/api/Ciudades/ConsultarXId?idCiudad=${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -54,7 +54,7 @@ function CiudadEliminar() {
       return;
     }
 
-    fetch(`http://spavehiculos.runasp.net/api/Ciudades/EliminarXId?idCiudad=${id}`, {
+    fetch(`https://spavehiculos.runasp.net/api/Ciudades/EliminarXId?idCiudad=${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,

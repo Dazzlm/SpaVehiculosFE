@@ -29,7 +29,7 @@ export default function StockEditar() {
     const cargarDatos = async () => {
       try {
         const res = await fetch(
-          `http://spavehiculos.runasp.net/api/StockSedes/ConsultarPorIdSedeProducto?idSedeProducto=${id}`,
+          `https://spavehiculos.runasp.net/api/StockSedes/ConsultarPorIdSedeProducto?idSedeProducto=${id}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -44,7 +44,7 @@ export default function StockEditar() {
         setStockInfo(data.data);
 
         const resProducto = await fetch(
-          `http://spavehiculos.runasp.net/api/Productos/ObtenerPorId?id=${data.data.IdProducto}`,
+          `https://spavehiculos.runasp.net/api/Productos/ObtenerPorId?id=${data.data.IdProducto}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -76,7 +76,7 @@ export default function StockEditar() {
     setUpdating(true);
     try {
       const res = await fetch(
-        "http://spavehiculos.runasp.net/api/StockSedes/Actualizar",
+        "https://spavehiculos.runasp.net/api/StockSedes/Actualizar",
         {
           method: "PUT",
           headers: {

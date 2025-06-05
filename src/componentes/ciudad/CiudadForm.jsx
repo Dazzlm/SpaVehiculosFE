@@ -31,7 +31,7 @@ export default function CiudadForm() {
       }
 
       const response = await fetch(
-        "http://spavehiculos.runasp.net/api/Ciudades/Insertar",
+        "https://spavehiculos.runasp.net/api/Ciudades/Insertar",
         {
           method: "POST",
           headers: {

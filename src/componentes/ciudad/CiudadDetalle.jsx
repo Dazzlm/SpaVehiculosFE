@@ -27,7 +27,7 @@ function CiudadDetalle() {
       return;
     }
   useEffect(() => {
-    fetch(`http://spavehiculos.runasp.net/api/Ciudades/ConsultarXId?idCiudad=${id}`, {
+    fetch(`https://spavehiculos.runasp.net/api/Ciudades/ConsultarXId?idCiudad=${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

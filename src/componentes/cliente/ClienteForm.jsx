@@ -30,7 +30,7 @@ export default function ClienteForm() {
       }
 
       const response = await fetch(
-        "http://spavehiculos.runasp.net/api/Clientes/InsertarClienteUsuario",
+        "https://spavehiculos.runasp.net/api/Clientes/InsertarClienteUsuario",
         {
           method: "POST",
           headers: {

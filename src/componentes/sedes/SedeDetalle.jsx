@@ -34,7 +34,7 @@ function SedeDetalle() {
 
       try {
         // Obtener sede
-        const resSede = await fetch(`http://spavehiculos.runasp.net/api/Sedes/ConsultarXId?idSede=${id}`, {
+        const resSede = await fetch(`https://spavehiculos.runasp.net/api/Sedes/ConsultarXId?idSede=${id}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -44,7 +44,7 @@ function SedeDetalle() {
         const sedeData = await resSede.json();
 
         // Obtener ciudades
-        const resCiudades = await fetch("http://spavehiculos.runasp.net/api/Ciudades/ConsultarTodos", {
+        const resCiudades = await fetch("https://spavehiculos.runasp.net/api/Ciudades/ConsultarTodos", {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!resCiudades.ok) throw new Error("Error al obtener ciudades");

@@ -21,7 +21,7 @@ function ProveedorEliminar() {
   useEffect(() => {
    const user = JSON.parse(localStorage.getItem("CurrentUser"));
 
-fetch(`http://spavehiculos.runasp.net/api/GestorProv/ConsultarporID?idProveedor=${id}`, {
+fetch(`https://spavehiculos.runasp.net/api/GestorProv/ConsultarporID?idProveedor=${id}`, {
   method: "GET",
   headers: {
     "Content-Type": "application/json",
@@ -40,7 +40,7 @@ fetch(`http://spavehiculos.runasp.net/api/GestorProv/ConsultarporID?idProveedor=
   const handleEliminar = () => {
    const user = JSON.parse(localStorage.getItem("CurrentUser"));
 
-fetch(`http://spavehiculos.runasp.net/api/GestorProv/EliminarProveedor?idProveedor=${id}`, {
+fetch(`https://spavehiculos.runasp.net/api/GestorProv/EliminarProveedor?idProveedor=${id}`, {
   method: "DELETE",
   headers: {
     "Content-Type": "application/json",

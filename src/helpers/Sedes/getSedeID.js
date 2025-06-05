@@ -2,7 +2,7 @@ export async function getSedeID(idSede) {
   try {
     const user = JSON.parse(localStorage.getItem("CurrentUser"));
 
-    const response = await fetch(`http://spavehiculos.runasp.net/api/Sedes/ConsultarXId?IdSede=${idSede}`, {
+    const response = await fetch(`https://spavehiculos.runasp.net/api/Sedes/ConsultarXId?IdSede=${idSede}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

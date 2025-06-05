@@ -25,7 +25,7 @@ function ProveedorDetalle() {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("CurrentUser"));
 
-fetch(`http://spavehiculos.runasp.net/api/GestorProv/ConsultarporID?idProveedor=${id}`, {
+fetch(`https://spavehiculos.runasp.net/api/GestorProv/ConsultarporID?idProveedor=${id}`, {
   method: "GET",
   headers: {
     "Content-Type": "application/json",

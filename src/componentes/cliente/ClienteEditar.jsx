@@ -45,7 +45,7 @@ export default function ClienteEditar() {
       return;
     }
 
-    fetch(`http://spavehiculos.runasp.net/api/Clientes/ConsultarClienteUsuario?id=${id}`, {
+    fetch(`https://spavehiculos.runasp.net/api/Clientes/ConsultarClienteUsuario?id=${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -81,7 +81,7 @@ export default function ClienteEditar() {
       };
 
       const res = await fetch(
-        "http://spavehiculos.runasp.net/api/Clientes/ActualizarClienteUsuario",
+        "https://spavehiculos.runasp.net/api/Clientes/ActualizarClienteUsuario",
         {
           method: "PUT",
           headers: {

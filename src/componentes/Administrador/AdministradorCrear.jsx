@@ -39,7 +39,7 @@ export default function AdministradorForm() {
       const user = JSON.parse(localStorage.getItem("CurrentUser"));
 
 const response = await fetch(
-  "http://spavehiculos.runasp.net/api/GestorAdmin/InsertarAdminUsuario",
+  "https://spavehiculos.runasp.net/api/GestorAdmin/InsertarAdminUsuario",
   {
     method: "POST",
     headers: {

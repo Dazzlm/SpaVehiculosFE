@@ -34,7 +34,7 @@ function ProductoDetalle() {
       try {
         // Obtener producto
         const resProducto = await fetch(
-          `http://spavehiculos.runasp.net/api/Productos/ObtenerPorId?id=${id}`,
+          `https://spavehiculos.runasp.net/api/Productos/ObtenerPorId?id=${id}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -54,7 +54,7 @@ function ProductoDetalle() {
         let nombreProveedor = "Desconocido";
         if (idProveedor) {
           const resProveedor = await fetch(
-            `http://spavehiculos.runasp.net/api/GestorProv/ConsultarporID?idProveedor=${idProveedor}`,
+            `https://spavehiculos.runasp.net/api/GestorProv/ConsultarporID?idProveedor=${idProveedor}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,

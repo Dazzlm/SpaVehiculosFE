@@ -39,7 +39,7 @@ const StockLista = () => {
         };
 
         const res = await fetch(
-          `http://spavehiculos.runasp.net/api/StockSedes/ConsultarPorID?idSedeProducto=${currentSede}`,
+          `https://spavehiculos.runasp.net/api/StockSedes/ConsultarPorID?idSedeProducto=${currentSede}`,
           { headers }
         );
         const data = await res.json();
@@ -49,7 +49,7 @@ const StockLista = () => {
         const productosCompletos = await Promise.all(
           data.data.map(async (item) => {
             const productoRes = await fetch(
-              `http://spavehiculos.runasp.net/api/Productos/ObtenerPorId?id=${item.IdProducto}`,
+              `https://spavehiculos.runasp.net/api/Productos/ObtenerPorId?id=${item.IdProducto}`,
               { headers }
             );
             const dataprod = await productoRes.json();

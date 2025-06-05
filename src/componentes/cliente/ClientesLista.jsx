@@ -37,7 +37,7 @@ const ListaClientes = () => {
       return;
     }
 
-    fetch("http://spavehiculos.runasp.net/api/Clientes/ConsultarTodos", {
+    fetch("https://spavehiculos.runasp.net/api/Clientes/ConsultarTodos", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

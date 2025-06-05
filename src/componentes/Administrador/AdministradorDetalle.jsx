@@ -36,7 +36,7 @@ function AdministradorDetalle() {
 
 
   useEffect(() => {
-   const baseUrl = 'http://spavehiculos.runasp.net/';
+   const baseUrl = 'https://spavehiculos.runasp.net/';
 const user = JSON.parse(localStorage.getItem("CurrentUser"));
 
 fetch(`${baseUrl}api/GestorAdmin/ConsultarAdminUsuario?id=${id}`, {

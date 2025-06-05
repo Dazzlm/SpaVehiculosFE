@@ -5,7 +5,7 @@ export async function actualizarServicio(servicio) {
       throw new Error("No estás autenticado.");
     }
 
-    const response = await fetch('http://spavehiculos.runasp.net/api/Servicios/ActualizarServicio', {
+    const response = await fetch('https://spavehiculos.runasp.net/api/Servicios/ActualizarServicio', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

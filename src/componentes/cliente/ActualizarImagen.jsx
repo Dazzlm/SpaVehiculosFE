@@ -79,7 +79,7 @@ const handleSubmit = async (e) => {
   formData.append('archivo', archivo);
 
   try {
-    const response = await fetch('http://spavehiculos.runasp.net/api/UploadCliente/Actualizar', {
+    const response = await fetch('https://spavehiculos.runasp.net/api/UploadCliente/Actualizar', {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${token}`, // <-- token aquí

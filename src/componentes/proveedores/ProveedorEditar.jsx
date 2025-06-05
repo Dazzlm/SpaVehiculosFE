@@ -42,7 +42,7 @@ export default function ProveedorEditar() {
 
     const user = JSON.parse(localStorage.getItem("CurrentUser"));
 
-fetch(`http://spavehiculos.runasp.net/api/GestorProv/ConsultarporID?idProveedor=${id}`, {
+fetch(`https://spavehiculos.runasp.net/api/GestorProv/ConsultarporID?idProveedor=${id}`, {
   method: "GET",
   headers: {
     "Content-Type": "application/json",
@@ -68,7 +68,7 @@ fetch(`http://spavehiculos.runasp.net/api/GestorProv/ConsultarporID?idProveedor=
       data.IdProveedor = parseInt(id);
       const user = JSON.parse(localStorage.getItem("CurrentUser"));
 
-const res = await fetch("http://spavehiculos.runasp.net/api/GestorProv/ActualizarProveedor", {
+const res = await fetch("https://spavehiculos.runasp.net/api/GestorProv/ActualizarProveedor", {
   method: "PUT",
   headers: {
     "Content-Type": "application/json",

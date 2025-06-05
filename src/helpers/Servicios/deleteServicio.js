@@ -5,7 +5,7 @@ export async function eliminarServicio(idServicio) {
       throw new Error("No estás autenticado.");
     }
 
-    const response = await fetch(`http://spavehiculos.runasp.net/api/Servicios/EliminarServicio?idServicio=${idServicio}`, {
+    const response = await fetch(`https://spavehiculos.runasp.net/api/Servicios/EliminarServicio?idServicio=${idServicio}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

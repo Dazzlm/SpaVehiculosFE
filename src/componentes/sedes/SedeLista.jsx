@@ -35,7 +35,7 @@ const ListaSedes = () => {
     return;
   }
 
-  fetch("http://spavehiculos.runasp.net/api/Sedes/ConsultarTodos", {
+  fetch("https://spavehiculos.runasp.net/api/Sedes/ConsultarTodos", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

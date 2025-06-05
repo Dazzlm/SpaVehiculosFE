@@ -37,7 +37,7 @@ function ClienteDetalle() {
       return;
     }
 
-    const baseUrl = 'http://spavehiculos.runasp.net/api/Clientes';
+    const baseUrl = 'https://spavehiculos.runasp.net/api/Clientes';
 
     fetch(`${baseUrl}/ConsultarClienteUsuario?id=${id}`, {
       method: "GET",
@@ -53,7 +53,7 @@ function ClienteDetalle() {
       .then(data => {
         setClienteUsuario(data);
 
-        const imagenClienteUrl = `http://spavehiculos.runasp.net/api/UploadCliente/ImagenCliente?idCliente=${id}`;
+        const imagenClienteUrl = `https://spavehiculos.runasp.net/api/UploadCliente/ImagenCliente?idCliente=${id}`;
         fetch(imagenClienteUrl, {
           headers: {
             Authorization: `Bearer ${token}`,

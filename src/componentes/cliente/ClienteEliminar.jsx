@@ -29,7 +29,7 @@ function ClienteEliminar() {
       return;
     }
 
-    fetch(`http://spavehiculos.runasp.net/api/Clientes/ConsultarXId?idCliente=${id}`, {
+    fetch(`https://spavehiculos.runasp.net/api/Clientes/ConsultarXId?idCliente=${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -63,7 +63,7 @@ function ClienteEliminar() {
 
     try {
       const res = await fetch(
-        `http://spavehiculos.runasp.net/api/Clientes/EliminarClienteUsuario?idCliente=${id}`,
+        `https://spavehiculos.runasp.net/api/Clientes/EliminarClienteUsuario?idCliente=${id}`,
         {
           method: "DELETE",
           headers: {

@@ -28,7 +28,7 @@ export default function ProductoEliminar() {
       return;
     }
 
-    fetch(`http://spavehiculos.runasp.net/api/Productos/ObtenerPorId?id=${id}`, {
+    fetch(`https://spavehiculos.runasp.net/api/Productos/ObtenerPorId?id=${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -54,7 +54,7 @@ export default function ProductoEliminar() {
       return;
     }
 
-    fetch(`http://spavehiculos.runasp.net/api/Productos/Eliminar?id=${id}`, {
+    fetch(`https://spavehiculos.runasp.net/api/Productos/Eliminar?id=${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`,

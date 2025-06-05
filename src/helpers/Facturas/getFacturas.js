@@ -4,7 +4,7 @@ export async function getFacturas() {
   try {
     const user = JSON.parse(localStorage.getItem("CurrentUser")); 
 
-    const response = await fetch(`http://spavehiculos.runasp.net/api/Facturas/ConsultarFacturas`, {
+    const response = await fetch(`https://spavehiculos.runasp.net/api/Facturas/ConsultarFacturas`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

@@ -2,7 +2,7 @@ export const postFactura = async (facturaPayload) => {
   try {
     const user = JSON.parse(localStorage.getItem("CurrentUser"));
 
-    const response = await fetch("http://spavehiculos.runasp.net/api/Facturas/crear", {
+    const response = await fetch("https://spavehiculos.runasp.net/api/Facturas/crear", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

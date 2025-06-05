@@ -69,6 +69,8 @@ cd auto-spa-app
 
 ```bash
 npm install
+npm install react-spring
+npm install react-router
 ```
 
 > Asegúrate de tener instalados:

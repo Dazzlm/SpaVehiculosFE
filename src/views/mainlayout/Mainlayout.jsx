@@ -42,12 +42,18 @@ export default function Mainlayout() {
 
   return (
     <div className={styles["main__layout"]}>
-      <Sidebar className={styles["main__layout--sidebar"]} />
-      <div className={styles["main__layout--content"]}>
-        <Topbar />
+    
+      <div className={styles["main__layout--sidebarPosition"]}>
+        <Sidebar />
+      </div>
+
+      <div className={styles["main__layout--menu"]}>
         <Menu>
           <Outlet />
         </Menu>
+      </div>
+      <div className={styles["main__layout--topbar"]}> 
+        <Topbar />
       </div>
     </div>
   );

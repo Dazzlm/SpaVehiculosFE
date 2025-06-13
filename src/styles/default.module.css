@@ -14,8 +14,4 @@
   --font-extrabold: 800;
 }
 
-body {
-  font-family: 'Poppins', sans-serif;
-  background-color: var(--color-smoke-white);
-  color: var(--color-carbon-black);
-}
+

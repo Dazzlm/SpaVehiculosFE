@@ -1,24 +1,73 @@
 @import url("../../styles/default.module.css");
 .main__layout {
-  display: flex;
-  flex-direction: row;
-  height: 100vh;
-  width: 98vw ;
+  display: grid;
+  grid-template-areas:
+    "sidebar"
+    "menu"
+    "topbar";
+  overflow: hidden;
 }
 
-.main__layout--content {
-  display: flex;
-  flex-direction: column;
-  height: 100%; 
-  width: 85%;
+.main__layout--sidebarPosition {
+  grid-area: sidebar;
+
 }
 
-.main__layout--sidebar {
-  display: flex;
-  flex-direction: column;
-  padding: 0px 0px 0px 20px;
-  height: 100%;
-  width: 15%;
-  background-color: var(--color-dark-blue);
-  color: white ;
+.main__layout--topbar {
+  grid-area: topbar;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  z-index: 1;
+}
+
+
+
+.main__layout--menu {
+  grid-area: menu;
+  margin-top: 20px;     
+  margin-bottom: 200px;   
+  overflow-y: auto;
+  height: calc(100vh - 20px - 200px -80px);
+  width: 100%;
+}
+
+@media (min-width: 1501px) {
+  .main__layout {
+   
+      grid-template-columns: 300px auto;
+      grid-template-rows: 150px auto;
+     grid-template-areas:
+      
+      "sidebar topbar"
+      "sidebar menu";
+
+  }
+
+  .main__layout--topbar {
+    grid-area: topbar;
+    position: static;
+    width: 100%;
+    height: 200px;
+    z-index: 1;
+  }
+
+  .main__layout--menu {
+    grid-area: menu;
+    margin-top: 20px;     
+    margin-bottom: 200px;   
+    overflow-y: hidden;
+    height: calc(100% - 200px);
+    width: calc(100% - 300px);
+  }
+  .main__layout--sidebarPosition {
+    grid-area: sidebar;
+    position: static;
+    width: 300px;
+    height: 100%;
+  }
+
+ 
 }

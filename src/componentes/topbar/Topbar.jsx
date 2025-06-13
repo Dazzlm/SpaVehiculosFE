@@ -19,16 +19,18 @@ export default function Topbar() {
       <div className={styles["topbar__container--sedes"]}>
         <ListSedes />
       </div>
-      <Button
-        variant="contained"
-        color="error"
-        size="small"
-        startIcon={<LogoutIcon />}
-        className={styles["topbar__logout"]}
-        onClick={handleLogout}
-      >
-        Cerrar sesión
-      </Button>
+      <div className={styles["topbar__container--logout"]}>
+        <Button
+          variant="contained"
+          color="error"
+          size="small"
+          startIcon={<LogoutIcon />}
+          
+          onClick={handleLogout}
+        >
+          Cerrar sesión
+        </Button>
+      </div>
     </div>
   );
 }

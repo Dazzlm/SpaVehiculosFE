@@ -1,13 +1,53 @@
 @import url("../../styles/default.module.css");
 
+.main__layout--sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  background-color: var(--color-dark-blue);
+  color: white ;
+  font-size: 20px;
+}
+
+.sidebar__header{
+  position: fixed;
+  display: flex;
+  top: 0;
+  z-index: 2;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 12%;
+  background-color: var(--color-dark-blue);
+}
+
+  .sidebar__toggle {
+   display: none; 
+    align-items: center;
+    justify-content: end;
+    margin: 0px 0px;
+    width: 100%;
+    height: 50px;
+    background-color: var(--color-dark-blue);
+    color: white;
+    padding: 20px;
+    cursor: pointer;
+    
+  }
+
 .sidebar__title {
   font-size: 1.5rem;
   font-weight: bold;
   padding: 8px 20px;
+  margin: 0;
 }
 
 .sidebar__container {
     display: flex;
+    padding: 0px 0px 0px 20px;
     flex-direction: column;
     gap: 1rem;
     
@@ -37,3 +77,60 @@
   color: #fff;
 }
 
+@media (max-width: 1500px) {
+  .sidebar__toggle {
+    display: flex;
+  }
+
+  .sidebar__container {
+    position: fixed;
+    background-color: var(--color-dark-blue);
+    z-index: 1000;
+    overflow-y: auto;
+    top: 12%;
+    height: calc(100vh - 12%);
+    width: 100%;
+    left: 100%;
+    transition: left 0.3s;
+  }
+
+  .sidebar__container--collapsed {
+    display: flex;
+    left: 0;
+    transition: left 0.3s;
+  }
+}
+
+@media (min-width: 1501px) {
+  .sidebar__container {
+    position: static;
+    width: 300px;
+    height: 85vh;
+    top: 0;
+    left: 0;
+    transition: none;
+     z-index: 0;
+     
+    transition: none;
+  }
+
+  .sidebar__toggle {
+    display: none;
+  }
+
+  .sidebar__header{
+    position: static;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height:146px;
+  width: 300px;
+    background-color: var(--color-dark-blue);
+    transition: none;
+     z-index: 3;
+    transition: none;
+  }
+
+
+}

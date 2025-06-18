@@ -14,7 +14,8 @@
 
 .topbar__title {
   padding: 0px;
-  font-size: 24px;
+  margin-left: 35px;
+  font-size: 28px;
   font-weight: 600;
 }
 .topbar__search{

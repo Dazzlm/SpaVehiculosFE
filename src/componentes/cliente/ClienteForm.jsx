@@ -17,17 +17,52 @@ export default function ClienteForm() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm();
 
+  const reglas = (nombreCampo, min, max, regex = null, mensajeRegex = "") => ({
+    required: `El campo ${nombreCampo} es obligatorio`,
+    minLength: {
+      value: min,
+      message: `Debe tener al menos ${min} caracteres`,
+    },
+    maxLength: {
+      value: max,
+      message: `No puede exceder los ${max} caracteres`,
+    },
+    validate: (value) => {
+      const cleaned = value.trim();
+      if (cleaned === "") return `El campo ${nombreCampo} no puede estar vacío`;
+      if (/\s{2,}/.test(cleaned))
+        return `No debe contener espacios consecutivos`;
+      if (regex && !regex.test(cleaned)) return mensajeRegex;
+      return true;
+    },
+  });
+
+  const limpiarInput = (nombreCampo, tipo) => (e) => {
+    let valor = e.target.value;
+    if (
+      tipo === "email" ||
+      nombreCampo === "DocumentoUsuario" ||
+      nombreCampo === "Telefono"
+    ) {
+      valor = valor.replace(/\s+/g, "");
+    } else {
+      valor = valor.replace(/\s+/g, " ").trimStart();
+    }
+    setValue(nombreCampo, valor, { shouldValidate: true });
+  };
+
   const onSubmit = async (data) => {
     try {
-      const storedUser = JSON.parse(localStorage.getItem("CurrentUser") || "null");
+      const storedUser = JSON.parse(
+        localStorage.getItem("CurrentUser") || "null"
+      );
       const token = storedUser?.token || null;
 
-      if (!token) {
-        throw new Error("No se encontró el token de autenticación.");
-      }
+      if (!token) throw new Error("No se encontró el token de autenticación.");
 
       const response = await fetch(
         "https://spavehiculos.runasp.net/api/Clientes/InsertarClienteUsuario",
@@ -41,9 +76,7 @@ export default function ClienteForm() {
         }
       );
 
-      if (!response.ok) {
-        throw new Error("Error al guardar el cliente");
-      }
+      if (!response.ok) throw new Error("Error al guardar el cliente");
 
       navigate("/usuarios/cliente");
     } catch (error) {
@@ -78,68 +111,83 @@ export default function ClienteForm() {
       >
         <TextField
           label="Nombre"
-          {...register("Nombre", { required: "El nombre es obligatorio" })}
+          fullWidth
+          {...register("Nombre", reglas("Nombre", 2, 40))}
+          onChange={limpiarInput("Nombre")}
           error={!!errors.Nombre}
           helperText={errors.Nombre?.message}
-          fullWidth
         />
+
         <TextField
           label="Apellidos"
-          {...register("Apellidos", { required: "Los apellidos son obligatorios" })}
+          fullWidth
+          {...register("Apellidos", reglas("Apellidos", 2, 50))}
+          onChange={limpiarInput("Apellidos")}
           error={!!errors.Apellidos}
           helperText={errors.Apellidos?.message}
-          fullWidth
         />
+
         <TextField
           label="Email"
+          fullWidth
           type="email"
-          {...register("Email", {
-            required: "El email es obligatorio",
-            pattern: {
-              value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-              message: "Email no es válido",
-            },
-          })}
+          {...register(
+            "Email",
+            reglas("Email", 5, 60, /\S+@\S+\.\S+/, "El correo no es válido")
+          )}
+          onChange={limpiarInput("Email", "email")}
           error={!!errors.Email}
           helperText={errors.Email?.message}
-          fullWidth
         />
+
         <TextField
           label="Teléfono"
-          {...register("Telefono", { required: "El teléfono es obligatorio" })}
+          fullWidth
+          {...register(
+            "Telefono",
+            reglas("Teléfono", 7, 10, /^[0-9-]+$/, "Solo números o guiones")
+          )}
+          onChange={limpiarInput("Telefono")}
           error={!!errors.Telefono}
           helperText={errors.Telefono?.message}
-          fullWidth
         />
+
         <TextField
           label="Dirección"
-          {...register("Direccion", { required: "La dirección es obligatoria" })}
+          fullWidth
+          {...register("Direccion", reglas("Dirección", 5, 100))}
+          onChange={limpiarInput("Direccion")}
           error={!!errors.Direccion}
           helperText={errors.Direccion?.message}
-          fullWidth
         />
 
         <TextField
           label="Nombre de Usuario"
-          {...register("NombreUsuario", {
-            required: "El nombre de usuario es obligatorio",
-          })}
+          fullWidth
+          {...register("NombreUsuario", reglas("Nombre Usuario", 3, 20))}
+          onChange={limpiarInput("NombreUsuario")}
           error={!!errors.NombreUsuario}
           helperText={errors.NombreUsuario?.message}
-          fullWidth
         />
 
         <TextField
           label="Documento"
-          {...register("DocumentoUsuario", {
-            required: "El documento es obligatorio",
-          })}
+          fullWidth
+          {...register(
+            "DocumentoUsuario",
+            reglas("Documento", 5, 10, /^[0-9]+$/, "Solo debe contener números")
+          )}
+          onChange={limpiarInput("DocumentoUsuario", "documento")}
           error={!!errors.DocumentoUsuario}
           helperText={errors.DocumentoUsuario?.message}
-          fullWidth
         />
 
-        <Stack direction="row" spacing={2} justifyContent="space-between" mt={3}>
+        <Stack
+          direction="row"
+          spacing={2}
+          justifyContent="space-between"
+          mt={3}
+        >
           <Button
             variant="outlined"
             startIcon={<ArrowBackIcon />}

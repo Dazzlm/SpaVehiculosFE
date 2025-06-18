@@ -17,13 +17,21 @@ export default function CiudadForm() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm();
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    const cleaned = value.replace(/\s+/g, " ");
+    setValue(name, cleaned, { shouldValidate: true });
+  };
+
   const onSubmit = async (data) => {
     try {
-      // Obtener token desde localStorage
-      const storedUser = JSON.parse(localStorage.getItem('CurrentUser') || 'null');
+      const storedUser = JSON.parse(
+        localStorage.getItem("CurrentUser") || "null"
+      );
       const token = storedUser?.token || null;
 
       if (!token) {
@@ -79,13 +87,25 @@ export default function CiudadForm() {
       >
         <TextField
           label="Nombre"
-          {...register("Nombre", { required: "El nombre es obligatorio" })}
+          {...register("Nombre", {
+            required: "El nombre es obligatorio",
+            minLength: {
+              value: 2,
+              message: "Debe tener al menos 2 caracteres",
+            },
+          })}
+          onChange={handleInputChange}
           error={!!errors.Nombre}
           helperText={errors.Nombre?.message}
           fullWidth
         />
 
-        <Stack direction="row" spacing={2} justifyContent="space-between" mt={3}>
+        <Stack
+          direction="row"
+          spacing={2}
+          justifyContent="space-between"
+          mt={3}
+        >
           <Button
             variant="outlined"
             startIcon={<ArrowBackIcon />}

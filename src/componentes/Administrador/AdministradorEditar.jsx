@@ -43,6 +43,40 @@ export default function AdministradorEditar() {
     },
   });
 
+  const reglas = (campo, min, max, regex = null, mensajeRegex = "") => ({
+    required: `El campo ${campo} es obligatorio`,
+    minLength: {
+      value: min,
+      message: `Debe tener al menos ${min} caracteres`,
+    },
+    maxLength: {
+      value: max,
+      message: `No puede exceder los ${max} caracteres`,
+    },
+    validate: (value) => {
+      const limpio = value.trim();
+      if (limpio === "") return `El campo ${campo} no puede estar vacío`;
+      if (/\s{2,}/.test(limpio)) return `No debe contener espacios dobles`;
+      if (regex && !regex.test(limpio)) return mensajeRegex;
+      return true;
+    },
+  });
+
+  const limpiarCampo =
+    (field, tipo = "texto") =>
+    (e) => {
+      let valor = e.target.value;
+
+      if (["email", "telefono", "cedula"].includes(tipo)) {
+        valor = valor.replace(/\s+/g, ""); // elimina todos los espacios
+      } else {
+        valor = valor.replace(/\s{2,}/g, " "); // un solo espacio entre palabras
+        valor = valor.trimStart(); // elimina espacio inicial
+      }
+
+      field.onChange(valor);
+    };
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("CurrentUser"));
 
@@ -177,7 +211,7 @@ export default function AdministradorEditar() {
             <Controller
               name="Nombre"
               control={control}
-              rules={{ required: "El nombre es obligatorio" }}
+              rules={reglas("Nombre", 2, 40)}
               render={({ field }) => (
                 <TextField
                   {...field}
@@ -185,13 +219,14 @@ export default function AdministradorEditar() {
                   error={!!errors.Nombre}
                   helperText={errors.Nombre?.message}
                   fullWidth
+                  onChange={limpiarCampo(field)}
                 />
               )}
             />
             <Controller
               name="Apellidos"
               control={control}
-              rules={{ required: "Los apellidos son obligatorios" }}
+              rules={reglas("Apellidos", 2, 40)}
               render={({ field }) => (
                 <TextField
                   {...field}
@@ -199,20 +234,20 @@ export default function AdministradorEditar() {
                   error={!!errors.Apellidos}
                   helperText={errors.Apellidos?.message}
                   fullWidth
+                  onChange={limpiarCampo(field)}
                 />
               )}
             />
             <Controller
               name="Email"
               control={control}
-              rules={{
-                required: "El email es obligatorio",
-                pattern: {
-                  value:
-                    /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-                  message: "Email no válido",
-                },
-              }}
+              rules={reglas(
+                "Email",
+                5,
+                60,
+                /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                "Formato de correo inválido"
+              )}
               render={({ field }) => (
                 <TextField
                   {...field}
@@ -221,13 +256,20 @@ export default function AdministradorEditar() {
                   error={!!errors.Email}
                   helperText={errors.Email?.message}
                   fullWidth
+                  onChange={limpiarCampo(field, "email")}
                 />
               )}
             />
             <Controller
               name="Telefono"
               control={control}
-              rules={{ required: "El teléfono es obligatorio" }}
+              rules={reglas(
+                "Teléfono",
+                7,
+                10,
+                /^[0-9-]+$/,
+                "Solo números o guiones"
+              )}
               render={({ field }) => (
                 <TextField
                   {...field}
@@ -235,13 +277,14 @@ export default function AdministradorEditar() {
                   error={!!errors.Telefono}
                   helperText={errors.Telefono?.message}
                   fullWidth
+                  onChange={limpiarCampo(field, "telefono")}
                 />
               )}
             />
             <Controller
               name="Cedula"
               control={control}
-              rules={{ required: "La cédula es obligatoria" }}
+              rules={reglas("Cédula", 5, 10, /^[0-9]+$/, "Solo números")}
               render={({ field }) => (
                 <TextField
                   {...field}
@@ -249,13 +292,14 @@ export default function AdministradorEditar() {
                   error={!!errors.Cedula}
                   helperText={errors.Cedula?.message}
                   fullWidth
+                  onChange={limpiarCampo(field, "cedula")}
                 />
               )}
             />
             <Controller
               name="NombreUsuario"
               control={control}
-              rules={{ required: "El nombre de usuario es obligatorio" }}
+              rules={reglas("Nombre de Usuario", 3, 30)}
               render={({ field }) => (
                 <TextField
                   {...field}
@@ -263,6 +307,7 @@ export default function AdministradorEditar() {
                   error={!!errors.NombreUsuario}
                   helperText={errors.NombreUsuario?.message}
                   fullWidth
+                  onChange={limpiarCampo(field)}
                 />
               )}
             />
@@ -285,7 +330,7 @@ export default function AdministradorEditar() {
             <Controller
               name="Cargo"
               control={control}
-              rules={{ required: "El cargo es obligatorio" }}
+              rules={reglas("Cargo", 2, 30)}
               render={({ field }) => (
                 <TextField
                   {...field}
@@ -293,6 +338,7 @@ export default function AdministradorEditar() {
                   error={!!errors.Cargo}
                   helperText={errors.Cargo?.message}
                   fullWidth
+                  onChange={limpiarCampo(field)}
                 />
               )}
             />
@@ -301,7 +347,9 @@ export default function AdministradorEditar() {
               control={control}
               rules={{
                 validate: (value) =>
-                  value === true || value === false || "El estado es obligatorio",
+                  value === true ||
+                  value === false ||
+                  "El estado es obligatorio",
               }}
               render={({ field }) => (
                 <FormControl fullWidth error={!!errors.Estado}>
@@ -323,9 +371,6 @@ export default function AdministradorEditar() {
                 </FormControl>
               )}
             />
-
-
-
 
             <Button
               type="submit"

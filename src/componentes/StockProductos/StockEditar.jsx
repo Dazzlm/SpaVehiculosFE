@@ -21,6 +21,7 @@ export default function StockEditar() {
   const [mensaje, setMensaje] = useState("");
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
+  const [errorStock, setErrorStock] = useState("");
 
   const user = JSON.parse(localStorage.getItem("CurrentUser"));
   const token = user?.token;
@@ -58,7 +59,7 @@ export default function StockEditar() {
         const prod = await resProducto.json();
         setProducto(prod.Data);
       } catch (error) {
-        setMensaje("Error al cargar datos.");
+        setMensaje("Error al cargar datos." + error.message);
       } finally {
         setLoading(false);
       }
@@ -68,8 +69,8 @@ export default function StockEditar() {
   }, [id, token]);
 
   const handleGuardar = async () => {
-    if (stockInfo.StockDisponible < 0) {
-      setMensaje("El stock no puede ser negativo.");
+    if (stockInfo.StockDisponible < 0 || stockInfo.StockDisponible > 10000) {
+      setMensaje("Error El stock debe estar entre 0 y 10.000 unidades.");
       return;
     }
 
@@ -99,14 +100,21 @@ export default function StockEditar() {
 
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="60vh"
+      >
         <CircularProgress />
       </Box>
     );
   }
 
   if (!stockInfo || !producto) {
-    return <Typography color="error">No se pudo cargar la información.</Typography>;
+    return (
+      <Typography color="error">No se pudo cargar la información.</Typography>
+    );
   }
 
   return (
@@ -140,10 +148,20 @@ export default function StockEditar() {
 
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <TextField label="ID Producto" value={producto.IdProducto} fullWidth disabled />
+            <TextField
+              label="ID Producto"
+              value={producto.IdProducto}
+              fullWidth
+              disabled
+            />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField label="Nombre" value={producto.Nombre} fullWidth disabled />
+            <TextField
+              label="Nombre"
+              value={producto.Nombre}
+              fullWidth
+              disabled
+            />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
@@ -168,13 +186,31 @@ export default function StockEditar() {
               label="Stock Disponible"
               type="number"
               value={stockInfo.StockDisponible}
-              onChange={(e) =>
+              onChange={(e) => {
+                const valor = parseInt(e.target.value, 10);
+                if (isNaN(valor)) {
+                  setErrorStock("Error Debe ingresar un número válido.");
+                  return;
+                }
+
+                if (valor < 0) {
+                  setErrorStock("Error El stock no puede ser negativo.");
+                } else if (valor > 10000) {
+                  setErrorStock(
+                    "Error El stock no puede superar las 10.000 unidades."
+                  );
+                } else {
+                  setErrorStock("");
+                }
+
                 setStockInfo({
                   ...stockInfo,
-                  StockDisponible: parseInt(e.target.value),
-                })
-              }
-              inputProps={{ min: 0 }}
+                  StockDisponible: valor,
+                });
+              }}
+              inputProps={{ min: 0, max: 10000 }}
+              error={!!errorStock}
+              helperText={errorStock}
               fullWidth
               required
             />
@@ -185,7 +221,7 @@ export default function StockEditar() {
           variant="contained"
           startIcon={<SaveIcon />}
           onClick={handleGuardar}
-          disabled={updating}
+          disabled={updating || !!errorStock}
           sx={{ mt: 4, fontWeight: "bold" }}
         >
           {updating ? "Guardando..." : "Guardar Cambios"}
@@ -194,4 +230,3 @@ export default function StockEditar() {
     </Box>
   );
 }
-

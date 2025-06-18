@@ -48,7 +48,7 @@ export default function ProductoForm() {
       }
 
       const data = await response.json();
-      setProveedores(data);
+      setProveedores(data.Data);
     } catch (error) {
       console.error("Error al obtener proveedores:", error.message);
     }

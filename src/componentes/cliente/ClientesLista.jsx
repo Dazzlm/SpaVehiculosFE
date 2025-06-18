@@ -46,7 +46,7 @@ const ListaClientes = () => {
     })
       .then((response) => response.json())
       .then((data) =>
-        setClientes(data.sort((a, b) => a.IdCliente - b.IdCliente))
+        setClientes(data.Data.sort((a, b) => a.IdCliente - b.IdCliente))
       )
       .catch((error) => console.error("Error al obtener clientes:", error));
   }, [currentUser]);

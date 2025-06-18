@@ -18,7 +18,7 @@ export async function getFacturas() {
       throw new Error(result.message || "Error al obtener la lista de facturas");
     }
 
-    return result.data;
+    return result.Data;
   } catch (error) {
     console.error("Error:", error);
     return [];

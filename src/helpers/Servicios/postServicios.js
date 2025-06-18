@@ -20,7 +20,7 @@ export async function crearServicio(servicio) {
     }
 
     const data = await response.json();
-    return data;
+    return data.Data;
   } catch (error) {
     console.error('Error creando servicio:', error.message);
     throw error;

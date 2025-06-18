@@ -54,7 +54,7 @@ export default function StockEliminar() {
         );
         if (!resProd.ok) throw new Error("Error al obtener producto");
         const dataProd = await resProd.json();
-        setProducto(dataProd.data);
+        setProducto(dataProd.Data);
 
         setError("");
       } catch {

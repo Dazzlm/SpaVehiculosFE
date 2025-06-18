@@ -41,10 +41,10 @@ export default function StockEditar() {
         if (!res.ok) throw new Error("Error al obtener stock");
 
         const data = await res.json();
-        setStockInfo(data.data);
+        setStockInfo(data.Data);
 
         const resProducto = await fetch(
-          `https://spavehiculos.runasp.net/api/Productos/ObtenerPorId?id=${data.data.IdProducto}`,
+          `https://spavehiculos.runasp.net/api/Productos/ObtenerPorId?id=${data.Data.IdProducto}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -56,7 +56,7 @@ export default function StockEditar() {
         if (!resProducto.ok) throw new Error("Error al obtener producto");
 
         const prod = await resProducto.json();
-        setProducto(prod.data);
+        setProducto(prod.Data);
       } catch (error) {
         setMensaje("Error al cargar datos.");
       } finally {

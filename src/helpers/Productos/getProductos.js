@@ -16,7 +16,7 @@ export async function getProductos() {
       throw new Error(result.message || "Error al obtener productos");
     }
 
-    return result.data;
+    return result.Data;
   } catch (error) {
     console.error("Error:", error);
     return [];

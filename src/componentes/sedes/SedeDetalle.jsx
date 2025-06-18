@@ -50,10 +50,10 @@ function SedeDetalle() {
         if (!resCiudades.ok) throw new Error("Error al obtener ciudades");
         const ciudades = await resCiudades.json();
 
-        const ciudad = ciudades.find(c => c.IdCiudad === sedeData.IdCiudad);
-        sedeData.NombreCiudad = ciudad?.Nombre || "Desconocida";
+        const ciudad = ciudades.Data.find(c => c.IdCiudad === sedeData.Data.IdCiudad);
+        sedeData.Data.NombreCiudad = ciudad?.Nombre || "Desconocida";
 
-        setSede(sedeData);
+        setSede(sedeData.Data);
 
       } catch (error) {
         console.error("Error al cargar datos:", error.message);

@@ -40,7 +40,7 @@ export default function ProductoEliminar() {
         if (!res.ok) throw new Error("Error al obtener producto");
         return res.json();
       })
-      .then((response) => setProducto(response.data))
+      .then((response) => setProducto(response.Data))
       .catch(() => setError("Error al obtener el producto"));
   }, [id, navigate]);
 
@@ -62,7 +62,7 @@ export default function ProductoEliminar() {
     })
       .then((res) => {
         if (!res.ok) throw new Error("Error al eliminar");
-        return res.text();
+        return res.json().Message;
       })
       .then(() => {
         setMensaje("Producto eliminado correctamente.");

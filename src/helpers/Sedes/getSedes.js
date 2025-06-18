@@ -19,7 +19,7 @@ export async function getSedes() {
       };
     }
 
-    return result;
+    return result.Data;
   } catch (errors) {
     console.error("Error fetching data:", errors.message);
     return {

@@ -49,7 +49,7 @@ const ListaCiudades = () => {
         return response.json();
       })
       .then((data) => {
-        const ciudadesOrdenadas = data.sort((a, b) => a.IdCiudad - b.IdCiudad);
+        const ciudadesOrdenadas = data.Data.sort((a, b) => a.IdCiudad - b.IdCiudad);
         setCiudades(ciudadesOrdenadas);
       })
       .catch((error) => console.error("Error al obtener ciudades:", error));

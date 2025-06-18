@@ -54,10 +54,10 @@ export default function AccionesFactura() {
     setIsLoading(true);
     const exito = await postFactura(facturaPayload);
 
-    if (exito.success) {
+    if (exito.Success) {
       Swal.fire("Éxito", "Factura generada correctamente.", "success");
       limpiarCarrito();
-      navigate("/facturas/ver/"+exito.IdFactura);
+      navigate("/facturas/ver/"+exito.Data);
     } else {
       Swal.fire("Error", "No se pudo generar la factura.", "error");
     }

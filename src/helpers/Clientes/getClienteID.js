@@ -22,7 +22,7 @@ export async function getClienteID(IdCliente) {
       throw new Error(result.message || "Error al obtener el cliente con ID " + IdCliente);
     }
 
-    return result;
+    return result.Data;
   } catch (error) {
     console.error("Error:", error);
     return null; // mejor devolver null cuando hay error o no autenticación

@@ -62,7 +62,7 @@ export default function SedeEditar() {
         if (res.status === 204) throw new Error("Sede no encontrada");
         if (!res.ok) throw new Error("Error al obtener sede");
         const data = await res.json();
-        reset(data);
+        reset(data.Data);
         setLoading(false);
       })
       .catch(() => {
@@ -79,7 +79,7 @@ export default function SedeEditar() {
         if (!res.ok) throw new Error("Error al cargar las ciudades");
         const data = await res.json();
         // Ordenar ciudades por nombre
-        const ciudadesOrdenadas = data.sort((a, b) =>
+        const ciudadesOrdenadas = data.Data.sort((a, b) =>
           a.Nombre.localeCompare(b.Nombre)
         );
         setCiudades(ciudadesOrdenadas);

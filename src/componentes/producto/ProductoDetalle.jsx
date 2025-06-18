@@ -46,11 +46,11 @@ function ProductoDetalle() {
           throw new Error(`Error al obtener producto: ${resProducto.status}`);
         const dataProducto = await resProducto.json();
 
-        if (!dataProducto.success)
+        if (!dataProducto.Success)
           throw new Error("Error en la respuesta del servidor");
 
         // Obtener nombre del proveedor
-        const idProveedor = dataProducto.data.IdProveedor;
+        const idProveedor = dataProducto.Data.IdProveedor;
         let nombreProveedor = "Desconocido";
         if (idProveedor) {
           const resProveedor = await fetch(
@@ -68,7 +68,7 @@ function ProductoDetalle() {
         }
 
         // Actualizar estado producto con proveedor incluido
-        setProducto({ ...dataProducto.data, NombreProveedor: nombreProveedor });
+        setProducto({ ...dataProducto.Data, NombreProveedor: nombreProveedor });
       } catch (error) {
         console.error("Error al cargar datos:", error.message);
         setProducto(null);

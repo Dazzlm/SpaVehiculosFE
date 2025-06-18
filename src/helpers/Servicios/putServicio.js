@@ -20,7 +20,7 @@ export async function actualizarServicio(servicio) {
     }
 
     const data = await response.json();
-    return data;
+    return data.Data;
   } catch (error) {
     console.error('Error actualizando servicio:', error.message);
     throw error;

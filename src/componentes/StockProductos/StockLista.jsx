@@ -44,16 +44,16 @@ const StockLista = () => {
         );
         const data = await res.json();
 
-        if (!res.ok) throw new Error(data.message || "Error al obtener stock");
+        if (!res.ok) throw new Error(data.Message || "Error al obtener stock");
 
         const productosCompletos = await Promise.all(
-          data.data.map(async (item) => {
+          data.Data.map(async (item) => {
             const productoRes = await fetch(
               `https://spavehiculos.runasp.net/api/Productos/ObtenerPorId?id=${item.IdProducto}`,
               { headers }
             );
             const dataprod = await productoRes.json();
-            const producto = dataprod.data;
+            const producto = dataprod.Data;
 
             if (!productoRes.ok) throw new Error(producto.message);
 

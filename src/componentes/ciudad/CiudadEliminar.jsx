@@ -40,7 +40,7 @@ function CiudadEliminar() {
         if (!res.ok) throw new Error("Error al obtener la ciudad");
         return res.json();
       })
-      .then((data) => setCiudad(data))
+      .then((data) => setCiudad(data.Data))
       .catch(() => setError("Error al obtener la ciudad"));
   }, [id, navigate]);
 

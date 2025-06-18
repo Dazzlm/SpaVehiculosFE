@@ -48,7 +48,7 @@ fetch(`${baseUrl}api/GestorAdmin/ConsultarAdminUsuario?id=${id}`, {
 })
   .then(res => res.json())
   .then(data => {
-    setAdministrador(data);
+    setAdministrador(data.Data);
   })
   .catch(err => console.error("Error al cargar administrador", err));
 

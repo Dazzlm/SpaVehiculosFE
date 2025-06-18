@@ -51,13 +51,16 @@ export default function SedeEditar() {
       return;
     }
 
-    fetch(`https://spavehiculos.runasp.net/api/Sedes/ConsultarXId?idSede=${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    fetch(
+      `https://spavehiculos.runasp.net/api/Sedes/ConsultarXId?idSede=${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
       .then(async (res) => {
         if (res.status === 204) throw new Error("Sede no encontrada");
         if (!res.ok) throw new Error("Error al obtener sede");
@@ -78,7 +81,6 @@ export default function SedeEditar() {
       .then(async (res) => {
         if (!res.ok) throw new Error("Error al cargar las ciudades");
         const data = await res.json();
-        // Ordenar ciudades por nombre
         const ciudadesOrdenadas = data.Data.sort((a, b) =>
           a.Nombre.localeCompare(b.Nombre)
         );
@@ -102,14 +104,17 @@ export default function SedeEditar() {
         return;
       }
 
-      const res = await fetch("https://spavehiculos.runasp.net/api/Sedes/Actualizar", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(data),
-      });
+      const res = await fetch(
+        "https://spavehiculos.runasp.net/api/Sedes/Actualizar",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(data),
+        }
+      );
       if (!res.ok) throw new Error("Error en la actualización");
       setMensaje("Sede actualizada correctamente");
       setTimeout(() => navigate("/sedes"), 1500);
@@ -196,7 +201,19 @@ export default function SedeEditar() {
             <Controller
               name="Nombre"
               control={control}
-              rules={{ required: "El nombre es obligatorio" }}
+              rules={{
+                required: "El nombre es obligatorio",
+                validate: (value) =>
+                  value.trim().length > 0 || "El nombre no puede estar vacío",
+                maxWidth: {
+                  value: 50,
+                  message: "El nombre no puede exceder los 50 caracteres",
+                },
+                minWidth: {
+                  value: 2,
+                  message: "El nombre debe tener al menos 2 caracteres",
+                },
+              }}
               render={({ field }) => (
                 <TextField
                   {...field}
@@ -204,13 +221,29 @@ export default function SedeEditar() {
                   error={!!errors.Nombre}
                   helperText={errors.Nombre?.message}
                   fullWidth
+                  onChange={(e) =>
+                    field.onChange(e.target.value.replace(/\s{2,}/g, " "))
+                  }
                 />
               )}
             />
             <Controller
               name="Dirección"
               control={control}
-              rules={{ required: "La dirección es obligatoria" }}
+              rules={{
+                required: "La dirección es obligatoria",
+                validate: (value) =>
+                  value.trim().length > 0 ||
+                  "La dirección no puede estar vacía",
+                maxLength: {
+                  value: 100,
+                  message: "La dirección no puede exceder los 100 caracteres",
+                },
+                minLength: {
+                  value: 5,
+                  message: "La dirección debe tener al menos 5 caracteres",
+                },
+              }}
               render={({ field }) => (
                 <TextField
                   {...field}
@@ -218,10 +251,17 @@ export default function SedeEditar() {
                   error={!!errors.Dirección}
                   helperText={errors.Dirección?.message}
                   fullWidth
+                  onChange={(e) =>
+                    field.onChange(e.target.value.replace(/\s{2,}/g, " "))
+                  }
                 />
               )}
             />
-            <FormControl fullWidth error={!!errors.IdCiudad} disabled={loadingCiudades}>
+            <FormControl
+              fullWidth
+              error={!!errors.IdCiudad}
+              disabled={loadingCiudades}
+            >
               <InputLabel id="select-ciudad-label">Ciudad</InputLabel>
               <Controller
                 name="IdCiudad"
@@ -229,12 +269,21 @@ export default function SedeEditar() {
                 defaultValue=""
                 rules={{
                   required: "La ciudad es obligatoria",
-                  validate: (value) => value > 0 || "Debe seleccionar una ciudad válida",
+                  validate: (value) =>
+                    value > 0 || "Debe seleccionar una ciudad válida",
                 }}
                 render={({ field }) => (
-                  <Select labelId="select-ciudad-label" label="Ciudad" {...field}>
+                  <Select
+                    labelId="select-ciudad-label"
+                    label="Ciudad"
+                    {...field}
+                  >
                     <MenuItem value="">
-                      <em>{loadingCiudades ? "Cargando ciudades..." : "Seleccione una ciudad"}</em>
+                      <em>
+                        {loadingCiudades
+                          ? "Cargando ciudades..."
+                          : "Seleccione una ciudad"}
+                      </em>
                     </MenuItem>
                     {ciudades.map((ciudad) => (
                       <MenuItem key={ciudad.IdCiudad} value={ciudad.IdCiudad}>
@@ -245,20 +294,42 @@ export default function SedeEditar() {
                 )}
               />
               <FormHelperText>
-                {errors.IdCiudad ? errors.IdCiudad.message : errorCiudades ? errorCiudades : ""}
+                {errors.IdCiudad
+                  ? errors.IdCiudad.message
+                  : errorCiudades
+                  ? errorCiudades
+                  : ""}
               </FormHelperText>
             </FormControl>
             <Controller
               name="Teléfono"
               control={control}
-              rules={{ required: "El teléfono es obligatorio" }}
+              rules={{
+                required: "El teléfono es obligatorio",
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: "El teléfono solo debe contener números",
+                },
+                minLength: {
+                  value: 7,
+                  message: "El teléfono debe tener al menos 7 dígitos",
+                },
+                maxLength: {
+                  value: 10,
+                  message: "El teléfono no puede exceder los 10 dígitos",
+                },
+              }}
               render={({ field }) => (
                 <TextField
                   {...field}
+                  type="tel"
                   label="Teléfono"
                   error={!!errors.Teléfono}
                   helperText={errors.Teléfono?.message}
                   fullWidth
+                  onChange={(e) =>
+                    field.onChange(e.target.value.replace(/\s+/g, ""))
+                  }
                 />
               )}
             />

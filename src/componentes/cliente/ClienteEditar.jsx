@@ -45,13 +45,16 @@ export default function ClienteEditar() {
       return;
     }
 
-    fetch(`https://spavehiculos.runasp.net/api/Clientes/ConsultarClienteUsuario?id=${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    fetch(
+      `https://spavehiculos.runasp.net/api/Clientes/ConsultarClienteUsuario?id=${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
       .then(async (res) => {
         if (res.status === 204) throw new Error("Cliente no encontrado");
         if (!res.ok) throw new Error("Error al obtener cliente");
@@ -76,7 +79,14 @@ export default function ClienteEditar() {
       }
 
       const datosActualizados = {
-        ...data,
+        ...Object.fromEntries(
+          Object.entries(data).map(([key, value]) => [
+            key,
+            typeof value === "string"
+              ? value.trim().replace(/\s+/g, " ")
+              : value,
+          ])
+        ),
         IdCliente: parseInt(id),
       };
 
@@ -103,16 +113,44 @@ export default function ClienteEditar() {
     }
   };
 
+  const reglas = (nombreCampo, min, max, regex = null, mensajeRegex = "") => ({
+    required: `El campo ${nombreCampo} es obligatorio`,
+    minLength: {
+      value: min,
+      message: `Debe tener al menos ${min} caracteres`,
+    },
+    maxLength: {
+      value: max,
+      message: `No puede exceder los ${max} caracteres`,
+    },
+    validate: (value) => {
+      const cleaned = value.trim();
+      if (cleaned === "") return `El campo ${nombreCampo} no puede estar vacío`;
+      if (/\s{2,}/.test(cleaned))
+        return `No debe contener espacios consecutivos`;
+      if (regex && !regex.test(cleaned)) return mensajeRegex;
+      return true;
+    },
+  });
+
   if (loading)
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="50vh">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="50vh"
+      >
         <CircularProgress />
       </Box>
     );
 
   return (
     <Box display="flex" justifyContent="center" p={2}>
-      <Paper elevation={6} sx={{ maxWidth: 400, width: "100%", p: 3, borderRadius: 2 }}>
+      <Paper
+        elevation={6}
+        sx={{ maxWidth: 400, width: "100%", p: 3, borderRadius: 2 }}
+      >
         <Button
           variant="outlined"
           startIcon={<ArrowBackIcon />}
@@ -131,13 +169,21 @@ export default function ClienteEditar() {
           Volver
         </Button>
 
-        <Typography variant="h4" fontWeight="bold" color="primary" mb={3} align="center">
+        <Typography
+          variant="h4"
+          fontWeight="bold"
+          color="primary"
+          mb={3}
+          align="center"
+        >
           Editar Cliente
         </Typography>
 
         {mensaje && (
           <Alert
-            severity={mensaje.includes("Error") || mensaje.includes("error") ? "error" : "success"}
+            severity={
+              mensaje.toLowerCase().includes("error") ? "error" : "success"
+            }
             sx={{ mb: 2, borderRadius: 2 }}
           >
             {mensaje}
@@ -146,55 +192,71 @@ export default function ClienteEditar() {
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <Box display="flex" flexDirection="column" gap={3}>
-            <Controller
-              name="Nombre"
-              control={control}
-              render={({ field }) => (
-                <TextField {...field} label="Nombre" fullWidth size="large" />
-              )}
-            />
-            <Controller
-              name="Apellidos"
-              control={control}
-              render={({ field }) => (
-                <TextField {...field} label="Apellidos" fullWidth size="large" />
-              )}
-            />
-            <Controller
-              name="Email"
-              control={control}
-              render={({ field }) => (
-                <TextField {...field} label="Email" type="email" fullWidth size="large" />
-              )}
-            />
-            <Controller
-              name="Telefono"
-              control={control}
-              render={({ field }) => (
-                <TextField {...field} label="Teléfono" fullWidth size="large" />
-              )}
-            />
-            <Controller
-              name="Direccion"
-              control={control}
-              render={({ field }) => (
-                <TextField {...field} label="Dirección" fullWidth size="large" />
-              )}
-            />
-            <Controller
-              name="DocumentoUsuario"
-              control={control}
-              render={({ field }) => (
-                <TextField {...field} label="Documento Usuario" fullWidth size="large" />
-              )}
-            />
-            <Controller
-              name="NombreUsuario"
-              control={control}
-              render={({ field }) => (
-                <TextField {...field} label="Nombre Usuario" fullWidth size="large" />
-              )}
-            />
+            {[
+              { name: "Nombre", label: "Nombre", min: 2, max: 40 },
+              { name: "Apellidos", label: "Apellidos", min: 2, max: 50 },
+              {
+                name: "Email",
+                label: "Email",
+                min: 5,
+                max: 60,
+                regex: /\S+@\S+\.\S+/,
+                mensajeRegex: "El correo no es válido",
+                type: "email",
+              },
+              {
+                name: "Telefono",
+                label: "Teléfono",
+                min: 7,
+                max: 10,
+                regex: /^[0-9-]+$/,
+                mensajeRegex:
+                  "El teléfono solo debe contener números o guiones",
+              },
+              { name: "Direccion", label: "Dirección", min: 5, max: 100 },
+              {
+                name: "DocumentoUsuario",
+                label: "Documento Usuario",
+                min: 5,
+                max: 10,
+                regex: /^[0-9]+$/,
+                mensajeRegex: "El documento solo debe contener números",
+              },
+              {
+                name: "NombreUsuario",
+                label: "Nombre Usuario",
+                min: 3,
+                max: 20,
+              },
+            ].map(({ name, label, min, max, type, regex, mensajeRegex }) => (
+              <Controller
+                key={name}
+                name={name}
+                control={control}
+                rules={reglas(label, min, max, regex, mensajeRegex)}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label={label}
+                    fullWidth
+                    size="large"
+                    type={type || "text"}
+                    error={!!errors[name]}
+                    helperText={errors[name]?.message}
+                    onChange={(e) => {
+                      let value = e.target.value;
+                      if (name === "Email") {
+                        value = value.replace(/\s+/g, "");
+                      } else {
+                        value = value.replace(/\s+/g, " ").trimStart();
+                      }
+                      field.onChange(value);
+                    }}
+                  />
+                )}
+              />
+            ))}
+
             <Button
               type="submit"
               variant="contained"

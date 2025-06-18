@@ -21,11 +21,11 @@ export async function getServicio() {
       throw new Error("Error en la respuesta del servidor");
     }
 
-    if (!Array.isArray(result)) {
+    if (!Array.isArray(result.Data)) {
       throw new Error("El backend no devolvió un arreglo");
     }
 
-    return result.data;
+    return result.Data;
   } catch (error) {
     console.error("Error al obtener servicios:", error.message);
     return [];

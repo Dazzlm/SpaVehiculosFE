@@ -10,20 +10,19 @@ import {
   Stack,
   InputAdornment,
   FormControl,
-   InputLabel, Select,
-    MenuItem, FormHelperText,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormHelperText,
 } from "@mui/material";
-import LockIcon from '@mui/icons-material/Lock';
+import LockIcon from "@mui/icons-material/Lock";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import BadgeIcon from "@mui/icons-material/Badge";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-
-
+import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 
 export default function AdministradorForm() {
   const navigate = useNavigate();
@@ -38,18 +37,17 @@ export default function AdministradorForm() {
     try {
       const user = JSON.parse(localStorage.getItem("CurrentUser"));
 
-const response = await fetch(
-  "https://spavehiculos.runasp.net/api/GestorAdmin/InsertarAdminUsuario",
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${user?.token}`,
-    },
-    body: JSON.stringify(data),
-  }
-);
-
+      const response = await fetch(
+        "https://spavehiculos.runasp.net/api/GestorAdmin/InsertarAdminUsuario",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user?.token}`,
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Error al guardar el administrador");
@@ -95,13 +93,7 @@ const response = await fetch(
         </Typography>
       </Box>
 
-      <Box
-        sx={{
-          flex: 1,
-          overflowY: "auto",
-          p: 3,
-        }}
-      >
+      <Box sx={{ flex: 1, overflowY: "auto", p: 3 }}>
         <Box
           component="form"
           onSubmit={handleSubmit(onSubmit)}
@@ -113,7 +105,16 @@ const response = await fetch(
         >
           <TextField
             label="Nombre"
-            {...register("Nombre", { required: "El nombre es obligatorio" })}
+            {...register("Nombre", {
+              required: "El nombre es obligatorio",
+              minLength: { value: 2, message: "Mínimo 2 caracteres" },
+              maxLength: { value: 40, message: "Máximo 40 caracteres" },
+              onChange: (e) => {
+                e.target.value = e.target.value
+                  .replace(/\s+/g, " ")
+                  .trimStart();
+              },
+            })}
             error={!!errors.Nombre}
             helperText={errors.Nombre?.message}
             fullWidth
@@ -130,6 +131,13 @@ const response = await fetch(
             label="Apellidos"
             {...register("Apellidos", {
               required: "Los apellidos son obligatorios",
+              minLength: { value: 2, message: "Mínimo 2 caracteres" },
+              maxLength: { value: 50, message: "Máximo 50 caracteres" },
+              onChange: (e) => {
+                e.target.value = e.target.value
+                  .replace(/\s+/g, " ")
+                  .trimStart();
+              },
             })}
             error={!!errors.Apellidos}
             helperText={errors.Apellidos?.message}
@@ -152,6 +160,9 @@ const response = await fetch(
                 value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
                 message: "Email no es válido",
               },
+              onChange: (e) => {
+                e.target.value = e.target.value.replace(/\s+/g, "");
+              },
             })}
             error={!!errors.Email}
             helperText={errors.Email?.message}
@@ -169,9 +180,18 @@ const response = await fetch(
             label="Teléfono"
             {...register("Telefono", {
               required: "El teléfono es obligatorio",
+              minLength: { value: 7, message: "Mínimo 7 dígitos" },
+              maxLength: { value: 10, message: "Máximo 10 dígitos" },
+              pattern: {
+                value: /^[0-9]+$/,
+                message: "Solo números",
+              },
+              onChange: (e) => {
+                e.target.value = e.target.value.replace(/\s+/g, "");
+              },
             })}
-            error={!!errors.Teléfono}
-            helperText={errors.Teléfono?.message}
+            error={!!errors.Telefono}
+            helperText={errors.Telefono?.message}
             fullWidth
             InputProps={{
               startAdornment: (
@@ -190,6 +210,9 @@ const response = await fetch(
                 value: /^[0-9]{6,15}$/,
                 message: "Cédula no válida",
               },
+              onChange: (e) => {
+                e.target.value = e.target.value.replace(/\s+/g, "");
+              },
             })}
             error={!!errors.Cedula}
             helperText={errors.Cedula?.message}
@@ -202,6 +225,7 @@ const response = await fetch(
               ),
             }}
           />
+
           <TextField
             label="Fecha de Nacimiento"
             type="date"
@@ -223,7 +247,16 @@ const response = await fetch(
 
           <TextField
             label="Cargo"
-            {...register("Cargo", { required: "El cargo es obligatorio" })}
+            {...register("Cargo", {
+              required: "El cargo es obligatorio",
+              minLength: { value: 2, message: "Mínimo 2 caracteres" },
+              maxLength: { value: 30, message: "Máximo 30 caracteres" },
+              onChange: (e) => {
+                e.target.value = e.target.value
+                  .replace(/\s+/g, " ")
+                  .trimStart();
+              },
+            })}
             error={!!errors.Cargo}
             helperText={errors.Cargo?.message}
             fullWidth
@@ -236,12 +269,16 @@ const response = await fetch(
             }}
           />
 
-           <TextField
+          <TextField
             label="Usuario"
             {...register("NombreUsuario", {
               required: "El nombre de usuario es obligatorio",
-            },
-            )}
+              minLength: { value: 3, message: "Mínimo 3 caracteres" },
+              maxLength: { value: 20, message: "Máximo 20 caracteres" },
+              onChange: (e) => {
+                e.target.value = e.target.value.replace(/\s+/g, "");
+              },
+            })}
             error={!!errors.NombreUsuario}
             helperText={errors.NombreUsuario?.message}
             fullWidth
@@ -267,6 +304,9 @@ const response = await fetch(
                 value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/,
                 message: "Debe contener letras y números",
               },
+              onChange: (e) => {
+                e.target.value = e.target.value.replace(/\s+/g, "");
+              },
             })}
             error={!!errors.Contrasena}
             helperText={errors.Contrasena?.message}
@@ -282,22 +322,30 @@ const response = await fetch(
 
           <FormControl fullWidth error={!!errors.Estado}>
             <InputLabel id="estado-label">Estado</InputLabel>
-              <Select
-                labelId="estado-label"
-                label="Estado"
-               defaultValue=""
-                {...register("Estado", {
-                 validate: (value) =>
-                    value === "true" || value === "false" || "El estado es obligatorio",
-                })}
-              >
-                <MenuItem value="true">Inactivo</MenuItem>
-                <MenuItem value="false">Activo</MenuItem>
-              </Select>
-              <FormHelperText>{errors.Estado?.message}</FormHelperText>
-            </FormControl>
+            <Select
+              labelId="estado-label"
+              defaultValue=""
+              label="Estado"
+              {...register("Estado", {
+                validate: (value) =>
+                  value === "true" ||
+                  value === "false" ||
+                  "El estado es obligatorio",
+              })}
+            >
+              <MenuItem value="true">Inactivo</MenuItem>
+              <MenuItem value="false">Activo</MenuItem>
+            </Select>
+            <FormHelperText>{errors.Estado?.message}</FormHelperText>
+          </FormControl>
 
-          <Stack direction="row" spacing={2} justifyContent="space-between" mt={3} mb={2}>
+          <Stack
+            direction="row"
+            spacing={2}
+            justifyContent="space-between"
+            mt={3}
+            mb={2}
+          >
             <Button
               variant="outlined"
               startIcon={<ArrowBackIcon />}

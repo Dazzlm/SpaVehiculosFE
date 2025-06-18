@@ -23,6 +23,7 @@ export default function CiudadEditar() {
     control,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
@@ -37,18 +38,20 @@ export default function CiudadEditar() {
     const token = storedUser?.token;
 
     if (!token) {
-      console.warn("No se encontró token, redirigiendo al login...");
       navigate("/login");
       return;
     }
 
-    fetch(`https://spavehiculos.runasp.net/api/Ciudades/ConsultarXId?idCiudad=${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    fetch(
+      `https://spavehiculos.runasp.net/api/Ciudades/ConsultarXId?idCiudad=${id}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
       .then(async (res) => {
         if (res.status === 204) throw new Error("Ciudad no encontrada");
         if (!res.ok) throw new Error("Error al obtener ciudad");
@@ -73,14 +76,17 @@ export default function CiudadEditar() {
         return;
       }
 
-      const res = await fetch("https://spavehiculos.runasp.net/api/Ciudades/Actualizar", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(data),
-      });
+      const res = await fetch(
+        "https://spavehiculos.runasp.net/api/Ciudades/Actualizar",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       if (!res.ok) throw new Error("Error en la actualización");
       setMensaje("Ciudad actualizada correctamente");
@@ -88,6 +94,11 @@ export default function CiudadEditar() {
     } catch {
       setMensaje("Error al actualizar ciudad");
     }
+  };
+
+  const handleInputChange = (name, value) => {
+    const cleaned = value.replace(/\s+/g, " ");
+    setValue(name, cleaned, { shouldValidate: true });
   };
 
   if (loading)
@@ -109,7 +120,6 @@ export default function CiudadEditar() {
         justifyContent: "center",
         alignItems: "flex-start",
         p: 2,
-        minHeight: "auto",
         backgroundColor: "transparent",
       }}
     >
@@ -120,7 +130,6 @@ export default function CiudadEditar() {
           width: "100%",
           p: 5,
           borderRadius: 4,
-          bgcolor: "white",
         }}
       >
         <Button
@@ -133,11 +142,9 @@ export default function CiudadEditar() {
             borderColor: "primary.main",
             fontWeight: "bold",
             textTransform: "none",
-            transition: "all 0.3s ease",
             "&:hover": {
               bgcolor: "primary.main",
               color: "white",
-              borderColor: "primary.main",
             },
           }}
         >
@@ -157,7 +164,7 @@ export default function CiudadEditar() {
         {mensaje && (
           <Alert
             severity={mensaje.includes("Error") ? "error" : "success"}
-            sx={{ mb: 3, borderRadius: 2 }}
+            sx={{ mb: 3 }}
           >
             {mensaje}
           </Alert>
@@ -168,15 +175,21 @@ export default function CiudadEditar() {
             <Controller
               name="Nombre"
               control={control}
-              rules={{ required: "El nombre es obligatorio" }}
+              rules={{
+                required: "El nombre es obligatorio",
+                minLength: {
+                  value: 2,
+                  message: "Debe tener al menos 2 caracteres",
+                },
+              }}
               render={({ field }) => (
                 <TextField
                   {...field}
                   label="Nombre"
+                  onChange={(e) => handleInputChange("Nombre", e.target.value)}
                   error={!!errors.Nombre}
                   helperText={errors.Nombre?.message}
                   fullWidth
-                  size="medium"
                 />
               )}
             />
@@ -188,12 +201,7 @@ export default function CiudadEditar() {
               size="large"
               startIcon={<SaveIcon />}
               disabled={isSubmitting}
-              sx={{
-                mt: 2,
-                fontWeight: "bold",
-                py: 1.5,
-                borderRadius: 3,
-              }}
+              sx={{ mt: 2, fontWeight: "bold", py: 1.5, borderRadius: 3 }}
             >
               {isSubmitting ? "Guardando..." : "Guardar Cambios"}
             </Button>

@@ -54,9 +54,12 @@ const AgregarProductoASede = () => {
           fetch(`${API_BASE}/Productos/ObtenerTodos`, {
             headers: getAuthHeaders(),
           }),
-          fetch(`${API_BASE}/StockSedes/ConsultarPorID?idSedeProducto=${currentSede}`, {
-            headers: getAuthHeaders(),
-          }),
+          fetch(
+            `${API_BASE}/StockSedes/ConsultarPorID?idSedeProducto=${currentSede}`,
+            {
+              headers: getAuthHeaders(),
+            }
+          ),
         ]);
 
         const productosData = await productosRes.json();
@@ -203,6 +206,7 @@ const AgregarProductoASede = () => {
             rules={{
               required: "El stock es obligatorio",
               min: { value: 1, message: "El stock debe ser mayor que cero" },
+              max: { value: 10000, message: "El stock es demasiado alto" },
             }}
             render={({ field }) => (
               <TextField

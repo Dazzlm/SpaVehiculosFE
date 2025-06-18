@@ -1,24 +1,25 @@
-
-import styles from './Topbar.module.css';
-import ListSedes from '../ListSedes/ListSedes.jsx';
-import Button from '@mui/material/Button';
-import LogoutIcon from '@mui/icons-material/Logout';
-import { useSpaVehiculosStore } from '../../zustand/SpaVehiculosStore.js';
+import styles from "./Topbar.module.css";
+import ListSedes from "../ListSedes/ListSedes.jsx";
+import Button from "@mui/material/Button";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { useSpaVehiculosStore } from "../../zustand/SpaVehiculosStore.js";
 export default function Topbar() {
-  const { clearCurrentUser } = useSpaVehiculosStore();
+  const { clearCurrentUser, limpiarCarrito } = useSpaVehiculosStore();
 
   const handleLogout = () => {
+    limpiarCarrito();
+    localStorage.clear();
     clearCurrentUser();
   };
 
   return (
-    <div className={styles["topbar"]} >
+    <div className={styles["topbar"]}>
       <p className={styles["topbar__title"]}>Dashboard </p>
-      
+
       <div className={styles["topbar__container--sedes"]}>
         <ListSedes />
       </div>
-       <Button
+      <Button
         variant="contained"
         color="error"
         size="small"
@@ -29,5 +30,5 @@ export default function Topbar() {
         Cerrar sesión
       </Button>
     </div>
-  )
+  );
 }

@@ -2,6 +2,7 @@
 
 export const useCarritoStore = ((set, get) => ({
   carrito: {
+    idSede: null,
     productos: [],
     servicios: [],
   },
@@ -101,8 +102,14 @@ export const useCarritoStore = ((set, get) => ({
   // ----------------------
   // Utilidades
   // ----------------------
-  limpiarCarrito: () => set({ carrito: { productos: [], servicios: [] } }),
-
+  limpiarCarrito: () => set({ carrito: {idSede:null,  productos: [], servicios: [] } }),
+  setCarrito: (nuevoCarrito) => set({ carrito: nuevoCarrito }),
+  setIdSedeCarrito: (idSede) => set((state) => ({
+    carrito: {
+      ...state.carrito,
+       idSede,
+    },
+  })),
   obtenerTotal: () => {
     const { productos, servicios } = get().carrito;
 

@@ -42,7 +42,7 @@ export default function SedeForm() {
       if (!response.ok) throw new Error("Error al cargar las ciudades");
 
       const data = await response.json();
-      setCiudades(data);
+      setCiudades(data.Data);
     } catch (error) {
       setErrorCiudades(error.message);
     } finally {

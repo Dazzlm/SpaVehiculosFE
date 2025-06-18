@@ -63,11 +63,11 @@ const AgregarProductoASede = () => {
         const productosSedeData = await productosSedeRes.json();
 
         if (productosRes.ok) {
-          setProductos(productosData.data || []);
+          setProductos(productosData.Data || []);
         }
 
         if (productosSedeRes.ok) {
-          setProductosSede(productosSedeData.data || []);
+          setProductosSede(productosSedeData.Data || []);
         }
 
         if (!productosRes.ok && !productosSedeRes.ok) {

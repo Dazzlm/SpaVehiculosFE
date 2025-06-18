@@ -25,7 +25,7 @@ export async function getServicio() {
       throw new Error("El backend no devolvió un arreglo");
     }
 
-    return result;
+    return result.data;
   } catch (error) {
     console.error("Error al obtener servicios:", error.message);
     return [];

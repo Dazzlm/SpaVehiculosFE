@@ -61,9 +61,9 @@ export default function AdministradorEditar() {
         if (!res.ok) throw new Error("Error al obtener administrador");
         const data = await res.json();
 
-        if (data.FechaNacimiento)
-          data.FechaNacimiento = data.FechaNacimiento.split("T")[0];
-        reset(data);
+        if (data.Data.FechaNacimiento)
+          data.Data.FechaNacimiento = data.Data.FechaNacimiento.split("T")[0];
+        reset(data.Data);
         setLoading(false);
       })
       .catch(() => {

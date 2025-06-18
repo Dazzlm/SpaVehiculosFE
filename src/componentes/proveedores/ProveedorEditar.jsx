@@ -53,7 +53,7 @@ fetch(`https://spavehiculos.runasp.net/api/GestorProv/ConsultarporID?idProveedor
     if (res.status === 204) throw new Error("Proveedor no encontrado");
     if (!res.ok) throw new Error("Error al obtener proveedor");
     const data = await res.json();
-    reset(data);
+    reset(data.Data);
     setLoading(false);
   })
   .catch(() => {

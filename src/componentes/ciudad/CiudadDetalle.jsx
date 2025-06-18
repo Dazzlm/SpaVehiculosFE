@@ -35,7 +35,7 @@ function CiudadDetalle() {
       },
     })
       .then((res) => res.json())
-      .then((data) => setCiudad(data))
+      .then((data) => setCiudad(data.Data))
       .catch((err) => console.error("Error al cargar la ciudad", err));
   }, [id]);
 

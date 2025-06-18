@@ -13,10 +13,10 @@ export async function getSedeID(idSede) {
     const result = await response.json();
 
     if (!response.ok) {
-      throw new Error(result.message || "Error al obtener la sede con ID " + idSede);
+      throw new Error(result.Message || "Error al obtener la sede con ID " + idSede);
     }
 
-    return result;
+    return result.Data;
   } catch (error) {
     console.error("Error:", error);
     return [];

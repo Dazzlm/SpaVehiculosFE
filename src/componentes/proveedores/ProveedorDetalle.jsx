@@ -34,7 +34,7 @@ fetch(`https://spavehiculos.runasp.net/api/GestorProv/ConsultarporID?idProveedor
 })
   .then((res) => res.json())
   .then((data) => {
-    setProveedor(data);
+    setProveedor(data.Data);
   })
   .catch((err) => console.error("Error al cargar proveedor", err));
 

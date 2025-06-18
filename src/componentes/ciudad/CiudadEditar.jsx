@@ -53,7 +53,7 @@ export default function CiudadEditar() {
         if (res.status === 204) throw new Error("Ciudad no encontrada");
         if (!res.ok) throw new Error("Error al obtener ciudad");
         const data = await res.json();
-        reset(data);
+        reset(data.Data);
         setLoading(false);
       })
       .catch(() => {

@@ -53,7 +53,7 @@ const ListaAdministradores = () => {
         throw new Error(data.message || "Error al obtener administradores");
       }
 
-      setAdministradores(data);
+      setAdministradores(data.Data);
     } catch (error) {
       console.error("Error al obtener administradores:", error);
       Swal.fire("Error", error.message || "Error al obtener administradores", "error");
@@ -94,7 +94,7 @@ const ListaAdministradores = () => {
         const result = await response.json();
 
         if (!response.ok) {
-          throw new Error(result.message || "Error al eliminar el administrador.");
+          throw new Error(result.Message || "Error al eliminar el administrador.");
         }
 
         await Swal.fire("Eliminado", "El administrador ha sido eliminado correctamente.", "success");

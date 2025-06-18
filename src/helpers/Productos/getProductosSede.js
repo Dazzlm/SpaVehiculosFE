@@ -16,7 +16,7 @@ export async function getProductosSede(idSede) {
       throw new Error(result.message || "Error al obtener productos con stock");
     }
 
-    return result.data;
+    return result.Data;
   } catch (error) {
     console.error("Error:", error);
     return [];

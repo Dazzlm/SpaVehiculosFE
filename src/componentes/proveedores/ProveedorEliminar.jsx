@@ -32,7 +32,7 @@ fetch(`https://spavehiculos.runasp.net/api/GestorProv/ConsultarporID?idProveedor
     if (!res.ok) throw new Error();
     return res.json();
   })
-  .then((data) => setProveedor(data))
+  .then((data) => setProveedor(data.Data))
   .catch(() => setError("Error al obtener proveedor"));
 
   }, [id]);
@@ -49,7 +49,7 @@ fetch(`https://spavehiculos.runasp.net/api/GestorProv/EliminarProveedor?idProvee
 })
   .then((res) => {
     if (!res.ok) throw new Error();
-    return res.text();
+    return res.json().Message;
   })
   .then(() => {
     setMensaje("Proveedor eliminado correctamente.");

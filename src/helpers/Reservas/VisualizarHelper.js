@@ -17,21 +17,21 @@ export const obtenerClientes = async () => {
   const response = await axios.get(`${API_BASE}/Clientes/ConsultarTodos`, {
     headers: getAuthHeaders(),
   });
-  return response.data;
+  return response.data.Data;
 };
 
 export const obtenerServicios = async () => {
   const response = await axios.get(`${API_BASE}/Servicios/ConsultarTodos`, {
     headers: getAuthHeaders(),
   });
-  return response.data;
+  return response.data.Data;
 };
 
 export const obtenerSedes = async () => {
   const response = await axios.get(`${API_BASE}/Sedes/ConsultarTodos`, {
     headers: getAuthHeaders(),
   });
-  return response.data;
+  return response.data.Data;
 };
 
 export const crearReserva = async (reserva) => {

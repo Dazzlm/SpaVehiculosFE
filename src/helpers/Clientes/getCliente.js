@@ -33,7 +33,7 @@ export const getCliente = async () => {
 
     const cliente = await response.json();
 
-    if (!cliente || !cliente.IdCliente) {
+    if (!cliente.Data || !cliente.Data.IdCliente) {
       Swal.fire(
         "No encontrado",
         "No se encontró ningún cliente con ese valor.",
@@ -42,7 +42,7 @@ export const getCliente = async () => {
       return null;
     }
 
-    return cliente;
+    return cliente.Data;
   } catch (error) {
     console.error("Error buscando cliente:", error);
     Swal.fire("Error", "Hubo un problema al buscar el cliente.", "error");

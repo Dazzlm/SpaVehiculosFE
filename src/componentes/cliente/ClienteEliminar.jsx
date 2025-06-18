@@ -40,7 +40,7 @@ function ClienteEliminar() {
         if (res.status === 204) throw new Error("Cliente no encontrado");
         if (!res.ok) throw new Error("Error al obtener cliente");
         const data = await res.json();
-        setCliente(data);
+        setCliente(data.Data);
         setLoading(false);
       })
       .catch((err) => {
@@ -72,11 +72,11 @@ function ClienteEliminar() {
         }
       );
 
-      const respuestaTexto = await res.text();
+      const respuestaTexto = await res.json();
 
-      if (!res.ok) throw new Error(respuestaTexto);
+      if (!res.ok) throw new Error(respuestaTexto.Message);
 
-      setMensaje(respuestaTexto);
+      setMensaje(respuestaTexto.mensaje);
       setTimeout(() => navigate("/usuarios/cliente"), 1500);
     } catch (err) {
       setError(err.message || "Error al eliminar cliente");

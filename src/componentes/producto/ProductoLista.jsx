@@ -52,10 +52,10 @@ const ListaProductos = () => {
         return response.json();
       })
       .then((data) => {
-        if (data.success) {
-          setProductos(data.data);
+        if (data.Success) {
+          setProductos(data.Data);
         } else {
-          console.error("Error: respuesta no exitosa", data);
+          console.error("Error: respuesta no exitosa", data.Message);
         }
       })
       .catch((error) =>

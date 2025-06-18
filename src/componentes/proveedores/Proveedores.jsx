@@ -37,7 +37,7 @@ fetch("https://spavehiculos.runasp.net/api/GestorProv/ConsultarTodos", {
   },
 })
   .then((response) => response.json())
-  .then((data) => setProveedores(data))
+  .then((data) => setProveedores(data.Data))
   .catch((error) => console.error("Error al obtener proveedores:", error));
 
   }, []);

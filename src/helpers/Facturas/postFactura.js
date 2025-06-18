@@ -19,7 +19,7 @@ export const postFactura = async (facturaPayload) => {
     const result = await response.json();
     console.log("Factura creada con éxito:", result);
 
-    return result;
+    return result; // Retorna los datos de la factura creada
   } catch (error) {
     console.error("Error generando la factura:", error);
     return null; // opcional: retorna null si falla

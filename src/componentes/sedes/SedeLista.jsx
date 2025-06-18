@@ -44,7 +44,7 @@ const ListaSedes = () => {
   })
     .then((response) => response.json())
     .then((data) => {
-      const sedesOrdenadas = data.sort((a, b) => a.IdSede - b.IdSede);
+      const sedesOrdenadas = data.Data.sort((a, b) => a.IdSede - b.IdSede);
       setSedes(sedesOrdenadas);
     })
     .catch((error) => console.error("Error al obtener sedes:", error));

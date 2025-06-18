@@ -56,7 +56,7 @@ export default function ClienteEditar() {
         if (res.status === 204) throw new Error("Cliente no encontrado");
         if (!res.ok) throw new Error("Error al obtener cliente");
         const data = await res.json();
-        reset(data);
+        reset(data.Data);
         setLoading(false);
       })
       .catch(() => {

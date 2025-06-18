@@ -59,7 +59,7 @@ export default function ProductoEditar() {
         if (!res.ok) throw new Error("Error al obtener proveedores");
 
         const data = await res.json();
-        setProveedores(data);
+        setProveedores(data.Data);
       } catch (error) {
         console.error(error);
       }
@@ -92,7 +92,7 @@ export default function ProductoEditar() {
         if (!res.ok) throw new Error("Error al obtener producto");
 
         const response = await res.json();
-        const data = response.data;
+        const data = response.Data;
 
         reset({
           Nombre: data.Nombre,

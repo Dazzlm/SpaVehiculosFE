@@ -46,7 +46,7 @@ export const consultarClientes = async () => {
     const response = await axios.get(`${API_BASE_URL}/Clientes/ConsultarTodos`, {
       headers: getAuthHeaders(),
     });
-    return response.data;
+    return response.data.Data;
   } catch (error) {
     console.error("Error al cargar clientes:", error);
     throw error;
@@ -58,7 +58,7 @@ export const consultarServicios = async () => {
     const response = await axios.get(`${API_BASE_URL}/Servicios/ConsultarTodos`, {
       headers: getAuthHeaders(),
     });
-    return response.data;
+    return response.data.Data;
   } catch (error) {
     console.error("Error al cargar servicios:", error);
     throw error;
@@ -70,7 +70,7 @@ export const consultarSedes = async () => {
     const response = await axios.get(`${API_BASE_URL}/Sedes/ConsultarTodos`, {
       headers: getAuthHeaders(),
     });
-    return response.data;
+    return response.data.Data;
   } catch (error) {
     console.error("Error al cargar sedes:", error);
     throw error;

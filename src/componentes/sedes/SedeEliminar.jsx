@@ -36,7 +36,7 @@ function SedeEliminar() {
       },
     })
       .then((res) => res.json())
-      .then((data) => setSede(data))
+      .then((data) => setSede(data.Data))
       .catch(() => setError("Error al obtener la sede"));
   }, [id, navigate]);
 

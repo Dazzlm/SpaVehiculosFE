@@ -51,7 +51,7 @@ function ClienteDetalle() {
         return res.json();
       })
       .then(data => {
-        setClienteUsuario(data);
+        setClienteUsuario(data.Data);
 
         const imagenClienteUrl = `https://spavehiculos.runasp.net/api/UploadCliente/ImagenCliente?idCliente=${id}`;
         fetch(imagenClienteUrl, {

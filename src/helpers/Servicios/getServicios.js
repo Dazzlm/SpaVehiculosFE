@@ -20,7 +20,7 @@ export async function getServicios() {
       throw new Error(result.message || "Error al obtener servicios");
     }
 
-    return result;
+    return result.Data;
   } catch (error) {
     console.error("Error al obtener servicios:", error.message);
     return [];

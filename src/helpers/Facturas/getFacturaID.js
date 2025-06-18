@@ -19,7 +19,7 @@ export async function getFacturaID(idFactura) {
       throw new Error(result.message || "Error al obtener el detalle de la factura con ID " + idFactura);
     }
 
-    return result.data;
+    return result.Data;
   } catch (error) {
     console.error("Error:", error);
     return [];

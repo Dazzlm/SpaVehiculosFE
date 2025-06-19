@@ -13,7 +13,7 @@ export default function Facturar() {
 
   return (
     <div className={styles["container-facturar"]}>
-      <div style={{ marginBottom: '1rem' }}>
+      <div style={{ marginBottom: '1rem', marginLeft: '2rem' }}>
         <Button
           variant="outlined"
           startIcon={<ArrowBackIcon />}

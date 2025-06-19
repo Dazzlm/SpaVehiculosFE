@@ -156,6 +156,7 @@ export default function AdministradorEditar() {
         justifyContent: "center",
         alignItems: "flex-start",
         p: 2,
+        minWidth: "25vw"
       }}
     >
       <Paper

@@ -3,9 +3,11 @@
 .menu{
     display: flex;
     flex-direction: column;
+    align-items: center;
     background-color: var(--color-smoke-white);
     width: 100%;
     height: 100%;
+    padding: 0px;
 }
 
 @media (max-width: 1500px) {

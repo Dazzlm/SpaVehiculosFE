@@ -146,7 +146,7 @@ export default function ClienteEditar() {
     );
 
   return (
-    <Box display="flex" justifyContent="center" p={2}>
+    <Box display="flex" justifyContent="center" p={2} minWidth={"50vw"}>
       <Paper
         elevation={6}
         sx={{ maxWidth: 400, width: "100%", p: 3, borderRadius: 2 }}

@@ -3,9 +3,11 @@
   display: grid;
   grid-template-areas:
     "sidebar"
-    "menu"
+    "menus"
     "topbar";
   overflow: hidden;
+  grid-template-columns: auto;
+  grid-template-rows: 100px auto 50px;
 }
 
 .main__layout--sidebarPosition {
@@ -26,7 +28,7 @@
 
 
 .main__layout--menu {
-  grid-area: menu;
+  grid-area: menus;
   margin-top: 20px;     
   margin-bottom: 200px;   
   overflow-y: auto;
@@ -34,15 +36,34 @@
   width: 100%;
 }
 
+@media (min-width: 616px) and (max-width: 1500px)  {
+
+  .main__layout {
+  display: grid;
+  grid-template-areas:
+    "sidebar"
+    "menus"
+    "topbar";
+  overflow: hidden;
+  grid-template-columns: auto;
+  grid-template-rows: 100px auto 100px;
+}
+
+    .main__layout--topbar {
+  
+    height: 100px;
+  }
+}
+
 @media (min-width: 1501px) {
   .main__layout {
    
       grid-template-columns: 300px auto;
-      grid-template-rows: 150px auto;
+      grid-template-rows: 130px auto;
      grid-template-areas:
       
       "sidebar topbar"
-      "sidebar menu";
+      "sidebar menus";
 
   }
 
@@ -50,22 +71,22 @@
     grid-area: topbar;
     position: static;
     width: 100%;
-    height: 200px;
+    height: 135px;
     z-index: 1;
   }
 
   .main__layout--menu {
-    grid-area: menu;
-    margin-top: 20px;     
-    margin-bottom: 200px;   
+    grid-area: menus;
+    margin-top: 0px;     
+    margin-bottom: 0px;
     overflow-y: hidden;
-    height: calc(100% - 200px);
-    width: calc(100% - 300px);
+    height: 100% ;
+    width: 100%;
   }
   .main__layout--sidebarPosition {
     grid-area: sidebar;
     position: static;
-    width: 300px;
+    width: 300px; 
     height: 100%;
   }
 

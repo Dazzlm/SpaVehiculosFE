@@ -16,7 +16,7 @@ export default function Topbar() {
     <div className={styles["topbar"]}>
       <p className={styles["topbar__title"]}>Dashboard </p>
 
-      <div className={styles["topbar__container--sedes"]}>
+      <div className={ styles["topbar__container--sedes"] }>
         <ListSedes />
       </div>
       <div className={styles["topbar__container--logout"]}>

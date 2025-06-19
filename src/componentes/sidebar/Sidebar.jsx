@@ -1,6 +1,4 @@
 import { Link, useLocation } from "react-router-dom";
-
-import { useState } from "react";
 import optionsSidebar from "../../helpers/optionsSidebar.jsx";
 import styles from "./Sidebar.module.css";
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';

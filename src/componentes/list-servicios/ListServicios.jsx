@@ -2,6 +2,7 @@ import ItemCard from "../item-card/ItemCard";
 import styles from "./ListServicios.module.css";
 import { getServicios } from "../../helpers/Servicios/getServicios";
 import { useState, useEffect } from "react";
+import TooltipComponent from "../TooltipComponent/TooltipComponent.jsx";
 export default function ListServicios() {
     const [servicios, setServicios] = useState([]);
     // Fetch data from API
@@ -23,7 +24,10 @@ export default function ListServicios() {
     
   return (
   <div className={styles["container"]}>
-    <h2 className={styles["titulo"]}>Elige los Servicios a facturar</h2>
+    <div className={styles["header"]}>
+      <h2 className={styles["titulo"]}>Elige los Servicios a facturar</h2>
+      <TooltipComponent tooltipText="Los servicios son los mismos para todas la sedes" />
+    </div>
 
     {servicios.length === 0 ? (
       "No hay servicios disponibles"

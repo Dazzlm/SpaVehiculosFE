@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { Button, Tooltip } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import styles from './Facturar.module.css';
@@ -7,21 +7,56 @@ import ListProductos from '../list-productos/ListProductos.jsx';
 import ListServicios from '../list-servicios/ListServicios.jsx';
 import ListCart from '../list-cart/ListCart.jsx';
 import AccionesFactura from '../acciones-factura/AccionesFactura.jsx';
+import {useSpaVehiculosStore} from '../../zustand/SpaVehiculosStore.js';
+import { getSedeID } from '../../helpers/Sedes/getSedeID.js';
+import TooltipComponent from '../TooltipComponent/TooltipComponent.jsx';
+import { useState, useEffect } from 'react';
 
 export default function Facturar() {
+  const [sede, setSede] = useState(null);
   const navigate = useNavigate();
+  const { currentSede } = useSpaVehiculosStore();
+  useEffect(() => {
+     const fetchData = async () => {
+      try {
+        if (!currentSede) {
+          return;
+        }
+
+        const sedeData = await getSedeID(currentSede);
+        if (!sedeData) {
+          console.error("No se encontró la sede con ID:", currentSede);
+          return;
+        }
+        setSede(sedeData);
+      }catch (error) {
+        console.error("Error fetching data:", error); 
+      }
+      
+     }
+
+    fetchData();
+     
+  }, [sede,currentSede]);
 
   return (
     <div className={styles["container-facturar"]}>
-      <div style={{ marginBottom: '1rem', marginLeft: '2rem' }}>
-        <Button
+      <div className={styles["container-header"]}>
+        <Button className='button-back'
           variant="outlined"
           startIcon={<ArrowBackIcon />}
-          onClick={() => navigate('/facturacion')} // Ajusta la ruta según necesites
+          onClick={() => navigate('/facturacion')} 
         >
           Regresar
         </Button>
+        {sede &&
+          <div className={styles["container-info"]}>
+              <h1 > Facturacion en sede: {sede.Nombre}  </h1>
+          </div>
+        }
       </div>
+      
+      
       <div className={styles["container-facturacion"]}>
         
 
@@ -35,7 +70,11 @@ export default function Facturar() {
         </div>
 
         <div className={styles["container-resumen"]}>
-          <h2 className={styles["titulo"]}>Resumen de la Factura</h2>
+          <div className={styles["container-resumen-header"]}>
+            <h2 className={styles["titulo"]}>Resumen de la Factura</h2>
+            <TooltipComponent tooltipText="Puedes cambiar de sede sin perder los productos seleccionados" />
+          </div>
+          
           <ListCart />
           <div className={styles["acciones-factura"]}>
             <AccionesFactura />

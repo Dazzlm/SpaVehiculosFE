@@ -26,3 +26,13 @@
   flex-wrap: wrap;
   gap: 16px;
 }
+
+.header{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  background-color: white;
+  border-bottom: 1px solid #eee;
+}

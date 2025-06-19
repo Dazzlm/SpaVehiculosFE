@@ -3,6 +3,7 @@ import styles from "./ListProductos.module.css";
 import { getProductosSede } from "../../helpers/Productos/getProductosSede.js";
 import { useState, useEffect } from "react";
 import { useSpaVehiculosStore } from "../../zustand/SpaVehiculosStore.js";
+import TooltipComponent from "../TooltipComponent/TooltipComponent.jsx";
 export default function ListProductos() {
   const [productos, setProductos] = useState([]);
   const currentSede = useSpaVehiculosStore((state) => state.currentSede);
@@ -26,8 +27,12 @@ export default function ListProductos() {
 
  return (
   <div className={styles["container"]}>
-    <h2 className={styles["titulo"]}>Elige los Productos a facturar</h2>
-
+    <div className={styles["header"]}>
+      <h2 className={styles["titulo"]}>Elige los Productos a facturar
+      </h2>
+      <TooltipComponent tooltipText="Los productos se muestran segun el stock de la sede, puedes cambiar la sede arriba" />
+    </div>
+    
     {productos.length === 0 ? (
       "No hay productos disponibles"
     ) : (

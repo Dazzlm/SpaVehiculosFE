@@ -198,8 +198,7 @@ export default function Inicio() {
   return (
     <div
       style={{
-        marginTop: "1rem",
-        height: "87vh",
+        height: "86h",
         width: "80vw",
         overflow: "hidden",
         position: "relative",

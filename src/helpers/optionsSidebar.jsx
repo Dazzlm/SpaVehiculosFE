@@ -10,7 +10,6 @@ import PhotoIcon from '@mui/icons-material/Photo';
 
 
 const optionsSidebar = [
-
   {
     id: 0,
     title: "Inicio",

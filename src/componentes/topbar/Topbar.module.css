@@ -4,59 +4,105 @@
 .topbar {
   display: flex;
   align-items: center;
-  width: 95%;
+  width: 100%;
+  height: 100%;
   justify-content: space-between;
-  padding: 0px 90px 0px 20px;
   background-color: #fff;
   border-bottom: 1px solid #eee;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 0;
 }
 
 .topbar__title {
   padding: 0px;
-  margin-left: 35px;
-  font-size: 28px;
+  margin: 0px;
+  margin-left: 20px;
+  font-size: 24px;
   font-weight: 600;
-}
-.topbar__search{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    margin-left: 20px;
-    gap : 10px;
-    
-}
-
-.topbar__search-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
-  background-color: var(--color-metal-gray);
-  padding: 5px 10px;
-   border-radius: 5px;
-  transition: color 0.3s ease;
-}
-
-.topbar__search-button:hover {
-  transform: scale(1.1);
-  transition: transform 0.3s ease;
-}
-
-.topbar__search-button:hover {
-  color: #007bff;
-    transition: color 0.3s ease;
 }
 
 .topbar__container--sedes {
   height: 20px;
-  width: 15%;
+  width: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+}
+
+.topbar__container--logout{
+  margin-right: 20px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+@media (max-width: 615px) {
+  .topbar {
+    display: flex;
+    height: 200px;  
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  .topbar__container--sedes {
+    height: 30px;
+    width: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    row-gap: 10px;
+    
+  }
+  .topbar__container--logout{
+   margin: 0px;
+  }
+  .topbar__title {
+    margin: 0px;
+  }
+}
+
+@media (min-width: 616px) and (max-width: 1500px)  {
+  .topbar {
+    display: flex;
+    height: 100px;
+    padding: 0px;
+  }
+  
+  .topbar__title {
+    font-size: 28px;
+    margin-left: 2rem;
+  }
+  
+  .topbar__container--sedes {
+    width: 20%;
+    height: 30px;
+  }
+  
+  .topbar__container--logout {
+    margin-right: 2rem;
+  }
+}
+
+@media (min-width: 1501px) {
+  .topbar {
+    height: 130px;
+    padding: 0px;
+  }
+  
+  .topbar__title {
+    font-size: 28px;
+    margin-left: 4rem;
+  }
+  
+  .topbar__container--sedes {
+    width: 200px;
+    height: 30px;
+  }
+  
+  .topbar__container--logout {
+    margin-right: 4rem;
+  }
 }

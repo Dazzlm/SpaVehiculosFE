@@ -179,14 +179,14 @@ export default function FacturaDetalle() {
         </Typography>
       </Paper>
 
-      <Divider sx={{ my: 3 }} />
+      <Divider sx={{ my: 2}} />
 
       {productos.length > 0 && (
         <>
           <Typography variant="h6" gutterBottom>
             Productos
           </Typography>
-          <TableContainer component={Paper} sx={{ mb: 3 }}>
+          <TableContainer component={Paper} sx={{ mb: 3, maxHeight: "200px" }}>
             <Table>
               <TableHead>
                 <TableRow>
@@ -224,7 +224,7 @@ export default function FacturaDetalle() {
           <Typography variant="h6" gutterBottom>
             Servicios
           </Typography>
-          <TableContainer component={Paper} sx={{ mb: 3 }}>
+          <TableContainer component={Paper} sx={{ mb: 3 ,maxHeight: "200px"}}>
             <Table>
               <TableHead>
                 <TableRow>

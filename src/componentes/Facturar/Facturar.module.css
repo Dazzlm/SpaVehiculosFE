@@ -2,7 +2,7 @@
 .container-facturar {
   display: flex;
   flex-direction: column;
-  height: 91vh; /* Ajusta según sea necesario */
+  height: 86vh; /* Ajusta según sea necesario */
   width: 100%;
   box-sizing: border-box;
   padding: 1rem;

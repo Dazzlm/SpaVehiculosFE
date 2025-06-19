@@ -120,7 +120,8 @@ export default function CiudadEditar() {
         justifyContent: "center",
         alignItems: "flex-start",
         p: 2,
-        backgroundColor: "transparent",
+          backgroundColor: "transparent",
+          minWidth: "20vw",
       }}
     >
       <Paper

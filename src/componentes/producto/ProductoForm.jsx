@@ -120,6 +120,7 @@ export default function ProductoForm() {
           rules={{
             required: "El nombre es obligatorio",
             minLength: { value: 2, message: "Mínimo 2 caracteres" },
+            maxLength: { value: 50, message: "Máximo 50 caracteres" },
             validate: (value) =>
               limpiarEspacios(value).length > 0 ||
               "El nombre no puede estar vacío",
@@ -142,6 +143,7 @@ export default function ProductoForm() {
           rules={{
             required: "La descripción es obligatoria",
             minLength: { value: 5, message: "Mínimo 5 caracteres" },
+            maxLength: { value: 250, message: "Máximo 250 caracteres" },
             validate: (value) =>
               limpiarEspacios(value).length > 0 ||
               "La descripción no puede estar vacía",

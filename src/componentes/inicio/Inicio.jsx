@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSpring, animated } from "@react-spring/web";
 import { useSpaVehiculosStore } from "../../zustand/SpaVehiculosStore";
+import { useNavigate } from "react-router-dom";
 
 const tarjetas_config = [
   {
@@ -9,6 +10,7 @@ const tarjetas_config = [
     icono: "👤",
     gradient: "linear-gradient(135deg, #ff6b6b, #ee5a52)",
     endpoint: "Clientes/Contar",
+    onClick: "/usuarios/cliente",
     dataKey: null,
   },
   {
@@ -16,15 +18,15 @@ const tarjetas_config = [
     icono: "📦",
     gradient: "linear-gradient(135deg, #4ecdc4, #44a08d)",
     endpoint: "Productos/Contar",
+    onClick: "/gestion/productos",
     dataKey: "cantidad",
   },
   {
     titulo: "Reservas Hoy",
     icono: "🗓️",
     gradient: "linear-gradient(135deg, yellow, yellow)",
-    endpoint: `Reservas/ContarPorFecha?fecha=${
-      new Date().toISOString().split("T")[0]
-    }`,
+    endpoint: `Reservas/ContarPorFecha?fecha=${new Date().toISOString().split("T")[0]}`,
+    onClick: "/reservas?filtro=today",
     dataKey: "cantidad",
   },
   {
@@ -32,74 +34,66 @@ const tarjetas_config = [
     icono: "🧾",
     gradient: "linear-gradient(135deg, aqua, aqua)",
     endpoint: "Facturas/ConsultarFacturasHoy",
+    onClick: "/facturacion/lista?filtro=today",
     dataKey: "cantidad",
   },
 ];
 
 const imagenes = [
-  "https://plus.unsplash.com/premium_photo-1661501041641-3e731115e687?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y2FyJTIwd2FzaHxlbnwwfHwwfHx8MA%3D%3D",
-  "https://plus.unsplash.com/premium_photo-1661495725810-0e92d20311ab?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8Y2FyJTIwd2FzaHxlbnwwfHwwfHx8MA%3D%3D",
-  "https://plus.unsplash.com/premium_photo-1661454209648-4764099a9be9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGNhciUyMHdhc2h8ZW58MHx8MHx8fDA%3D",
-  "https://images.unsplash.com/photo-1605164599901-f8a1464a2c87?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fGNhciUyMHdhc2h8ZW58MHx8MHx8fDA%3D",
+  "https://plus.unsplash.com/premium_photo-1661501041641-3e731115e687?w=500&auto=format&fit=crop&q=60",
+  "https://plus.unsplash.com/premium_photo-1661495725810-0e92d20311ab?w=500&auto=format&fit=crop&q=60",
+  "https://plus.unsplash.com/premium_photo-1661454209648-4764099a9be9?w=500&auto=format&fit=crop&q=60",
+  "https://images.unsplash.com/photo-1605164599901-f8a1464a2c87?w=500&auto=format&fit=crop&q=60",
 ];
 
 const TarjetaEstadistica = ({ config, valor, spring }) => {
-  const estiloTarjeta = {
-    background:
-      config.titulo === "Clientes Registrados"
-        ? "white"
-        : "rgba(255, 255, 255, 0.95)",
-    backdropFilter:
-      config.titulo !== "Clientes Registrados" ? "blur(10px)" : "none",
-    borderRadius: config.titulo === "Clientes Registrados" ? "16px" : "20px",
-    padding: "2rem",
-    border:
-      config.titulo === "Clientes Registrados"
-        ? "1px solid #e2e8f0"
-        : "1px solid rgba(255,255,255,0.2)",
-    transition: "all 0.3s ease",
-  };
+  const navigate = useNavigate();
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div style={estiloTarjeta}>
+    <div
+      style={{
+        background: config.titulo === "Clientes Registrados" ? "white" : "rgba(255,255,255,0.95)",
+        backdropFilter: config.titulo !== "Clientes Registrados" ? "blur(10px)" : "none",
+        borderRadius: "16px",
+        padding: "1rem",
+        border: "1px solid rgba(0,0,0,0.1)",
+        cursor: "pointer",
+        transition: "all 0.3s ease",
+        transform: isHovered ? "scale(1.03)" : "scale(1)",
+        boxShadow: isHovered ? "0 4px 12px rgba(0,0,0,0.15)" : "none",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        textAlign: "center",
+        justifyContent: "center",
+        gap: "0.5rem",
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={() => navigate(config.onClick)}
+    >
       <div
         style={{
+          width: "50px",
+          height: "50px",
+          borderRadius: "15px",
+          background: config.gradient,
           display: "flex",
-          flexDirection: "column",
           alignItems: "center",
-          gap: "1rem",
-          marginBottom: "1rem",
+          justifyContent: "center",
+          fontSize: "1.5rem",
         }}
       >
-        <div
-          style={{
-            width: "50px",
-            height: "50px",
-            borderRadius: "15px",
-            background: config.gradient,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: "1.5rem",
-          }}
-        >
-          {config.icono}
-        </div>
-        <h3
-          style={{
-            margin: 0,
-            fontSize: "1.2rem",
-            color: "#333",
-            fontWeight: "600",
-          }}
-        >
-          {config.titulo}
-        </h3>
+        {config.icono}
       </div>
+      <h3 style={{ margin: 0, fontSize: "1.2rem", color: "#333", fontWeight: "600" }}>
+        {config.titulo}
+      </h3>
       <animated.div
         style={{
           textAlign: "center",
-          fontSize: "3rem",
+          fontSize: "2.8rem",
           fontWeight: "700",
           background: config.gradient,
           WebkitBackgroundClip: "text",
@@ -114,17 +108,19 @@ const TarjetaEstadistica = ({ config, valor, spring }) => {
 };
 
 export default function Inicio() {
-  const [datos, setDatos] = useState(Array(4).fill(null));
-  const [fechaHora, setFechaHora] = useState(new Date());
+  const [datos, setDatos] = useState(Array(4).fill(0));
   const [imagenActual, setImagenActual] = useState(0);
   const { currentUser } = useSpaVehiculosStore();
+  const [fechaHora, setFechaHora] = useState(new Date());
 
   useEffect(() => {
-    const intervaloImagen = setInterval(() => {
-      setImagenActual((prev) => (prev + 1) % imagenes.length);
-    }, 4000);
+    const intervalo = setInterval(() => setImagenActual((prev) => (prev + 1) % imagenes.length), 4000);
+    return () => clearInterval(intervalo);
+  }, []);
 
-    return () => clearInterval(intervaloImagen);
+  useEffect(() => {
+    const timer = setInterval(() => setFechaHora(new Date()), 60000);
+    return () => clearInterval(timer);
   }, []);
 
   useEffect(() => {
@@ -132,15 +128,10 @@ export default function Inicio() {
       try {
         const storedUser = JSON.parse(localStorage.getItem("CurrentUser"));
         const token = currentUser?.token || storedUser?.token;
-        const headers = {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        };
+        const headers = { Authorization: `Bearer ${token}`, "Content-Type": "application/json" };
 
         const promesas = tarjetas_config.map((config) =>
-          axios.get(`https://spavehiculos.runasp.net/api/${config.endpoint}`, {
-            headers,
-          })
+          axios.get(`https://spavehiculos.runasp.net/api/${config.endpoint}`, { headers })
         );
 
         const resultados = await Promise.all(promesas);
@@ -160,11 +151,7 @@ export default function Inicio() {
   }, [currentUser]);
 
   const springs = datos.map((valor) =>
-    useSpring({
-      number: valor || 0,
-      from: { number: 0 },
-      config: { duration: 2000 },
-    })
+    useSpring({ number: valor || 0, from: { number: 0 }, config: { duration: 2000 } })
   );
 
   const fadeIn = useSpring({
@@ -198,27 +185,15 @@ export default function Inicio() {
   return (
     <div
       style={{
-        height: "86h",
-        width: "80vw",
+        height: "100%",
+        width: "100%",
         overflow: "hidden",
-        position: "relative",
-        display: "flex",
-        flexDirection: "column",
+        padding: "1rem",
+        boxSizing: "border-box",
       }}
     >
-      <animated.div
-        style={{
-          ...fadeIn,
-          position: "relative",
-          zIndex: 1,
-          height: "100%",
-          padding: "2rem",
-          display: "flex",
-          flexDirection: "column",
-          gap: "2rem",
-        }}
-      >
-        <header style={{ textAlign: "center", color: "#1e293b" }}>
+      <animated.div style={{ ...fadeIn }}>
+        <header style={{ textAlign: "center", color: "#1e293b", marginBottom: "2rem" }}>
           <h1
             style={{
               fontSize: "clamp(1.5rem, 3vw, 2.5rem)",
@@ -257,25 +232,8 @@ export default function Inicio() {
           </div>
         </header>
 
-        <main
-          style={{
-            flex: 1,
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "2rem",
-            alignItems: "center",
-            maxHeight: "calc(100vh - 200px)",
-          }}
-        >
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "1.5rem",
-              height: "100%",
-              justifyContent: "center",
-            }}
-          >
+        <main className="main-contenedor">
+          <div className="grid-estadisticas">
             {tarjetas_config.map((config, index) => (
               <TarjetaEstadistica
                 key={config.titulo}
@@ -286,18 +244,11 @@ export default function Inicio() {
             ))}
           </div>
 
-          <div
-            style={{
-              height: "100%",
-              position: "relative",
-              borderRadius: "25px",
-              overflow: "hidden",
-            }}
-          >
+          <div className="carrusel">
             <animated.img
               key={imagenActual}
               src={imagenes[imagenActual]}
-              alt="Vehículo destacado"
+              alt="Imagen de vehículo"
               style={{
                 ...imageTransition,
                 width: "100%",
@@ -308,52 +259,83 @@ export default function Inicio() {
                 left: 0,
               }}
             />
-
-            <div
-              style={{
-                position: "absolute",
-                bottom: "1rem",
-                left: "50%",
-                transform: "translateX(-50%)",
-                display: "flex",
-                gap: "0.5rem",
-                zIndex: 2,
-              }}
-            >
+            <div className="puntos">
               {imagenes.map((_, index) => (
                 <div
                   key={index}
+                  onClick={() => setImagenActual(index)}
                   style={{
-                    width: "12px",
-                    height: "12px",
+                    width: "10px",
+                    height: "10px",
                     borderRadius: "50%",
-                    background:
-                      index === imagenActual
-                        ? "rgba(255,255,255,0.9)"
-                        : "rgba(255,255,255,0.4)",
-                    transition: "all 0.3s ease",
+                    background: imagenActual === index ? "white" : "rgba(255,255,255,0.5)",
                     cursor: "pointer",
                   }}
-                  onClick={() => setImagenActual(index)}
                 />
               ))}
             </div>
-
-            <div
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                background:
-                  "linear-gradient(45deg, rgba(0,0,0,0.1), transparent)",
-                zIndex: 1,
-              }}
-            />
           </div>
         </main>
       </animated.div>
+
+      <style>{`
+        .main-contenedor {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        .grid-estadisticas {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        .carrusel {
+          position: relative;
+          border-radius: 16px;
+          overflow: hidden;
+          height: 200px;
+          flex-shrink: 0;
+        }
+
+        .puntos {
+          position: absolute;
+          bottom: 10px;
+          left: 50%;
+          transform: translateX(-50%);
+          display: flex;
+          gap: 0.4rem;
+        }
+
+        @media (min-width: 600px) {
+          .grid-estadisticas {
+            grid-template-columns: repeat(2, 1fr);
+          }
+          .carrusel {
+            height: 250px;
+          }
+        }
+
+        @media (min-width: 1024px) {
+          .main-contenedor {
+            flex-direction: row;
+            padding: 4rem;
+            padding-top: 0rem;
+          }
+          .grid-estadisticas {
+            flex: 1;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            height: 550px;
+            gap: 1.5rem;
+          }
+          .carrusel {
+            flex: 1;
+            height: auto;
+          }
+        }
+      `}</style>
     </div>
   );
 }

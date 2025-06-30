@@ -196,6 +196,17 @@ const ListaReservas = () => {
 
     aplicarFiltros();
   }, [searchTerm, filterDate, allReservas]);
+  
+  useEffect(() => {
+    const handleFilterToday = () => {
+      const today = dayjs().startOf("day");
+      setFilterDate(today);
+    };
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("filtro") === "today") {
+      handleFilterToday();
+    }
+  }, []);
 
   if (loading) {
     return (
